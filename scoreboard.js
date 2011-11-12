@@ -19,6 +19,7 @@ function startTimer(element, precision, duration, callback) {
     var beginning;
     var itimer;
     var precmult = 1;
+    var bg;
 
     for (var i = 0; i < precision; i += 1) {
         precmult *= 10;
@@ -37,12 +38,14 @@ function startTimer(element, precision, duration, callback) {
             element.style.color = "#888";
         }
 
-        if (! duration) {
-            element.style.backgroundColor = "#044";
-        } else if (remain <= 20000) {
-            element.style.backgroundColor = "#f24";
-        } else {
-            element.style.backgroundColor = element.bg;
+        if (! bg) {
+            if (! duration) {
+                element.style.backgroundColor = "#044";
+            } else if (remain <= 20000) {
+                element.style.backgroundColor = "#f24";
+            } else {
+                element.style.backgroundColor = element.bg;
+            }
         }
 
         element.innerHTML = "";
@@ -91,7 +94,7 @@ function startTimer(element, precision, duration, callback) {
     }
 
     // Unpause if paused
-    this.go = function () {
+    this.go = function (color) {
         if (itimer) return;
 
         this.start();
@@ -107,7 +110,12 @@ function startTimer(element, precision, duration, callback) {
     }
 
     // Restart with a new time
-    this.reset = function (t) {
+    this.reset = function (t, color) {
+        bg = color;
+        if (color) {
+            element.style.backgroundColor = color;
+        }
+
         duration = t;
         this.start();
         display(duration);
@@ -136,7 +144,7 @@ function transition() {
         jtext.innerHTML = "Jam";
     } else if (state == ROTATE) {
         pt.go();
-        jt.reset(30000);
+        jt.reset(30000, "#060");
         jtext.innerHTML = "Rotation";
     } else if (state == TIMEOUT) {
         pt.pause();
