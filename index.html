@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- Presentation Timer    2011 Neale Pickett -->
+<!-- Placed in the public domain. -->
+<!-- Time-stamp: "2011-11-11 22:43:12 neale" -->
+<html>
+  <head>
+    <title>LADD Scoreboard</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="text/javascript" src="scoreboard.js"></script>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td width="20%" class="team" onclick="score('a', -1);">
+          Bombs
+          <br>
+          <img src="bombs.png" alt="" class="logo">
+        </td>
+        <td width="60%" rowspan="2">
+          <p onclick="timer(0);">
+            <span class="timer" id="period">--:--</span>
+            <br>
+            <span id="periodtext">---</span>
+          </p>
+          <p onclick="timer(1);">
+            <span id="jamtext">---</span>
+            <br>
+            <span class="timer" id="jam">-:--.--</span>
+          </p>
+        </td>
+        <td width="20%" class="team" onclick="score('b', -1);">
+          Animas
+          <br>
+          <img src="animas.png" alt="" class="logo">
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <span id="score-a" class="number" onclick="score('a', 1)";>0</span>
+        </td>
+        <td>
+          <span id="score-b" class="number" onclick="score('b', 1)";>0</span>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
