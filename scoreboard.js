@@ -1,10 +1,8 @@
-var START = 0;
+var TIMEOUT = 0;
 var JAM = 1;
 var ROTATE = 2;
-var TIMEOUT = 3;
 
-var period = 1;
-var state = START;
+var state = TIMEOUT;
 
 function pad(i) {
     if (i < 10) {
@@ -21,11 +19,8 @@ function startTimer(element, precision, duration, callback) {
     var precmult = 1;
     var bg;
 
-    for (var i = 0; i < precision; i += 1) {
-        precmult *= 10;
-    }
-
-    function display(remain) {
+    var display = function () {
+        var remain = element.remaining();
         var min = Math.floor(Math.abs(remain / 60000));
         var sec = Math.abs(remain / 1000) % 60;
 
@@ -50,7 +45,7 @@ function startTimer(element, precision, duration, callback) {
 
         element.innerHTML = "";
         if ((duration > 0) && (remain <= 0)) {
-            this.stop();
+            element.stop();
             element.innerHTML = "0:0" + (0).toFixed(precision);
             if (callback) callback();
             return;
@@ -58,25 +53,31 @@ function startTimer(element, precision, duration, callback) {
         element.innerHTML += min + ":" + pad(sec.toFixed(precision));
     }
 
-    function update() {
-        var now = (new Date()).getTime();
-        var remain = beginning + duration - now;
-
-        display(remain);
-    }
-
-    // Is this timer running?
-    this.running = function () {
-        return ~~itimer;
+    // Is element timer running?
+    element.running = function () {
+        return !!itimer;
     }
     
-    // Is this a countdown timer?
-    this.descending = function () {
-        return ~~duration;
+    // Is element a countdown timer?
+    element.descending = function () {
+        return !!duration;
+    }
+
+    element.d = function() {
+        return [beginning, duration];
+    }
+
+    // Return time on clock
+    element.remaining = function () {
+        if (element.running()) {
+            return beginning + duration - (new Date()).getTime();
+        } else {
+            return duration;
+        }
     }
 
     // Stop (clear timer)
-    this.stop = function () {
+    element.stop = function () {
         if (itimer) {
             clearInterval(itimer);
             itimer = undefined;
@@ -84,41 +85,45 @@ function startTimer(element, precision, duration, callback) {
     }
 
     // Start
-    this.start = function () {
+    element.start = function () {
         beginning = (new Date()).getTime();
         if (itimer) {
             return;
         }
-        itimer = setInterval(update, 100);
-        display(duration);
+        itimer = setInterval(display, 100);
+        display();
     }
 
     // Unpause if paused
-    this.go = function (color) {
+    element.go = function () {
         if (itimer) return;
 
-        this.start();
+        element.start();
     }
 
     // Pause if unpaused
-    this.pause = function () {
+    element.pause = function () {
         if (! itimer) return;
         
-        this.stop();
+        element.stop();
         duration -= (new Date()).getTime() - beginning;
-        display(duration);
+        display();
     }
 
     // Restart with a new time
-    this.reset = function (t, color) {
+    element.reset = function (t, color) {
         bg = color;
         if (color) {
             element.style.backgroundColor = color;
         }
 
         duration = t;
-        this.start();
         display(duration);
+    }
+
+    // Setup
+    for (var i = 0; i < precision; i += 1) {
+        precmult *= 10;
     }
 
     if (precision == undefined) {
@@ -129,49 +134,54 @@ function startTimer(element, precision, duration, callback) {
         element.bg = element.style.backgroundColor;
         element.fg = element.style.color;
     }
+    display();
 }
 
 // Transition state machine based on state
 function transition() {
-    var jt = document.getElementById("jam").timer;
-    var pt = document.getElementById("period").timer;
+    var jt = document.getElementById("jam");
+    var pt = document.getElementById("period");
     var ptext = document.getElementById("periodtext");
     var jtext = document.getElementById("jamtext");
 
     if (state == JAM) {
         pt.go();
         jt.reset(120000);
+        jt.start();
         jtext.innerHTML = "Jam";
     } else if (state == ROTATE) {
         pt.go();
         jt.reset(30000, "#060");
+        jt.start();
         jtext.innerHTML = "Rotation";
     } else if (state == TIMEOUT) {
         pt.pause();
         jt.reset(0);
+        jt.start();
         jtext.innerHTML = "Timeout";
     }
     ptext.innerHTML = "Period " + period;
 }
 
+function save() {
+    localStorage.rdsb_name_a = e("name-a").innerHTML;
+    localStorage.rdsb_name_b = e("name-b").innerHTML;
+    localStorage.rdsb_score_a = e("score-a").innerHTML;
+    localStorage.rdsb_score_b = e("score-b").innerHTML;
+    localStorage.rdsb_period = period;
+    localStorage.rdsb_period_clock = e("period").remaining();
+}
+    
+
 // A timer was clicked
 // 0 = period timer
 // 1 = jam timer
 function timer(tn) {
-    if (tn == 0) {
-        if ((state == JAM) || (state == ROTATE)) {
-            state = TIMEOUT;
-        } else {
-            state = JAM;
-        }
-    } else {
-        if (state == JAM) {
-            state = ROTATE;
-        } else {
-            state = JAM;
-        }
-    }
     transition();
+}
+
+function e(id) {
+    return document.getElementById(id);
 }
 
 function score(team, points) {
@@ -182,21 +192,106 @@ function score(team, points) {
     te.innerHTML = ts;
 }
 
-function mockup() {
-    var p = document.getElementById("period");
-    var j = document.getElementById("jam");
+function teamname(t, v) {
+    if (! v) return;
+    e("name-" + t).innerHTML = v || "Home";
+    e("logo-" + t).src = v.toLowerCase() + ".png";
+}
 
-    p.timer = new startTimer(p, 0, 1800000);
+function handle(event) {
+    var e = event.target;
 
-    function jtexp() {
-        if (state == JAM) {
-            state = ROTATE;
-        } else {
+    if (state == TIMEOUT) {
+        // During startup, everything is editable
+        var team = e.id.substr(e.id.length - 1);
+
+        switch (e.id) {
+        case "name-a":
+        case "name-b":
+            teamname(team, prompt("Enter team " + team + " name", e.innerHTML));
+            break;
+        case "score-a":
+        case "score-b":
+            var s = prompt("Enter team " + team + " score", e.innerHTML);
+            if (! s) return;
+
+            e.innerHTML = s;
+            break;
+        case "period":
+            var r = prompt("Enter new time for period clock", e.innerHTML);
+            if (! r) return;
+
+            var t = r.split(":");
+            var sec = 0;
+
+            if (t.length > 3) {
+                e.innerHTML = "What?";
+                return;
+            }
+
+            for (var i in t) {
+                var v = t[i];
+
+                sec = (sec * 60) + Number(v);
+            }
+
+            e.reset(sec*1000);
+            break;
+        case "periodtext":
+            period = 3 - period;
+            e.innerHTML = "Period " + period;
+            break;
+        case "jam":
             state = JAM;
+            break;
+        }
+    } else {
+        switch (e.id) {
+        case "period":
+            state = TIMEOUT;
+            break;
+        case "jam":
+            if (state == JAM) {
+                state = ROTATE;
+            } else {
+                state = JAM;
+            }
+            break;
+        case "name-a":
+        case "logo-a":
+            score("a", -1);
+            break;
+        case "score-a":
+            score("a", 1);
+            break;
+        case "name-b":
+        case "logo-b":
+            score("b", -1);
+            break;
+        case "score-b":
+            score("b", 1);
+            break;
         }
         transition();
     }
-    j.timer = new startTimer(j, 1, 120000, jtexp);
 }
 
-window.onload = mockup;
+function start() {
+    var p = document.getElementById("period");
+    var j = document.getElementById("jam");
+
+    teamname("a", localStorage.rdsb_name_a || "Home");
+    teamname("b", localStorage.rdsb_name_b || "Visitor");
+    e("score-a").innerHTML = localStorage.rdsb_score_a || 0;
+    e("score-b").innerHTML = localStorage.rdsb_score_b || 0;
+    period = localStorage.rdsb_period || 1;
+
+    c = Number(localStorage.rdsb_period_clock || 1800000);
+    startTimer(p, 0, c);
+    startTimer(j, 1, 120000);
+
+    save_itimer = setInterval(save, 1000);
+    transition();
+}
+
+window.onload = start;
