@@ -23,21 +23,18 @@ p {
     margin: 0;
 }
 .team {
-    font-family: Comunicacion Digital;
+    font-family: Comunicacion Digital, sans-serif;
 }
-img.logo {
+.team img {
     max-width: 100%;
 }
-.number {
+#score-a, #score-b, #jam, #period {
     color: yellow;
     font-family: sans-serif;
     font-weight: bold;
 }
-.timer {
+#jam, #period {
     background: #000;
-    color: yellow;
-    font-family: sans-serif;
-    font-weight: bold;
     font-size: 150%;
     border-radius: 15px;
     padding: 0 0.1em;

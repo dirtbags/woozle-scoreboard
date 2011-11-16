@@ -173,13 +173,6 @@ function save() {
 }
     
 
-// A timer was clicked
-// 0 = period timer
-// 1 = jam timer
-function timer(tn) {
-    transition();
-}
-
 function e(id) {
     return document.getElementById(id);
 }
@@ -200,11 +193,10 @@ function teamname(t, v) {
 
 function handle(event) {
     var e = event.target;
+    var team = e.id.substr(e.id.length - 1);
 
     if (state == TIMEOUT) {
         // During startup, everything is editable
-        var team = e.id.substr(e.id.length - 1);
-
         switch (e.id) {
         case "name-a":
         case "name-b":
@@ -243,6 +235,7 @@ function handle(event) {
             break;
         case "jam":
             state = JAM;
+            transition();
             break;
         }
     } else {
@@ -259,19 +252,60 @@ function handle(event) {
             break;
         case "name-a":
         case "logo-a":
-            score("a", -1);
-            break;
-        case "score-a":
-            score("a", 1);
-            break;
         case "name-b":
         case "logo-b":
-            score("b", -1);
+            score(team, -1);
             break;
+        case "score-a":
         case "score-b":
-            score("b", 1);
+            score(team, 1);
             break;
         }
+        transition();
+    }
+}
+
+function key(e) {
+    var s;
+
+    switch (String.fromCharCode(e.which || 0)) {
+    case " ":
+        if (state == JAM) {
+            s = ROTATE;
+        } else {
+            s = JAM;
+        }
+        break;
+    case "j":
+        s = JAM;
+        break;
+    case "r":
+    case "l":                   // WFTDA TV uses this
+        s = ROTATE;
+        break;
+    case "t":
+        s = TIMEOUT;
+        break;
+    case "a":
+    case ",":
+        score('a', 1);
+        break;
+    case "b":
+    case ".":
+        score('b', 1);
+        break;
+    case "A":
+    case "<":
+        score('a', -1);
+        break;
+    case "B":
+    case ">":
+        score('b', -1);
+        break;
+    }
+
+    if ((s != undefined) && (s != state)) {
+        state = s;
         transition();
     }
 }
@@ -291,7 +325,7 @@ function start() {
     startTimer(j, 1, 120000);
 
     save_itimer = setInterval(save, 1000);
-    transition();
 }
 
 window.onload = start;
+window.onkeypress = key;

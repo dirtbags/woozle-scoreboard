@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Presentation Timer    2011 Neale Pickett -->
 <!-- Placed in the public domain. -->
-<!-- Time-stamp: "2011-11-14 16:44:07 neale" -->
+<!-- Time-stamp: "2011-11-15 20:55:47 neale" -->
 <html>
   <head>
     <title>LADD Scoreboard</title>
@@ -10,38 +10,38 @@
     <script type="text/javascript" src="scoreboard.js"></script>
   </head>
   <body>
-    <table onclick="handle(event);">
+    <table>
       <tr>
         <td width="20%" class="team">
-          <span id="name-a">-</span>
+          <span id="name-a" onclick="handle(event);">-</span>
           <br>
-          <img src="" alt="" class="logo" id="logo-a">
+          <img src="" alt="" id="logo-a" onclick="handle(event);">
         </td>
         <td width="60%" rowspan="2">
           <p>
-            <span class="timer" id="period">--:--</span>
+            <span id="period" onclick="handle(event);">--:--</span>
             <br>
-            <span id="periodtext">-</span>
+            <span id="periodtext" onclick="handle(event);">-</span>
           </p>
           <p>
             <span id="jamtext">-</span>
             <br>
-            <span class="timer" id="jam">-:--.--</span>
+            <span id="jam" onclick="handle(event);">-:--.--</span>
           </p>
         </td>
         <td width="20%" class="team">
-          <span id="name-b">-</span>
+          <span id="name-b" onclick="handle(event);">-</span>
           <br>
-          <img src="" alt="" class="logo" id="logo-b">
+          <img src="" alt="" id="logo-b" onclick="handle(event);">
         </td>
       </tr>
 
       <tr>
         <td>
-          <span id="score-a" class="number">-</span>
+          <span id="score-a" onclick="handle(event);">-</span>
         </td>
         <td>
-          <span id="score-b" class="number">-</span>
+          <span id="score-b" onclick="handle(event);">-</span>
         </td>
       </tr>
     </table>
