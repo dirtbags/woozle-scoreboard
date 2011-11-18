@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!-- Presentation Timer    2011 Neale Pickett -->
+<!-- Placed in the public domain. -->
+<!-- Time-stamp: "2011-11-17 12:17:57 neale" -->
+<html>
+  <head>
+    <title>Using the LADD Roller Derby Scoreboard</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+  </head>
+  <body>
+    <h1>Using the LADD Roller Derby Scoreboard</h1>
+
+    <img src="scoreboard-explained.png" alt="Annotated scoreboard">
+
+    <h1>Quick Guide for the Impatient</h1>
+
+    <ul>
+      <li>
+        When the period clock is gray, you can click on almost
+        anything to change it.
+      </li>
+      <li>
+        Press Space Bar or "J", or click the jam timer, to begin a jam.
+      </li>
+      <li>
+        Press "A" to give a point to team A, or "B" to give a point to
+        team B.
+      </li>
+      <li>
+        Press "Shift+A" to deduct a point from team A, or "Shift+B" to
+        deduct a point from team B".
+      </li>
+      <li>
+        Press Space Bar, "R", or "L"; or click the jam timer, to end a
+        jam.
+      </li>
+      <li>
+        Press "T" or click the period clock for a timeout.  This turns
+        the period clock gray: you can adjust elements (period clock,
+        scores, etc.) during timeouts by clicking them.
+      </li>
+    </ul>
+      
+
+    <h1>Getting Started</h1>
+
+    <img src="sb1.png" alt="Scoreboard startup">
+    <p>
+      When you first load the scoreboard, it will reset to some default
+      values.  You can begin using it right away if you like, but you
+      will probably want to change the team names and logos first.
+      Until you start the first jam, and during timeouts, almost
+      everything on the screen can be edited by clicking it.
+    </p>
+
+    <h2>Set up team names and logos</h2>
+    <img src="sb2.png" alt="Scoreboard with team names">
+    <p>
+      Click on a team name to change it, then click a team logo to
+      provide a URL for that team.  You can copy and paste the URL of
+      any image you find on the Internet, but it's probably best to
+      download images to your hard drive so that your scoreboard doesn't
+      depend on an Internet connection to operate.
+    </p>
+
+    <h2>Adjust period clock and period number</h2>
+    <p>
+      The period clock defaults to 30:00 the first time the scoreboard
+      loads, but will use whatever value it last had from then on.  If
+      you want to set the period clock to something else, click it and
+      type in the new time.
+    </p>
+
+    <p>
+      You can also click the period indicator to change from Period 1 to
+      Period 2.
+    </p>
+
+    <h2>Adjust team scores</h2>
+    <p>
+      Clicking on a team's score brings up a dialog box to adjust their
+      score.
+    </p>
+
+    <h2>Put the scoreboard on the projector</h2>
+    <p>
+      When everything is set up the way you want it, drag the browser
+      window to whatever screen is being projected, and make the browser
+      full-screen (usually the F11 key, or in the View menu).
+    </p>
+
+    <h1>Running a bout</h1>
+    <img src="sb3.png" alt="Scoreboard with team names">
+    <p>
+      The scoreboard was designed to be easy to operate with the
+      keyboard: you can just hit space bar most of the time, with "T"
+      for timeouts, use "A" and "B" to award points, and "Shift-A" and
+      "Shift-B" to deduct points.
+    </p>
+
+    <h2>Starting a jam</h2>
+    <p>
+      When the ref signals the start of the first jam (one short
+      whistle), start the jam timer by clicking on it, or typing Space
+      Bar or "J".  You're off!  The state indicator will show "Jam" and
+      the jam timer will count down from 2 minutes.
+    </p>
+
+    <h2>Awarding or deducting points</h2>
+    <p>
+      To award points to teams, click on the team's score or type "A" or
+      "B".  You can award points during a jam or between jams.
+    </p>
+
+    <p>
+      To deduct points, click on the team's name or logo, or type
+      "Shift-A" or "Shift-B".  Points can be deducted during a jam or
+      between jams.
+    </p>
+
+
+    <h2>Ending a jam</h2>
+    <img src="sb4.png" alt="Scoreboard between jams">
+    <p>
+      When the ref signals the end of the jam (four short whistles),
+      click the jam timer again, or type Space Bar, "R", or "L".  The
+      state indicator will show "Rotation" and the jam timer  will count
+      down from 30 seconds.
+    </p>
+
+
+    <h2>Timeouts</h2>
+    <img src="sb5.png" alt="Scoreboard during timeout">
+    <p>
+      For any timeout, be it a team timeout or official timeout, click
+      the period clock or type "T".  This changes the state indicator to
+      "Timeout", pauses the period clock, and makes the jam timer track
+      how long the timeout has lasted by counting up from 0.
+    </p>
+
+    <p>
+      Team timeouts are only supposed to last one minute.  It's the
+      referee's responsibility to signal the start of the next jam, and
+      the period clock shouldn't start counting down again until this
+      happens.
+    </p>
+
+    <h1>Making changes during a bout</h1>
+    <p>
+      If you need to adjust the period clock or make major adujustments
+      to team scores, you must first enter a timeout by clicking the
+      period clock or typing "T".  When in timeout, the procedure for
+      making changes things is the same as during setup.
+    </p>
+
+    <h1>If the browser exits</h1>
+    <p>
+      Shit happens.  So every second, the scoreboard saves its state to the
+      browser's long-term storage using the
+      HTML5 <code>localStorage</code> object.  The following information
+      is stored, and will come back the way it was when the browser exited:
+    </p>
+
+    <ul>
+      <li>Period clock time</li>
+      <li>Team names</li>
+      <li>Team logo URLs</li>
+      <li>Team scores</li>
+    </ul>
+
+    <p>
+      It is a good idea to verify that your browser actually stores this
+      information around before you run a bout, by starting a pretend
+      jam, exiting, then re-opening.
+    </p>
+
+    <h1>Customizing the display</h1>
+    <p>
+      The scoreboard is written in HTML5, CSS, and JavaScript.  If you'd
+      like to try your hand at graphic design, feel encouraged to do
+      so.  Just remember to keep the <code>onclick</code>
+      and <code>id</code> attributes in elements that have them, and
+      everything should continue to work.
+    </p>
+
+    <p>
+      If you come up with a new design, or code improvements, I'd love
+      to see it!
+    </p>
+
+    <h1>If you have problems</h1>
+    <p>
+      If something goes wrong, please email me (link below) with as much
+      detail as you can remember, and I'll try to fix it for you and
+      everybody else.  For example:
+    </p>
+    <blockquote>
+      <p>
+        I clicked the period timer during a timeout and the Team A logo
+        turned was replaced with a photo of a burrito.
+      </p>
+    </blockquote>
+
+    <h1>Enjoy!</h1>
+    <address>Neale Pickett <a href="mailto:neale&#64;woozle.org">&lt;neale&#64;woozle.org&gt;</a></address>
+    
+  </body>
+</html>

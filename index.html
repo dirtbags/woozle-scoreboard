@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <!-- Presentation Timer    2011 Neale Pickett -->
 <!-- Placed in the public domain. -->
-<!-- Time-stamp: "2011-11-15 20:55:47 neale" -->
+<!-- Time-stamp: "2011-11-17 17:17:44 neale" -->
 <html>
   <head>
-    <title>LADD Scoreboard</title>
+    <title>LADD Roller Derby Scoreboard</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script type="text/javascript" src="scoreboard.js"></script>
+    <link rel="stylesheet" type="text/css" href="scoreboard.css">
   </head>
   <body>
-    <table>
+    <h1>LADD Roller Derby Scoreboard</h1>
+    <img src="sb3.png" alt="Running scoreboard">
+
+    <p>
+      This is the scoreboard used by
+      the <a href="http://laderbydames.com/">Los Alamos Derby Dames</a>,
+      in bouts and scrimmages.
+    </p>
+
+    <h1>Features</h1>
+    <ul>
+      <li>Looks <em>good</em></li>
+      <li>Colors tuned for high-visibility with projectors</li>
+      <li>Appearance can be customized in HTML and CSS</li>
+      <li>Easy setup and operation</li>
+      <li>Runs in any modern web browser—even smartphones and tablets</li>
+      <li>Uses WFTDA timing</li>
+    </ul>
+
+    <h1>Try it!</h1>
+    <script type="text/javascript" src="scoreboard.js"></script>
+    <table id="scoreboard">
       <tr>
         <td width="20%" class="team">
           <span id="name-a" onclick="handle(event);">-</span>
           <br>
-          <img src="" alt="" id="logo-a" onclick="handle(event);">
+          <img src="" alt="A" id="logo-a" onclick="handle(event);"
+               onerror="imgfail('a');">
         </td>
         <td width="60%" rowspan="2">
           <p>
@@ -32,7 +54,8 @@
         <td width="20%" class="team">
           <span id="name-b" onclick="handle(event);">-</span>
           <br>
-          <img src="" alt="" id="logo-b" onclick="handle(event);">
+          <img src="" alt="B" id="logo-b" onclick="handle(event);"
+               onerror="imgfail('b');">
         </td>
       </tr>
 
@@ -45,5 +68,46 @@
         </td>
       </tr>
     </table>
+
+    <p>
+      <a href="scoreboard.html">full-screen version</a> (with
+      keybindings)
+    </p>
+
+    <p>
+      The scoreboard is implemented in pure HTML5 and JavaScript.  The
+      box above is a <em>running scoreboard</em>.  If the box works, you
+      can run this scoreboard without installing anything else.  Try
+      clicking on the Jam Timer to get things started.
+    </p>
+
+    <h1>Documentation</h1>
+    <p>
+      <a href="usage.html">Full documentation</a> comes bundled with the
+      download.
+    </p>
+
+
+    <h1>Download</h1>
+    <p>
+      <a href="http://woozle.org/~neale/gitweb.cgi/scoreboard/master.zip">Download
+        the latest version</a> to your hard drive to run a scoreboard
+      without Internet access (<strong>recommended</strong>).  This
+        includes the 
+    </p>
+
+    <p>
+      If your scoreboard computer has an Internet connection, you don't
+      need to download anything at all.  Just load up
+      the <a href="scoreboard.html">full-screen version</a> from this
+      page and you're all set.
+    </p>
+
+    <p>
+      You can
+      also <a href="http://woozle.org/~neale/gitweb.cgi/scoreboard">browse
+        the source tree</a> or clone it with git:
+      <pre>git clone http://woozle.org/~neale/projects/scoreboard</pre>
+    </p>
   </body>
 </html>

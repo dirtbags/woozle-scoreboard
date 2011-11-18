@@ -1,0 +1,44 @@
+@font-face {
+    font-family: Comunicacion Digital;
+    src: url(Comunicacion.ttf);
+}
+#scoreboard td {
+    vertical-align: top;
+    text-align: center;
+}
+#scoreboard p {
+    margin: 0;
+}
+.team {
+    font-family: Comunicacion Digital, sans-serif;
+}
+.team img {
+    max-width: 100%;
+    max-height: 2em;
+}
+
+#score-a, #score-b, #jam, #period {
+    color: yellow;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+#jam, #period {
+    background: #000;
+    font-size: 150%;
+    border-radius: 15px;
+    padding: 0 0.1em;
+}
+
+/* States timers can be in */
+#jam.paused, #period.paused {
+    color: #888;
+}
+#jam.lowtime, #period.lowtime {
+    background: #f24;
+}
+#jam.ascending {
+    background: #044;
+}
+#jam.rotate {
+    background: #060;
+}

@@ -1,3 +1,21 @@
+/*
+ * LADD Roller Derby Scoreboard
+ * Copyright © 2011  Neale Pickett <neale@woozle.org>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or (at
+ * your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 var TIMEOUT = 0;
 var JAM = 1;
 var ROTATE = 2;
@@ -17,7 +35,7 @@ function startTimer(element, precision, duration, callback) {
     var beginning;
     var itimer;
     var precmult = 1;
-    var bg;
+    var classname;
 
     var display = function () {
         var remain = element.remaining();
@@ -28,23 +46,23 @@ function startTimer(element, precision, duration, callback) {
         sec = Math.floor(sec * precmult) / precmult;
 
         if (itimer) {
-            element.style.color = element.fg;
+            element.className = classname;
         } else {
-            element.style.color = "#888";
+            element.className = classname + " paused";
         }
 
-        if (! bg) {
+        if (! classname) {
             if (! duration) {
-                element.style.backgroundColor = "#044";
+                element.className = "ascending";
             } else if (remain <= 20000) {
-                element.style.backgroundColor = "#f24";
-            } else {
-                element.style.backgroundColor = element.bg;
+                element.className = "lowtime";
             }
         }
 
         element.innerHTML = "";
         if ((duration > 0) && (remain <= 0)) {
+            // Timer has run out
+            duration = 0;
             element.stop();
             element.innerHTML = "0:0" + (0).toFixed(precision);
             if (callback) callback();
@@ -111,10 +129,10 @@ function startTimer(element, precision, duration, callback) {
     }
 
     // Restart with a new time
-    element.reset = function (t, color) {
-        bg = color;
-        if (color) {
-            element.style.backgroundColor = color;
+    element.reset = function (t, cn) {
+        classname = cn;
+        if (cn) {
+            element.className = cn;
         }
 
         duration = t;
@@ -130,10 +148,6 @@ function startTimer(element, precision, duration, callback) {
         precision = 1;
     }
 
-    if (element.bg == undefined) {
-        element.bg = element.style.backgroundColor;
-        element.fg = element.style.color;
-    }
     display();
 }
 
@@ -151,11 +165,14 @@ function transition() {
         jtext.innerHTML = "Jam";
     } else if (state == ROTATE) {
         pt.go();
-        jt.reset(30000, "#060");
+        jt.reset(30000, "rotate");
         jt.start();
         jtext.innerHTML = "Rotation";
     } else if (state == TIMEOUT) {
         pt.pause();
+        if (pt.remaining() <= 0) {
+            pt.reset(1800000);
+        }
         jt.reset(0);
         jt.start();
         jtext.innerHTML = "Timeout";
@@ -166,6 +183,8 @@ function transition() {
 function save() {
     localStorage.rdsb_name_a = e("name-a").innerHTML;
     localStorage.rdsb_name_b = e("name-b").innerHTML;
+    localStorage.rdsb_logo_a = e("logo-a").src;
+    localStorage.rdsb_logo_b = e("logo-b").src;
     localStorage.rdsb_score_a = e("score-a").innerHTML;
     localStorage.rdsb_score_b = e("score-b").innerHTML;
     localStorage.rdsb_period = period;
@@ -187,8 +206,15 @@ function score(team, points) {
 
 function teamname(t, v) {
     if (! v) return;
-    e("name-" + t).innerHTML = v || "Home";
-    e("logo-" + t).src = v.toLowerCase() + ".png";
+
+    var name = e("name-" + t);
+    var logo = e("logo-" + t);
+
+    if (logo.plastic) {
+        logo.src = v.toLowerCase() + ".png";
+        logo.plastic = false;
+    }
+    e("name-" + t).innerHTML = v;
 }
 
 function handle(event) {
@@ -201,6 +227,14 @@ function handle(event) {
         case "name-a":
         case "name-b":
             teamname(team, prompt("Enter team " + team + " name", e.innerHTML));
+            break;
+        case "logo-a":
+        case "logo-b":
+            var u = prompt("Enter URL to team " + team + " logo", e.src);
+
+            if (! u) return;
+            e.src = u;
+            e.plastic = false;
             break;
         case "score-a":
         case "score-b":
@@ -265,6 +299,18 @@ function handle(event) {
     }
 }
 
+function imgfail(team) {
+    var logo = e("logo-" + team);
+    var url = e("name-" + team).innerHTML.toLowerCase() + ".png";
+
+    if (logo.plastic && (logo.src != url)) {
+        logo.src = url;
+    } else {
+        logo.src = "skate.png";
+        logo.plastic = true;
+    }
+}
+
 function key(e) {
     var s;
 
@@ -316,9 +362,12 @@ function start() {
 
     teamname("a", localStorage.rdsb_name_a || "Home");
     teamname("b", localStorage.rdsb_name_b || "Visitor");
+    e("logo-a").src = localStorage.rdsb_logo_a || "skate.png";
+    e("logo-b").src = localStorage.rdsb_logo_b || "skate.png";
     e("score-a").innerHTML = localStorage.rdsb_score_a || 0;
     e("score-b").innerHTML = localStorage.rdsb_score_b || 0;
     period = localStorage.rdsb_period || 1;
+    e("periodtext").innerHTML = "Period " + period;
 
     c = Number(localStorage.rdsb_period_clock || 1800000);
     startTimer(p, 0, c);
@@ -328,4 +377,3 @@ function start() {
 }
 
 window.onload = start;
-window.onkeypress = key;
