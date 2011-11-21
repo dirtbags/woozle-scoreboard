@@ -289,11 +289,11 @@ function handle(event) {
         case "name-b":
         case "logo-b":
             score(team, -1);
-            break;
+            return;
         case "score-a":
         case "score-b":
             score(team, 1);
-            break;
+            return;
         }
         transition();
     }
