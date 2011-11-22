@@ -1,6 +1,6 @@
 @font-face {
-    font-family: Sk8ordye;
-    src: url(Sk8ordye.ttf);
+    font-family: Most Wazted;
+    src: url(Mostwasted.ttf);
 }
 body {
     background: #222 url(stone-cmp.jpg);
@@ -10,7 +10,7 @@ body {
 }
 h1 {
     color: #fd8;
-    font-family: Sk8ordye, fantasy, sans-serif;
+    font-family: Most Wazted, fantasy, sans-serif;
     font-size-adjust: 1.0;
 }
 h2 {
