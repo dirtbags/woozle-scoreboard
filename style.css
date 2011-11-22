@@ -1,6 +1,6 @@
 @font-face {
-    font-family: Jungle life;
-    src: url(Jungle_LIFE.ttf);
+    font-family: Sk8ordye;
+    src: url(Sk8ordye.ttf);
 }
 body {
     background: #222 url(stone-cmp.jpg);
@@ -10,7 +10,7 @@ body {
 }
 h1 {
     color: #fd8;
-    font-family: Jungle life, fantasy, sans-serif;
+    font-family: Sk8ordye, fantasy, sans-serif;
     font-size-adjust: 1.0;
 }
 h2 {
@@ -28,6 +28,6 @@ img {
 }
 #scoreboard {
     font-size: 2em;
-    font-family: Jungle life, fantasy;
+    font-family: Sk8ordye, fantasy;
     border: solid black 4px;
 }
