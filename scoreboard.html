@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- Presentation Timer    2011 Neale Pickett -->
+<!-- Placed in the public domain. -->
+<!-- Time-stamp: "2011-11-17 14:26:50 neale" -->
+<html>
+  <head>
+    <title>LADD Scoreboard</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+      @font-face {
+        font-family: Most Wazted;
+        src: url(Mostwasted.ttf);
+      }
+      body {
+        background: #222 url(stone-cmp.jpg);
+        color: #eee;
+        font-family: Most Wazted, fantasy;
+        font-size: 5em;
+        text-align: center;
+      }
+      #scoreboard {
+        width: 100%;
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="scoreboard.css">
+    <script type="text/javascript" src="scoreboard.js"></script>
+    <script type="text/javascript">
+      window.onkeypress = key;
+    </script>
+  </head>
+  <body>
+    <table id="scoreboard">
+      <tr>
+        <td width="20%" class="team">
+          <span id="name-a" onclick="handle(event);">-</span>
+          <br>
+          <img src="" alt="" id="logo-a" onclick="handle(event);"
+               onerror="imgfail('a');">
+        </td>
+        <td width="60%" rowspan="2">
+          <p>
+            <span id="period" onclick="handle(event);">--:--</span>
+            <br>
+            <span id="periodtext" onclick="handle(event);">-</span>
+          </p>
+          <p>
+            <span id="jamtext">-</span>
+            <br>
+            <span id="jam" onclick="handle(event);">-:--.--</span>
+          </p>
+        </td>
+        <td width="20%" class="team">
+          <span id="name-b" onclick="handle(event);">-</span>
+          <br>
+          <img src="" alt="" id="logo-b" onclick="handle(event);"
+               onerror="imgfail('b');">
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <span id="score-a" onclick="handle(event);">-</span>
+        </td>
+        <td>
+          <span id="score-b" onclick="handle(event);">-</span>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,6 +1,7 @@
 /*
  * LADD Roller Derby Scoreboard
  * Copyright © 2011  Neale Pickett <neale@woozle.org>
+ * Time-stamp: <2011-11-21 21:52:54 neale>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -108,8 +109,7 @@ function startTimer(element, precision, duration, callback) {
         if (itimer) {
             return;
         }
-        itimer = setInterval(display, 100);
-        display();
+        itimer = setInterval(display, 33);
     }
 
     // Unpause if paused
@@ -135,7 +135,9 @@ function startTimer(element, precision, duration, callback) {
             element.className = cn;
         }
 
+        self.stop();
         duration = t;
+        beginning = (new Date()).getTime();
         display(duration);
     }
 
@@ -152,7 +154,12 @@ function startTimer(element, precision, duration, callback) {
 }
 
 // Transition state machine based on state
-function transition() {
+function transition(newstate) {
+    if ((newstate == undefined) || (newstate == state)) {
+        return;
+    }
+    state = newstate;
+
     var jt = document.getElementById("jam");
     var pt = document.getElementById("period");
     var ptext = document.getElementById("periodtext");
@@ -220,6 +227,7 @@ function teamname(t, v) {
 function handle(event) {
     var e = event.target;
     var team = e.id.substr(e.id.length - 1);
+    var newstate;
 
     if (state == TIMEOUT) {
         // During startup, everything is editable
@@ -268,20 +276,19 @@ function handle(event) {
             e.innerHTML = "Period " + period;
             break;
         case "jam":
-            state = JAM;
-            transition();
+            newstate = JAM;
             break;
         }
     } else {
         switch (e.id) {
         case "period":
-            state = TIMEOUT;
+            newstate = TIMEOUT;
             break;
         case "jam":
             if (state == JAM) {
-                state = ROTATE;
+                newstate = ROTATE;
             } else {
-                state = JAM;
+                newstate = JAM;
             }
             break;
         case "name-a":
@@ -295,8 +302,8 @@ function handle(event) {
             score(team, 1);
             return;
         }
-        transition();
     }
+    transition(newstate);
 }
 
 function imgfail(team) {
@@ -312,14 +319,14 @@ function imgfail(team) {
 }
 
 function key(e) {
-    var s;
+    var newstate;
 
     switch (String.fromCharCode(e.which || 0)) {
     case " ":
         if (state == JAM) {
-            s = ROTATE;
+            newstate = ROTATE;
         } else {
-            s = JAM;
+            newstate = JAM;
         }
         break;
     case "j":
@@ -350,10 +357,7 @@ function key(e) {
         break;
     }
 
-    if ((s != undefined) && (s != state)) {
-        state = s;
-        transition();
-    }
+    transition(newstate);
 }
 
 function start() {
