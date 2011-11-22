@@ -1,7 +1,7 @@
 /*
  * LADD Roller Derby Scoreboard
  * Copyright © 2011  Neale Pickett <neale@woozle.org>
- * Time-stamp: <2011-11-21 21:52:54 neale>
+ * Time-stamp: <2011-11-21 23:17:49 neale>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,6 +42,7 @@ function startTimer(element, precision, duration, callback) {
         var remain = element.remaining();
         var min = Math.floor(Math.abs(remain / 60000));
         var sec = Math.abs(remain / 1000) % 60;
+        var t = "";
 
         /* Scale sec to precision, since toFixed only rounds */
         sec = Math.floor(sec * precmult) / precmult;
@@ -60,16 +61,19 @@ function startTimer(element, precision, duration, callback) {
             }
         }
 
-        element.innerHTML = "";
         if ((duration > 0) && (remain <= 0)) {
             // Timer has run out
             duration = 0;
             element.stop();
-            element.innerHTML = "0:0" + (0).toFixed(precision);
+            t = "0:0" + (0).toFixed(precision);
             if (callback) callback();
             return;
         }
-        element.innerHTML += min + ":" + pad(sec.toFixed(precision));
+        t += min + ":" + pad(sec.toFixed(precision));
+
+        if (t != element.innerHTML) {
+            element.innerHTML = t;
+        }
     }
 
     // Is element timer running?
@@ -238,7 +242,7 @@ function handle(event) {
             break;
         case "logo-a":
         case "logo-b":
-            var u = prompt("Enter URL to team " + team + " logo", e.src);
+            var u = prompt("Enter URL to team " + team + " logo");
 
             if (! u) return;
             e.src = u;
@@ -291,15 +295,13 @@ function handle(event) {
                 newstate = JAM;
             }
             break;
-        case "name-a":
-        case "logo-a":
-        case "name-b":
-        case "logo-b":
-            score(team, -1);
-            return;
         case "score-a":
         case "score-b":
-            score(team, 1);
+            if (event.shiftKey == 1) {
+                score(team, -1);
+            } else {
+                score(team, 1);
+            }
             return;
         }
     }
@@ -330,14 +332,14 @@ function key(e) {
         }
         break;
     case "j":
-        s = JAM;
+        newstate = JAM;
         break;
     case "r":
     case "l":                   // WFTDA TV uses this
-        s = ROTATE;
+        newstate = ROTATE;
         break;
     case "t":
-        s = TIMEOUT;
+        newstate = TIMEOUT;
         break;
     case "a":
     case ",":
