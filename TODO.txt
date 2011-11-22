@@ -1,0 +1,4 @@
+* Star indicator for lead jammer
+* Add a halftime state
+* Easier team name/logo selection from database
+* Per-team timeout counter

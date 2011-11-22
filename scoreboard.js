@@ -1,7 +1,7 @@
 /*
  * LADD Roller Derby Scoreboard
  * Copyright © 2011  Neale Pickett <neale@woozle.org>
- * Time-stamp: <2011-11-21 23:17:49 neale>
+ * Time-stamp: <2011-11-22 00:20:00 neale>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,11 +17,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var TIMEOUT = 0;
+var STARTUP = 0;
 var JAM = 1;
 var ROTATE = 2;
+var TIMEOUT = 3;
 
-var state = TIMEOUT;
+var state = STARTUP;
 
 function pad(i) {
     if (i < 10) {
@@ -233,29 +234,25 @@ function handle(event) {
     var team = e.id.substr(e.id.length - 1);
     var newstate;
 
-    if (state == TIMEOUT) {
-        // During startup, everything is editable
-        switch (e.id) {
-        case "name-a":
-        case "name-b":
+    switch (e.id) {
+    case "name-a":
+    case "name-b":
+        if (state == STARTUP) {
             teamname(team, prompt("Enter team " + team + " name", e.innerHTML));
-            break;
-        case "logo-a":
-        case "logo-b":
+        }
+        break;
+    case "logo-a":
+    case "logo-b":
+        if (state == STARTUP) {
             var u = prompt("Enter URL to team " + team + " logo");
 
             if (! u) return;
             e.src = u;
             e.plastic = false;
-            break;
-        case "score-a":
-        case "score-b":
-            var s = prompt("Enter team " + team + " score", e.innerHTML);
-            if (! s) return;
-
-            e.innerHTML = s;
-            break;
-        case "period":
+        }
+        break;
+    case "period":
+        if ((state == STARTUP) || (state == TIMEOUT)) {
             var r = prompt("Enter new time for period clock", e.innerHTML);
             if (! r) return;
 
@@ -269,41 +266,33 @@ function handle(event) {
 
             for (var i in t) {
                 var v = t[i];
-
                 sec = (sec * 60) + Number(v);
             }
 
             e.reset(sec*1000);
-            break;
-        case "periodtext":
-            period = 3 - period;
-            e.innerHTML = "Period " + period;
-            break;
-        case "jam":
-            newstate = JAM;
-            break;
-        }
-    } else {
-        switch (e.id) {
-        case "period":
+        } else {
             newstate = TIMEOUT;
-            break;
-        case "jam":
-            if (state == JAM) {
-                newstate = ROTATE;
-            } else {
-                newstate = JAM;
-            }
-            break;
-        case "score-a":
-        case "score-b":
-            if (event.shiftKey == 1) {
-                score(team, -1);
-            } else {
-                score(team, 1);
-            }
-            return;
         }
+        break;
+    case "periodtext":
+        period = 3 - period;
+        e.innerHTML = "Period " + period;
+        break;
+    case "jam":
+        if (state == JAM) {
+            newstate = ROTATE;
+        } else {
+            newstate = JAM;
+        }
+        break;
+    case "score-a":
+    case "score-b":
+        if (event.shiftKey == 1) {
+            score(team, -1);
+        } else {
+            score(team, 1);
+        }
+        break;
     }
     transition(newstate);
 }
