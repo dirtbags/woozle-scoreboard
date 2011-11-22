@@ -295,15 +295,13 @@ function handle(event) {
                 newstate = JAM;
             }
             break;
-        case "name-a":
-        case "logo-a":
-        case "name-b":
-        case "logo-b":
-            score(team, -1);
-            return;
         case "score-a":
         case "score-b":
-            score(team, 1);
+            if (event.shiftKey == 1) {
+                score(team, -1);
+            } else {
+                score(team, 1);
+            }
             return;
         }
     }
