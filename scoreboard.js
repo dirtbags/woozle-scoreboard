@@ -1,7 +1,7 @@
 /*
  * LADD Roller Derby Scoreboard
  * Copyright © 2011  Neale Pickett <neale@woozle.org>
- * Time-stamp: <2011-11-22 14:01:38 neale>
+ * Time-stamp: <2011-11-22 22:35:40 neale>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,145 +17,107 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* State names */
 var STARTUP = 0;
 var JAM = 1;
 var ROTATE = 2;
 var TIMEOUT = 3;
+var BREAK = 4;
 
 var state = STARTUP;
 
-function pad(i) {
-    if (i < 10) {
-        return "0" + i;
-    } else {
-        return i;
-    }
-}
-
-// Start a timer on [element] for [duration] milliseconds.
-function startTimer(element, precision, duration, callback) {
-    var beginning;
+// Create a timer on [element].
+// If [tenths] is true, show tenths of a second.
+// If [callback] is defined, call it when time runs out.
+function startTimer(element, tenths, callback) {
     var itimer;
-    var precmult = 1;
-    var classname;
+    var startTime;
+    var duration = 0;
+    var className;
 
-    var display = function () {
+    // Re-calculate and update displayed time
+    function refresh() {
         var remain = element.remaining();
         var min = Math.floor(Math.abs(remain / 60000));
-        var sec = Math.abs(remain / 1000) % 60;
-        var t = "";
+        var sec = (Math.floor(Math.abs(remain / 100)) / 10) % 60;
 
-        /* Scale sec to precision, since toFixed only rounds */
-        sec = Math.floor(sec * precmult) / precmult;
-
-        if (itimer) {
-            element.className = classname;
-        } else {
-            element.className = classname + " paused";
+        // Set classes
+        element.className = className;
+        if (! itimer) {
+            element.className += " paused";
+        }
+        if ((! className) && (remain <= 20000)) {
+            element.className += " lowtime";
         }
 
-        if (! classname) {
-            if (! duration) {
-                element.className = "ascending";
-            } else if (remain <= 20000) {
-                element.className = "lowtime";
+        // Has the timer run out?
+        if ((duration > 0) && (remain <= 0)) {
+            duration = 0;
+            sec = 0;
+            clearInterval(itimer);
+            itimer = undefined;
+            if (callback) {
+                callback();
             }
         }
 
-        if ((duration > 0) && (remain <= 0)) {
-            // Timer has run out
-            duration = 0;
-            element.stop();
-            t = "0:0" + (0).toFixed(precision);
-            if (callback) callback();
-            return;
+        // .toFixed() rounds, we want to truncate
+        if (! tenths) {
+            sec = Math.floor(sec);
+        } else {
+            sec = sec.toFixed(1);
         }
-        t += min + ":" + pad(sec.toFixed(precision));
+        // Zero-pad
+        if (sec < 10) {
+            sec = "0" + sec;
+        }
 
+        var t = min + ":" + sec;
         if (t != element.innerHTML) {
             element.innerHTML = t;
         }
     }
 
-    // Is element timer running?
-    element.running = function () {
-        return !!itimer;
-    }
-    
-    // Is element a countdown timer?
-    element.descending = function () {
-        return !!duration;
-    }
-
-    element.d = function() {
-        return [beginning, duration];
-    }
-
-    // Return time on clock
-    element.remaining = function () {
-        if (element.running()) {
-            return beginning + duration - (new Date()).getTime();
+    // Return remaining time in milliseconds
+    element.remaining = function() {
+        if (itimer) {
+            var now = (new Date()).getTime();
+            return duration - (now - startTime);
         } else {
             return duration;
         }
     }
 
-    // Stop (clear timer)
-    element.stop = function () {
+    // Set timer to [d] milliseconds.
+    // Put element into class [cn], if set.
+    element.set = function(t, cn) {
+        startTime = (new Date()).getTime();
+        duration = t;
+        className = cn;
+        refresh();
+    }
+
+    // Start timer
+    element.start = function() {
+        if (! itimer) {
+            startTime = (new Date()).getTime();
+            itimer = setInterval(refresh, 33);
+        }
+        refresh();
+    }
+
+    // Stop timer
+    element.stop = function() {
         if (itimer) {
+            duration = element.remaining();
             clearInterval(itimer);
             itimer = undefined;
         }
+        refresh();
     }
 
-    // Start
-    element.start = function () {
-        beginning = (new Date()).getTime();
-        if (itimer) {
-            return;
-        }
-        itimer = setInterval(display, 33);
-    }
 
-    // Unpause if paused
-    element.go = function () {
-        if (itimer) return;
 
-        element.start();
-    }
-
-    // Pause if unpaused
-    element.pause = function () {
-        if (! itimer) return;
-        
-        element.stop();
-        duration -= (new Date()).getTime() - beginning;
-        display();
-    }
-
-    // Restart with a new time
-    element.reset = function (t, cn) {
-        classname = cn;
-        if (cn) {
-            element.className = cn;
-        }
-
-        self.stop();
-        duration = t;
-        beginning = (new Date()).getTime();
-        display(duration);
-    }
-
-    // Setup
-    for (var i = 0; i < precision; i += 1) {
-        precmult *= 10;
-    }
-
-    if (precision == undefined) {
-        precision = 1;
-    }
-
-    display();
 }
 
 // Transition state machine based on state
@@ -171,21 +133,21 @@ function transition(newstate) {
     var jtext = document.getElementById("jamtext");
 
     if (state == JAM) {
-        pt.go();
-        jt.reset(120000);
+        pt.start();
+        jt.set(120000);
         jt.start();
         jtext.innerHTML = "Jam";
     } else if (state == ROTATE) {
-        pt.go();
-        jt.reset(30000, "rotate");
+        pt.start();
+        jt.set(30000, "rotate");
         jt.start();
         jtext.innerHTML = "Rotation";
     } else if (state == TIMEOUT) {
-        pt.pause();
+        pt.stop();
         if (pt.remaining() <= 0) {
-            pt.reset(1800000);
+            pt.set(1800000);
         }
-        jt.reset(0);
+        jt.set(0, "timeout");
         jt.start();
         jtext.innerHTML = "Timeout";
     }
@@ -269,7 +231,7 @@ function handle(event) {
                 sec = (sec * 60) + Number(v);
             }
 
-            e.reset(sec*1000);
+            e.set(sec*1000);
         } else {
             newstate = TIMEOUT;
         }
@@ -365,8 +327,11 @@ function start() {
     e("periodtext").innerHTML = "Period " + period;
 
     c = Number(localStorage.rdsb_period_clock || 1800000);
-    startTimer(p, 0, c);
-    startTimer(j, 1, 120000);
+    startTimer(p);
+    p.set(c);
+
+    startTimer(j, true);
+    j.set(120000);
 
     save_itimer = setInterval(save, 1000);
 }

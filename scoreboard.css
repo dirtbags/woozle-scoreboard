@@ -37,7 +37,7 @@
 #jam.lowtime, #period.lowtime {
     background: #f24;
 }
-#jam.ascending {
+#jam.timeout {
     background: #044;
 }
 #jam.rotate {
