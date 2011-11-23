@@ -1,7 +1,7 @@
 /*
  * LADD Roller Derby Scoreboard
  * Copyright © 2011  Neale Pickett <neale@woozle.org>
- * Time-stamp: <2011-11-22 22:35:40 neale>
+ * Time-stamp: <2011-11-22 23:22:32 neale>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,6 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* You can only have one scoreboard per page.  This limitation is mostly
+ * because elements need specific id= attributes, and these attribumets
+ * must be unique within a page.
+ */
+
+// Preset list of teams
+teams = [
+    // [Long team name, shortname, logo.png]
+    ["Home Team", "Home"],
+    ["Visitor Team", "Visitor"],
+    ["Los Alamos M'Atom Bombs", "Bombs"],
+    ["Animas Valley Roller Girls", "Animas"],
+    ["Taos Whiplashes", "Taos"],
+    ["Rollergirls In Pagosa", "RIP"],
+    ["4 Corners Roller Girls", "4CRG"],
+    ["Durango Roller Girls", "DRG", "durango.png"],
+    ["Santa Fe Disco Brawlers", "S.Fe", "brawlers.png"],
+    ["Aurora High City Derby Divas", "Aurora"],
+    ["Moab Roller Derby", "Moab"],
+    ["Black Team", "Black"],
+    ["White Team", "White"]
+];
+
 /* State names */
 var STARTUP = 0;
 var JAM = 1;
@@ -25,6 +48,8 @@ var TIMEOUT = 3;
 var BREAK = 4;
 
 var state = STARTUP;
+
+var preset = {a:0, b:1};
 
 // Create a timer on [element].
 // If [tenths] is true, show tenths of a second.
@@ -115,9 +140,6 @@ function startTimer(element, tenths, callback) {
         }
         refresh();
     }
-
-
-
 }
 
 // Transition state machine based on state
@@ -184,10 +206,6 @@ function teamname(t, v) {
     var name = e("name-" + t);
     var logo = e("logo-" + t);
 
-    if (logo.plastic) {
-        logo.src = v.toLowerCase() + ".png";
-        logo.plastic = false;
-    }
     e("name-" + t).innerHTML = v;
 }
 
@@ -206,11 +224,25 @@ function handle(event) {
     case "logo-a":
     case "logo-b":
         if (state == STARTUP) {
-            var u = prompt("Enter URL to team " + team + " logo");
+            if (event.altKey) {
+                var u = prompt("Enter URL to team " + team + " logo");
 
-            if (! u) return;
-            e.src = u;
-            e.plastic = false;
+                if (! u) return;
+                e.src = u;
+            } else {
+                var logo;
+                var t;
+
+                preset[team] = (preset[team] + 1) % teams.length;
+                t = teams[preset[team]];
+                
+                teamname(team, t[1]);
+                logo = t[2];
+                if (! logo) {
+                    logo = (t[1] || "skate").toLowerCase() + ".png";
+                }
+                e.src = "logos/" + logo;
+            }
         }
         break;
     case "period":
@@ -261,14 +293,7 @@ function handle(event) {
 
 function imgfail(team) {
     var logo = e("logo-" + team);
-    var url = e("name-" + team).innerHTML.toLowerCase() + ".png";
-
-    if (logo.plastic && (logo.src != url)) {
-        logo.src = url;
-    } else {
-        logo.src = "skate.png";
-        logo.plastic = true;
-    }
+    logo.src = "skate.png";
 }
 
 function key(e) {
