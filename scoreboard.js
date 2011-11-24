@@ -1,7 +1,7 @@
 /*
  * LADD Roller Derby Scoreboard
  * Copyright © 2011  Neale Pickett <neale@woozle.org>
- * Time-stamp: <2011-11-22 23:22:32 neale>
+ * Time-stamp: <2011-11-23 20:01:35 neale>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,23 +22,6 @@
  * must be unique within a page.
  */
 
-// Preset list of teams
-teams = [
-    // [Long team name, shortname, logo.png]
-    ["Home Team", "Home"],
-    ["Visitor Team", "Visitor"],
-    ["Los Alamos M'Atom Bombs", "Bombs"],
-    ["Animas Valley Roller Girls", "Animas"],
-    ["Taos Whiplashes", "Taos"],
-    ["Rollergirls In Pagosa", "RIP"],
-    ["4 Corners Roller Girls", "4CRG"],
-    ["Durango Roller Girls", "DRG", "durango.png"],
-    ["Santa Fe Disco Brawlers", "S.Fe", "brawlers.png"],
-    ["Aurora High City Derby Divas", "Aurora"],
-    ["Moab Roller Derby", "Moab"],
-    ["Black Team", "Black"],
-    ["White Team", "White"]
-];
 
 /* State names */
 var STARTUP = 0;
@@ -48,8 +31,6 @@ var TIMEOUT = 3;
 var BREAK = 4;
 
 var state = STARTUP;
-
-var preset = {a:0, b:1};
 
 // Create a timer on [element].
 // If [tenths] is true, show tenths of a second.
@@ -200,13 +181,15 @@ function score(team, points) {
     te.innerHTML = ts;
 }
 
-function teamname(t, v) {
-    if (! v) return;
+var preset = {a:-1, b:-1};
+function logo_rotate(team, dir) {
+    var t;
 
-    var name = e("name-" + t);
-    var logo = e("logo-" + t);
+    preset[team] = (teams.length + preset[team] + dir) % teams.length;
+    t = teams[preset[team]];
 
-    e("name-" + t).innerHTML = v;
+    e("name-" + team).innerHTML = t[0];
+    e("logo-" + team).src = "logos/" + t[1];
 }
 
 function handle(event) {
@@ -218,30 +201,27 @@ function handle(event) {
     case "name-a":
     case "name-b":
         if (state == STARTUP) {
-            teamname(team, prompt("Enter team " + team + " name", e.innerHTML));
+            if (event.ctrlKey) {
+                var tn = prompt("Enter team " + team + " name", e.innerHTML);
+                if (tn) {
+                    e.innerHTML = tn;
+                }
+            } else {
+                logo_rotate(team, event.shiftKey?-1:1);
+            }
         }
         break;
     case "logo-a":
     case "logo-b":
         if (state == STARTUP) {
-            if (event.altKey) {
+            if (event.ctrlKey) {
                 var u = prompt("Enter URL to team " + team + " logo");
 
-                if (! u) return;
-                e.src = u;
-            } else {
-                var logo;
-                var t;
-
-                preset[team] = (preset[team] + 1) % teams.length;
-                t = teams[preset[team]];
-                
-                teamname(team, t[1]);
-                logo = t[2];
-                if (! logo) {
-                    logo = (t[1] || "skate").toLowerCase() + ".png";
+                if (u) {
+                    e.src = u;
                 }
-                e.src = "logos/" + logo;
+            } else {
+                logo_rotate(team, event.shiftKey?-1:1);
             }
         }
         break;
@@ -281,7 +261,12 @@ function handle(event) {
         break;
     case "score-a":
     case "score-b":
-        if (event.shiftKey == 1) {
+        if (event.ctrlKey) {
+            var s = prompt("Enter score for team " + team, e.innerHTML);
+            if (s) {
+                e.innerHTML = s;
+            }
+        } else if (event.shiftKey) {
             score(team, -1);
         } else {
             score(team, 1);
@@ -289,11 +274,6 @@ function handle(event) {
         break;
     }
     transition(newstate);
-}
-
-function imgfail(team) {
-    var logo = e("logo-" + team);
-    logo.src = "skate.png";
 }
 
 function key(e) {
@@ -342,8 +322,8 @@ function start() {
     var p = document.getElementById("period");
     var j = document.getElementById("jam");
 
-    teamname("a", localStorage.rdsb_name_a || "Home");
-    teamname("b", localStorage.rdsb_name_b || "Visitor");
+    e("name-a").innerHTML = localStorage.rdsb_name_a || "Home";
+    e("name-b").innerHTML = localStorage.rdsb_name_b || "Visitor";
     e("logo-a").src = localStorage.rdsb_logo_a || "skate.png";
     e("logo-b").src = localStorage.rdsb_logo_b || "skate.png";
     e("score-a").innerHTML = localStorage.rdsb_score_a || 0;

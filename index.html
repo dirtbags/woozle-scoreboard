@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Presentation Timer    2011 Neale Pickett -->
 <!-- Placed in the public domain. -->
-<!-- Time-stamp: "2011-11-21 23:32:30 neale" -->
+<!-- Time-stamp: "2011-11-23 15:50:46 neale" -->
 <html>
   <head>
     <title>LADD Roller Derby Scoreboard</title>
@@ -21,23 +21,36 @@
 
     <h1>Features</h1>
     <ul>
-      <li>Looks <em>good</em></li>
-      <li>Colors tuned for high-visibility with projectors</li>
-      <li>Appearance can be customized in HTML and CSS</li>
-      <li>Easy setup and operation</li>
-      <li>Runs in any modern web browser—even smartphones and tablets</li>
+      <li>
+        Easy mouse-driven (with hotkeys) setup and operation
+      </li>
+      <li>
+        Looks <em>good</em>, with colors tuned for high-visibility
+        with projectors
+      </li>
+      <li>
+        Appearance can be customized in HTML and CSS
+      </li>
+      <li>
+        Runs in any modern web browser—even smartphones and
+        tablets
+      </li>
+      <li>
+        Ships with <a href="logos.html">an ever-expanding set of
+        team logos</a>
+      </li>
       <li>Uses WFTDA timing</li>
     </ul>
 
     <h1>Try it!</h1>
+    <script type="text/javascript" src="logos.js"></script>
     <script type="text/javascript" src="scoreboard.js"></script>
     <table id="scoreboard">
       <tr>
         <td width="20%" class="team">
           <span id="name-a" onclick="handle(event);">-</span>
           <br>
-          <img src="" alt="A" id="logo-a" onclick="handle(event);"
-               onerror="imgfail('a');">
+          <img src="" alt="☻" id="logo-a" onclick="handle(event);">
         </td>
         <td width="60%" rowspan="2">
           <p>
@@ -54,8 +67,7 @@
         <td width="20%" class="team">
           <span id="name-b" onclick="handle(event);">-</span>
           <br>
-          <img src="" alt="B" id="logo-b" onclick="handle(event);"
-               onerror="imgfail('b');">
+          <img src="" alt="☻" id="logo-b" onclick="handle(event);">
         </td>
       </tr>
 
@@ -78,7 +90,7 @@
       The scoreboard is implemented in pure HTML5 and JavaScript.  The
       box above is a <em>running scoreboard</em>.  If the box works, you
       can run this scoreboard without installing anything else.  Try
-      clicking on the Jam Timer to get things started.
+      clicking on team names, then the Jam Timer, to get things started.
     </p>
 
     <h1>Documentation</h1>

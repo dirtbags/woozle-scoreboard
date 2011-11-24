@@ -27,7 +27,8 @@ img {
     float: none;
 }
 #scoreboard {
-    font-size: 2em;
+    font-size: 3em;
     font-family: Most Wazted, fantasy;
     border: solid black 4px;
+    width: 100%;
 }
