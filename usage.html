@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- Presentation Timer    2011 Neale Pickett -->
 <!-- Placed in the public domain. -->
-<!-- Time-stamp: "2011-11-17 12:17:57 neale" -->
+<!-- Time-stamp: "2011-12-02 17:29:58 neale" -->
 <html>
   <head>
     <title>Using the LADD Roller Derby Scoreboard</title>
@@ -11,148 +11,176 @@
   <body>
     <h1>Using the LADD Roller Derby Scoreboard</h1>
 
-    <img src="scoreboard-explained.png" alt="Annotated scoreboard">
+    <img src="scoreboard-explained.png" alt="Annotated scoreboard"
+         style="border: solid black 2px;">
 
     <h1>Quick Guide for the Impatient</h1>
 
     <ul>
       <li>
-        When the period clock is gray, you can click on almost
+        When the state indicator reads "Setup", you can click on almost
         anything to change it.
       </li>
       <li>
-        Press Space Bar or "J", or click the jam timer, to begin a jam.
+        Reload the page (click "Reload" or press F5) to get back to
+        setup mode, without losing scores or period clock time.
       </li>
       <li>
-        Press "A" to give a point to team A, or "B" to give a point to
-        team B.
+        Click the jam timer or press Space Bar to start and end the jam.
       </li>
       <li>
-        Press "Shift+A" to deduct a point from team A, or "Shift+B" to
-        deduct a point from team B".
+        Click a score or press "A" or "B" to add a point.  Hold down
+        Shift (Shift-click or capital "A" or "B") to take one away.
       </li>
       <li>
-        Press Space Bar, "R", or "L"; or click the jam timer, to end a
-        jam.
+        Click a team logo to deduct a point.
       </li>
       <li>
-        Press "T" or click the period clock for a timeout.  This turns
-        the period clock gray: you can adjust elements (period clock,
-        scores, etc.) during timeouts by clicking them.
+        Click the period clock or press "T" to enter a timeout.
+      </li>
+      <li>
+        During timeout, click the period clock to edit the time it
+        shows.
+      </li>
+      <li>
+        Click the period indicator to change periods.
       </li>
     </ul>
+
+    <h1>Setup Mode</h1>
+
+    <p>
+      When in Setup mode (state indicator reads "Setup" and period
+      clock time is gray), you can click things to change them.
+    </p>
+
+    <p>
+      Clicking the jam clock in setup mode starts the clocks and begins
+      game mode.
+    </p>
+
+    <dl>
+      <dt>Team Names and Logos</dt>
+
+      <dd>
+        <p>
+          The scoreboard comes pre-set with a list of team names and logos,
+          including two generic logos.  I would love to include your team's
+          logo: send it
+          to <a href="mailto:neale&#64;woozle.org">neale&#64;woozle.org</a>.
+        </p>
+
+        <p>
+          Click a team's name to change it from the name associated with the
+          logo.  When you change the logo, this name will be overwritten.
+        </p>
       
+        <p>
+          Click a team's logo to cycle through this list.  Holding down
+          shift goes backwards through the list.  Changing the logo changes
+          the name, even if you set the name by hand.
+        </p>
 
-    <h1>Getting Started</h1>
+        <p>
+          <strong>Advanced:</strong> Hold down Ctrl or Alt while
+          clicking a logo to specify a URL to a team logo.  This
+          unfortunately only works on certain browsers, in certain
+          platforms.
+        </p>
+      </dd>
 
-    <img src="sb1.png" alt="Scoreboard startup">
-    <p>
-      When you first load the scoreboard, it will reset to some default
-      values.  You can begin using it right away if you like, but you
-      will probably want to change the team names and logos first.
-      Until you start the first jam, and during timeouts, almost
-      everything on the screen can be edited by clicking it.
-    </p>
+      <dt>Period clock</dt>
 
-    <h2>Set up team names and logos</h2>
-    <img src="sb2.png" alt="Scoreboard with team names">
-    <p>
-      Click on a team name to change it, then click a team logo to
-      provide a URL for that team.  You can copy and paste the URL of
-      any image you find on the Internet, but it's probably best to
-      download images to your hard drive so that your scoreboard doesn't
-      depend on an Internet connection to operate.
-    </p>
+      <dd>
+        <p>
+          You can set the period clock to any time you like by clicking on
+          it.
+        </p>
+      </dd>
 
-    <h2>Adjust period clock and period number</h2>
-    <p>
-      The period clock defaults to 30:00 the first time the scoreboard
-      loads, but will use whatever value it last had from then on.  If
-      you want to set the period clock to something else, click it and
-      type in the new time.
-    </p>
+      <dt>Period number</dt>
 
-    <p>
-      You can also click the period indicator to change from Period 1 to
-      Period 2.
-    </p>
+      <dd>
+        <p>
+          Click the period number to change it between 1 and 2.
+        </p>
+      </dd>
+    </dl>
 
-    <h2>Adjust team scores</h2>
-    <p>
-      Clicking on a team's score brings up a dialog box to adjust their
-      score.
-    </p>
-
-    <h2>Put the scoreboard on the projector</h2>
-    <p>
-      When everything is set up the way you want it, drag the browser
-      window to whatever screen is being projected, and make the browser
-      full-screen (usually the F11 key, or in the View menu).
-    </p>
-
-    <h1>Running a bout</h1>
-    <img src="sb3.png" alt="Scoreboard with team names">
-    <p>
-      The scoreboard was designed to be easy to operate with the
-      keyboard: you can just hit space bar most of the time, with "T"
-      for timeouts, use "A" and "B" to award points, and "Shift-A" and
-      "Shift-B" to deduct points.
-    </p>
-
-    <h2>Starting a jam</h2>
-    <p>
-      When the ref signals the start of the first jam (one short
-      whistle), start the jam timer by clicking on it, or typing Space
-      Bar or "J".  You're off!  The state indicator will show "Jam" and
-      the jam timer will count down from 2 minutes.
-    </p>
-
-    <h2>Awarding or deducting points</h2>
-    <p>
-      To award points to teams, click on the team's score or type "A" or
-      "B".  You can award points during a jam or between jams.
-    </p>
+    <h1>Game Mode</h1>
 
     <p>
-      To deduct points, click on the team's name or logo, or type
-      "Shift-A" or "Shift-B".  Points can be deducted during a jam or
-      between jams.
+      When the first jam whistle sounds, click the jam clock or hit
+      space bar to begin the jam.  This locks the team names and logos
+      into place and starts the game.
     </p>
 
+    <dl>
+      <dt>Starting and stopping Jams</dt>
 
-    <h2>Ending a jam</h2>
-    <img src="sb4.png" alt="Scoreboard between jams">
-    <p>
-      When the ref signals the end of the jam (four short whistles),
-      click the jam timer again, or type Space Bar, "R", or "L".  The
-      state indicator will show "Rotation" and the jam timer  will count
-      down from 30 seconds.
-    </p>
+      <dd>
+        <p>
+          Press the space bar or click the jam clock to start and stop
+          2-minute jams.  When stopped, the jam clock automatically resets
+          to 30s for rotation.
+        </p>
+      </dd>
+
+      <dt>Timeouts</dt>
+
+      <dd>
+        <p>
+          Press "T" or click the period clock to move to a timeout.  This
+          freezes the period clock and makes the jam clock count up from
+          0:00.
+        </p>
+
+        <p>
+          Press space bar or click the jam clock to end the timeout and
+          begin a jam.
+        </p>
+      </dd>
+
+      <dt>Adjusting the period clock</dt>
+
+      <dd>
+        <p>
+          During a timeout, click the period clock to set a new period clock
+          time.
+        </p>
+      </dd>
+    </dl>
 
 
-    <h2>Timeouts</h2>
-    <img src="sb5.png" alt="Scoreboard during timeout">
-    <p>
-      For any timeout, be it a team timeout or official timeout, click
-      the period clock or type "T".  This changes the state indicator to
-      "Timeout", pauses the period clock, and makes the jam timer track
-      how long the timeout has lasted by counting up from 0.
-    </p>
+    <h1>Other actions</h1>
 
-    <p>
-      Team timeouts are only supposed to last one minute.  It's the
-      referee's responsibility to signal the start of the next jam, and
-      the period clock shouldn't start counting down again until this
-      happens.
-    </p>
+    <dl>
+      <dt>Halftime timer</dt>
 
-    <h1>Making changes during a bout</h1>
-    <p>
-      If you need to adjust the period clock or make major adujustments
-      to team scores, you must first enter a timeout by clicking the
-      period clock or typing "T".  When in timeout, the procedure for
-      making changes things is the same as during setup.
-    </p>
+      <dd>
+        <p>
+          If you'd like to display how long is left in a halftime,
+          switch to timeout mode, click the period clock, and enter the
+          halftime duration on the period clock.  Then click the jam
+          clock to start the period clock counting down.
+        </p>
+
+        <p>
+          It's okay to let the jam clock run down to 0:00.
+        </p>
+      </dd>
+
+      <dt>Move to setup mode</dt>
+
+      <dd>
+        <p>
+          For the second bout of a double-header, you'll want to reset
+          team logos and names.  Refresh the page by clicking the button
+          in your web browser or hitting F5, to move into Setup mode.
+        </p>
+      </dd>
+    </dl>
+
 
     <h1>If the browser exits</h1>
     <p>
