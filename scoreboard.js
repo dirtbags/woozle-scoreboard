@@ -1,7 +1,7 @@
 /*
  * LADD Roller Derby Scoreboard
  * Copyright © 2011  Neale Pickett <neale@woozle.org>
- * Time-stamp: <2011-11-23 20:01:35 neale>
+ * Time-stamp: <2011-12-06 22:26:05 neale>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +24,13 @@
 
 
 /* State names */
-var STARTUP = 0;
-var JAM = 1;
-var ROTATE = 2;
-var TIMEOUT = 3;
-var BREAK = 4;
+var STARTUP = 0;                // !P 30:00   !J 2:00
+var JAM = 1;                    //  P          J 2:00  
+var ROTATE = 2;                 //  P          J 1:00
+var TIMEOUT = 3;                // !P          J 1:00
+
+var periods = ["Period 1", "Break", "Period 2"];
+var period = 0;
 
 var state = STARTUP;
 
@@ -181,6 +183,15 @@ function score(team, points) {
     te.innerHTML = ts;
 }
 
+function adjust_timeouts(team, dir) {
+    var i;
+    var t = e("timeouts-" + team);
+
+    t.val = (t.val + 4 + dir) % 4;
+
+    t.innerHTML = t.val;
+}
+
 var preset = {a:-1, b:-1};
 function logo_rotate(team, dir) {
     var t;
@@ -223,7 +234,13 @@ function handle(event) {
             } else {
                 logo_rotate(team, event.shiftKey?-1:1);
             }
+        } else {
+            score(team, -1);
         }
+        break;
+    case "timeouts-a":
+    case "timeouts-b":
+        adjust_timeouts(team, -1);
         break;
     case "period":
         if ((state == STARTUP) || (state == TIMEOUT)) {
@@ -318,16 +335,28 @@ function key(e) {
     transition(newstate);
 }
 
+function dfl(v, d) {
+    if (v == undefined) {
+        return d;
+    } else {
+        return v;
+    }
+}
+
 function start() {
     var p = document.getElementById("period");
     var j = document.getElementById("jam");
 
-    e("name-a").innerHTML = localStorage.rdsb_name_a || "Home";
-    e("name-b").innerHTML = localStorage.rdsb_name_b || "Visitor";
-    e("logo-a").src = localStorage.rdsb_logo_a || "skate.png";
-    e("logo-b").src = localStorage.rdsb_logo_b || "skate.png";
-    e("score-a").innerHTML = localStorage.rdsb_score_a || 0;
-    e("score-b").innerHTML = localStorage.rdsb_score_b || 0;
+    e("name-a").innerHTML = dfl(localStorage.rdsb_name_a, "Home");
+    e("name-b").innerHTML = dfl(localStorage.rdsb_name_b, "Visitor");
+    e("logo-a").src = dfl(localStorage.rdsb_logo_a, "#");
+    e("logo-b").src = dfl(localStorage.rdsb_logo_b, "#");
+    e("score-a").innerHTML = dfl(localStorage.rdsb_score_a, 0);
+    e("score-b").innerHTML = dfl(localStorage.rdsb_score_b, 0);
+    e("timeouts-a").val = dfl(localStorage.rdsb_timeout_a, 3);
+    e("timeouts-b").val = dfl(localStorage.rdsb_timeout_b, 3);
+    adjust_timeouts("a", 0);
+    adjust_timeouts("b", 0);
     period = localStorage.rdsb_period || 1;
     e("periodtext").innerHTML = "Period " + period;
 

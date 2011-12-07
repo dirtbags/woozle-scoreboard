@@ -17,11 +17,20 @@
     max-height: 2em;
 }
 
-#score-a, #score-b, #jam, #period {
+#timeouts-a, #timeouts-b, #score-a, #score-b, #jam, #period {
     color: yellow;
     font-family: sans-serif;
     font-weight: bold;
     font-size: 133%;
+}
+#timeouts-a, #timeouts-b {
+    font-size: 50%;
+}
+#timeouts-a {
+    float: left;
+}
+#timeouts-b {
+    float: right;
 }
 #jam, #period {
     background: #000;
