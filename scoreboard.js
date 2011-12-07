@@ -1,7 +1,7 @@
 /*
  * LADD Roller Derby Scoreboard
  * Copyright © 2011  Neale Pickett <neale@woozle.org>
- * Time-stamp: <2011-12-06 22:26:05 neale>
+ * Time-stamp: <2011-12-06 22:40:33 neale>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ var TIMEOUT = 3;                // !P          J 1:00
 var periods = ["Period 1", "Break", "Period 2"];
 var period = 0;
 
-var state = STARTUP;
+var state = SETUP;
 
 // Create a timer on [element].
 // If [tenths] is true, show tenths of a second.
@@ -211,21 +211,18 @@ function handle(event) {
     switch (e.id) {
     case "name-a":
     case "name-b":
-        if (state == STARTUP) {
-            if (event.ctrlKey) {
-                var tn = prompt("Enter team " + team + " name", e.innerHTML);
-                if (tn) {
-                    e.innerHTML = tn;
-                }
-            } else {
-                logo_rotate(team, event.shiftKey?-1:1);
+        if (state == SETUP) {
+            var tn = prompt("Enter team " + team + " name", e.innerHTML);
+
+            if (tn) {
+                e.innerHTML = tn;
             }
         }
         break;
     case "logo-a":
     case "logo-b":
-        if (state == STARTUP) {
-            if (event.ctrlKey) {
+        if (state == SETUP) {
+            if (event.ctrlKey || event.altKey) {
                 var u = prompt("Enter URL to team " + team + " logo");
 
                 if (u) {
@@ -243,7 +240,7 @@ function handle(event) {
         adjust_timeouts(team, -1);
         break;
     case "period":
-        if ((state == STARTUP) || (state == TIMEOUT)) {
+        if ((state == SETUP) || (state == TIMEOUT)) {
             var r = prompt("Enter new time for period clock", e.innerHTML);
             if (! r) return;
 
@@ -278,7 +275,7 @@ function handle(event) {
         break;
     case "score-a":
     case "score-b":
-        if (event.ctrlKey) {
+        if ((state == SETUP) || (event.ctrlKey)) {
             var s = prompt("Enter score for team " + team, e.innerHTML);
             if (s) {
                 e.innerHTML = s;
@@ -359,6 +356,7 @@ function start() {
     adjust_timeouts("b", 0);
     period = localStorage.rdsb_period || 1;
     e("periodtext").innerHTML = "Period " + period;
+    e("jamtext").innerHTML = "Setup";
 
     c = Number(localStorage.rdsb_period_clock || 1800000);
     startTimer(p);
