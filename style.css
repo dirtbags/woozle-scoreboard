@@ -29,3 +29,7 @@ a {
     border: solid black 4px;
     width: 100%;
 }
+caption {
+    font-size: 33%;
+    font-family: default;
+}
