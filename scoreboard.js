@@ -1,7 +1,6 @@
 /*
  * LADD Roller Derby Scoreboard
  * Copyright © 2011  Neale Pickett <neale@woozle.org>
- * Time-stamp: <2011-12-06 22:40:33 neale>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +23,7 @@
 
 
 /* State names */
-var STARTUP = 0;                // !P 30:00   !J 2:00
+var SETUP = 0;                  // !P 30:00   !J 2:00
 var JAM = 1;                    //  P          J 2:00  
 var ROTATE = 2;                 //  P          J 1:00
 var TIMEOUT = 3;                // !P          J 1:00
@@ -127,15 +126,17 @@ function startTimer(element, tenths, callback) {
 
 // Transition state machine based on state
 function transition(newstate) {
-    if ((newstate == undefined) || (newstate == state)) {
-        return;
-    }
-    state = newstate;
-
     var jt = document.getElementById("jam");
     var pt = document.getElementById("period");
     var ptext = document.getElementById("periodtext");
     var jtext = document.getElementById("jamtext");
+
+    ptext.innerHTML = periods[period];
+
+    if ((newstate == undefined) || (newstate == state)) {
+        return;
+    }
+    state = newstate;
 
     if (state == JAM) {
         pt.start();
@@ -156,7 +157,6 @@ function transition(newstate) {
         jt.start();
         jtext.innerHTML = "Timeout";
     }
-    ptext.innerHTML = "Period " + period;
 }
 
 function save() {
@@ -263,8 +263,7 @@ function handle(event) {
         }
         break;
     case "periodtext":
-        period = 3 - period;
-        e.innerHTML = "Period " + period;
+        period = (period + 1) % 3;
         break;
     case "jam":
         if (state == JAM) {
@@ -275,7 +274,7 @@ function handle(event) {
         break;
     case "score-a":
     case "score-b":
-        if ((state == SETUP) || (event.ctrlKey)) {
+        if (state == SETUP) {
             var s = prompt("Enter score for team " + team, e.innerHTML);
             if (s) {
                 e.innerHTML = s;
@@ -301,30 +300,19 @@ function key(e) {
             newstate = JAM;
         }
         break;
-    case "j":
-        newstate = JAM;
-        break;
-    case "r":
-    case "l":                   // WFTDA TV uses this
-        newstate = ROTATE;
-        break;
     case "t":
         newstate = TIMEOUT;
         break;
     case "a":
-    case ",":
         score('a', 1);
         break;
     case "b":
-    case ".":
         score('b', 1);
         break;
     case "A":
-    case "<":
         score('a', -1);
         break;
     case "B":
-    case ">":
         score('b', -1);
         break;
     }
