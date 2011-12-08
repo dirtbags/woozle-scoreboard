@@ -36,36 +36,44 @@ var period = 0;
 
 var state = SETUP;
 
+var timer_updates = [];
+function update() {
+    for (i in timer_updates) {
+        var u = timer_updates[i];
+
+        u();
+    }
+}
+
 // Create a timer on [element].
 // If [tenths] is true, show tenths of a second.
 // If [callback] is defined, call it when time runs out.
 function startTimer(element, tenths, callback) {
-    var itimer;
     var startTime;
+    var running = false;
     var duration = 0;
     var className;
 
     // Re-calculate and update displayed time
-    function refresh() {
+    function refresh () {
         var remain = element.remaining();
         var min = Math.floor(Math.abs(remain / 60000));
         var sec = (Math.floor(Math.abs(remain / 100)) / 10) % 60;
 
         // Set classes
         element.className = className;
-        if (! itimer) {
-            element.className += " paused";
-        }
         if ((! className) && (remain <= 20000)) {
             element.className += " lowtime";
+        }
+        if (! running) {
+            element.className += " paused";
         }
 
         // Has the timer run out?
         if ((duration > 0) && (remain <= 0)) {
             duration = 0;
             sec = 0;
-            clearInterval(itimer);
-            itimer = undefined;
+            running = false;
             if (callback) {
                 callback();
             }
@@ -90,7 +98,7 @@ function startTimer(element, tenths, callback) {
 
     // Return remaining time in milliseconds
     element.remaining = function() {
-        if (itimer) {
+        if (running) {
             var now = (new Date()).getTime();
             return duration - (now - startTime);
         } else {
@@ -109,22 +117,23 @@ function startTimer(element, tenths, callback) {
 
     // Start timer
     element.start = function() {
-        if (! itimer) {
+        if (! running) {
             startTime = (new Date()).getTime();
-            itimer = setInterval(refresh, 33);
+            running = true;
         }
         refresh();
     }
 
     // Stop timer
     element.stop = function() {
-        if (itimer) {
+        if (running) {
             duration = element.remaining();
-            clearInterval(itimer);
-            itimer = undefined;
+            running = false;
         }
         refresh();
     }
+
+    timer_updates.push(refresh);
 }
 
 // Transition state machine based on state
@@ -157,6 +166,10 @@ function transition(newstate) {
         jt.start();
         jtext.innerHTML = "Timeout";
     }
+
+    // Reset lead jammer indicators
+    e("jammer-a").className = "";
+    e("jammer-b").className = ""; 
 }
 
 
@@ -172,32 +185,23 @@ function score(team, points) {
     te.innerHTML = ts;
 }
 
-var preset = {a:-1, b:-1};
-function logo_rotate(team, dir) {
-    var t;
-
-    preset[team] = (teams.length + preset[team] + dir) % teams.length;
-    t = teams[preset[team]];
-
-    e("name-" + team).innerHTML = t[0];
-    e("logo-" + team).src = "logos/" + t[1];
-}
+var logo = {a:-1, b:-1};
 
 function handle(event) {
-    var e = event.target;
-    var team = e.id.substr(e.id.length - 1);
+    var tgt = event.target;
+    var team = tgt.id.substr(tgt.id.length - 1);
     var adj = event.shiftKey?-1:1;
     var mod = (event.ctrlKey || event.altKey);
     var newstate;
 
-    switch (e.id) {
+    switch (tgt.id) {
     case "name-a":
     case "name-b":
         if (state == SETUP) {
-            var tn = prompt("Enter team " + team + " name", e.innerHTML);
+            var tn = prompt("Enter team " + team + " name", tgt.innerHTML);
 
             if (tn) {
-                e.innerHTML = tn;
+                tgt.innerHTML = tn;
             }
         }
         break;
@@ -208,34 +212,48 @@ function handle(event) {
                 var u = prompt("Enter URL to team " + team + " logo");
 
                 if (u) {
-                    e.src = u;
+                    tgt.src = u;
                 }
             } else {
-                logo_rotate(team, adj);
+                var t;
+
+                logo[team] = (teams.length + logo[team] + adj) % teams.length;
+                t = teams[logo[team]];
+
+                e("name-" + team).innerHTML = t[0];
+                tgt.src = "logos/" + t[1];
             }
         } else {
             score(team, -adj);
         }
         break;
+    case "jammer-a":
+    case "jammer-b":
+        var on = ! tgt.className;
+
+        e("jammer-a").className = "";
+        e("jammer-b").className = "";
+        if (on) tgt.className = "lead";
+        break;
     case "timeouts-a":
     case "timeouts-b":
         // Allow for timeouts > 3
-        var v = Number(e.innerHTML);
+        var v = Number(tgt.innerHTML);
 
         v -= adj;
         if (v == -1) v = 3;
-        e.innerHTML = v;
+        tgt.innerHTML = v;
         break;
     case "period":
         if ((state == SETUP) || (state == TIMEOUT)) {
-            var r = prompt("Enter new time for period clock", e.innerHTML);
+            var r = prompt("Enter new time for period clock", tgt.innerHTML);
             if (! r) return;
 
             var t = r.split(":");
             var sec = 0;
 
             if (t.length > 3) {
-                e.innerHTML = "What?";
+                tgt.innerHTML = "What?";
                 return;
             }
 
@@ -244,7 +262,7 @@ function handle(event) {
                 sec = (sec * 60) + Number(v);
             }
 
-            e.set(sec*1000);
+            tgt.set(sec*1000);
         } else {
             newstate = TIMEOUT;
         }
@@ -253,14 +271,14 @@ function handle(event) {
         var pt;
 
         if (mod) {
-            pt = prompt("Enter new period indicator text", e.innerHTML);
+            pt = prompt("Enter new period indicator text", tgt.innerHTML);
         } else {
             var ptl = periodtext.length;
 
             period = (period + ptl + adj) % ptl;
             pt = periodtext[period];
         }
-        if (pt) e.innerHTML = pt;
+        if (pt) tgt.innerHTML = pt;
         break;
     case "jam":
         if (state == JAM) {
@@ -272,9 +290,9 @@ function handle(event) {
     case "score-a":
     case "score-b":
         if (state == SETUP) {
-            var s = prompt("Enter score for team " + team, e.innerHTML);
+            var s = prompt("Enter score for team " + team, tgt.innerHTML);
             if (s) {
-                e.innerHTML = s;
+                tgt.innerHTML = s;
             }
         } else {
             score(team, adj);
@@ -284,10 +302,10 @@ function handle(event) {
     transition(newstate);
 }
 
-function key(e) {
+function key(event) {
     var newstate;
 
-    switch (String.fromCharCode(e.which || 0)) {
+    switch (String.fromCharCode(event.which || 0)) {
     case " ":
         if (state == JAM) {
             newstate = ROTATE;
@@ -358,7 +376,8 @@ function start() {
     startTimer(j, true);
     j.set(120000);
 
-    save_itimer = setInterval(save, 1000);
+    save_timer = setInterval(save, 1000);
+    update_itimer = setInterval(update, 33);
 }
 
 window.onload = start;

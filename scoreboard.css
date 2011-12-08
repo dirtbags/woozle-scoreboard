@@ -2,6 +2,9 @@
     font-family: Comunicacion Digital;
     src: url(Comunicacion.ttf);
 }
+#scoreboard {
+    cursor: crosshair;
+}
 #scoreboard td {
     vertical-align: top;
     text-align: center;
@@ -26,12 +29,21 @@
 #timeouts-a, #timeouts-b {
     font-size: 50%;
 }
-#timeouts-a {
+#timeouts-a, #jammer-a {
     float: left;
 }
-#timeouts-b {
+#timeouts-b, #jammer-b {
     float: right;
 }
+
+#jammer-a, #jammer-b {
+    color: #444;
+}
+
+#jammer-a.lead, #jammer-b.lead {
+    color: yellow;
+}
+
 #jam, #period {
     background: #000;
     font-size: 150%;
