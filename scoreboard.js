@@ -19,6 +19,9 @@
 /* You can only have one scoreboard per page.  This limitation is mostly
  * because elements need specific id= attributes, and these attribumets
  * must be unique within a page.
+ *
+ * Corollary: don't change element ids without making a corresponding
+ * change in this file.
  */
 
 
@@ -28,7 +31,7 @@ var JAM = 1;                    //  P          J 2:00
 var ROTATE = 2;                 //  P          J 1:00
 var TIMEOUT = 3;                // !P          J 1:00
 
-var periods = ["Period 1", "Break", "Period 2"];
+var periodtext = ["Period 1", "Halftime", "Period 2", "Break"];
 var period = 0;
 
 var state = SETUP;
@@ -128,10 +131,7 @@ function startTimer(element, tenths, callback) {
 function transition(newstate) {
     var jt = document.getElementById("jam");
     var pt = document.getElementById("period");
-    var ptext = document.getElementById("periodtext");
     var jtext = document.getElementById("jamtext");
-
-    ptext.innerHTML = periods[period];
 
     if ((newstate == undefined) || (newstate == state)) {
         return;
@@ -159,17 +159,6 @@ function transition(newstate) {
     }
 }
 
-function save() {
-    localStorage.rdsb_name_a = e("name-a").innerHTML;
-    localStorage.rdsb_name_b = e("name-b").innerHTML;
-    localStorage.rdsb_logo_a = e("logo-a").src;
-    localStorage.rdsb_logo_b = e("logo-b").src;
-    localStorage.rdsb_score_a = e("score-a").innerHTML;
-    localStorage.rdsb_score_b = e("score-b").innerHTML;
-    localStorage.rdsb_period = period;
-    localStorage.rdsb_period_clock = e("period").remaining();
-}
-    
 
 function e(id) {
     return document.getElementById(id);
@@ -181,15 +170,6 @@ function score(team, points) {
 
     ts += points;
     te.innerHTML = ts;
-}
-
-function adjust_timeouts(team, dir) {
-    var i;
-    var t = e("timeouts-" + team);
-
-    t.val = (t.val + 4 + dir) % 4;
-
-    t.innerHTML = t.val;
 }
 
 var preset = {a:-1, b:-1};
@@ -206,6 +186,8 @@ function logo_rotate(team, dir) {
 function handle(event) {
     var e = event.target;
     var team = e.id.substr(e.id.length - 1);
+    var adj = event.shiftKey?-1:1;
+    var mod = (event.ctrlKey || event.altKey);
     var newstate;
 
     switch (e.id) {
@@ -222,22 +204,27 @@ function handle(event) {
     case "logo-a":
     case "logo-b":
         if (state == SETUP) {
-            if (event.ctrlKey || event.altKey) {
+            if (mod) {
                 var u = prompt("Enter URL to team " + team + " logo");
 
                 if (u) {
                     e.src = u;
                 }
             } else {
-                logo_rotate(team, event.shiftKey?-1:1);
+                logo_rotate(team, adj);
             }
         } else {
-            score(team, -1);
+            score(team, -adj);
         }
         break;
     case "timeouts-a":
     case "timeouts-b":
-        adjust_timeouts(team, -1);
+        // Allow for timeouts > 3
+        var v = Number(e.innerHTML);
+
+        v -= adj;
+        if (v == -1) v = 3;
+        e.innerHTML = v;
         break;
     case "period":
         if ((state == SETUP) || (state == TIMEOUT)) {
@@ -263,7 +250,17 @@ function handle(event) {
         }
         break;
     case "periodtext":
-        period = (period + 1) % 3;
+        var pt;
+
+        if (mod) {
+            pt = prompt("Enter new period indicator text", e.innerHTML);
+        } else {
+            var ptl = periodtext.length;
+
+            period = (period + ptl + adj) % ptl;
+            pt = periodtext[period];
+        }
+        if (pt) e.innerHTML = pt;
         break;
     case "jam":
         if (state == JAM) {
@@ -279,10 +276,8 @@ function handle(event) {
             if (s) {
                 e.innerHTML = s;
             }
-        } else if (event.shiftKey) {
-            score(team, -1);
         } else {
-            score(team, 1);
+            score(team, adj);
         }
         break;
     }
@@ -328,6 +323,17 @@ function dfl(v, d) {
     }
 }
 
+function save() {
+    localStorage.rdsb_name_a = e("name-a").innerHTML;
+    localStorage.rdsb_name_b = e("name-b").innerHTML;
+    localStorage.rdsb_logo_a = e("logo-a").src;
+    localStorage.rdsb_logo_b = e("logo-b").src;
+    localStorage.rdsb_score_a = e("score-a").innerHTML;
+    localStorage.rdsb_score_b = e("score-b").innerHTML;
+    localStorage.rdsb_period = period;
+    localStorage.rdsb_period_clock = e("period").remaining();
+}
+    
 function start() {
     var p = document.getElementById("period");
     var j = document.getElementById("jam");
@@ -338,13 +344,12 @@ function start() {
     e("logo-b").src = dfl(localStorage.rdsb_logo_b, "#");
     e("score-a").innerHTML = dfl(localStorage.rdsb_score_a, 0);
     e("score-b").innerHTML = dfl(localStorage.rdsb_score_b, 0);
-    e("timeouts-a").val = dfl(localStorage.rdsb_timeout_a, 3);
-    e("timeouts-b").val = dfl(localStorage.rdsb_timeout_b, 3);
-    adjust_timeouts("a", 0);
-    adjust_timeouts("b", 0);
-    period = localStorage.rdsb_period || 1;
-    e("periodtext").innerHTML = "Period " + period;
+    e("timeouts-a").innerHTML = dfl(localStorage.rdsb_timeout_a, 3);
+    e("timeouts-b").innerHTML = dfl(localStorage.rdsb_timeout_b, 3);
+    period = Number(localStorage.rdsb_period) || 0;
+    e("periodtext").innerHTML = periodtext[period];
     e("jamtext").innerHTML = "Setup";
+    transition();
 
     c = Number(localStorage.rdsb_period_clock || 1800000);
     startTimer(p);

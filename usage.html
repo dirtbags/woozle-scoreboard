@@ -28,22 +28,43 @@
     <img src="scoreboard-explained.png" alt="Annotated scoreboard"
          style="border: solid black 2px;">
 
+    <p>
+      If you don't like reading manuals, just start clicking on things;
+      it's supposed to be easy to figure out.
+    </p>
+
+    <dl>
+      <dt>Space Bar</dt>
+      <dd>Switch between Jam and Rotation</dd>
+
+      <dt>T</dt>
+      <dd>Enter timeout</dd>
+
+      <dt>A / Shift-A</dt>
+      <dd>Add / subtract a point on the left</dd>
+
+      <dt>B / Shift-B</dt>
+      <dd>Add / subtract a point on the right</dd>
+
+      <dt>F5</dt>
+      <dd>Enter Setup mode</dd>
+    </dl>
+
     <h1>Setup</h1>
 
     <ul>
       <li>
-        When the state indicator reads "Setup", you can click on almost
+        When the state indicator says "Setup", you can click on almost
         anything to change it.
       </li>
       <li>
         Set the logo before you change the team name.
       </li>
       <li>
-        If your team's logo and name isn't in the list,
-        please <a href="mailto:neale&#64;woozle.org">mail them to me</a>
-        and I will add them.
+        If your team's logo and name isn't in <a href="logos.html">the
+        list</a>, please email them to me so I can add them.
       <li>
-        Reload the page (click "Reload" or type F5) to get back to setup
+        Reload the page (click "Reload" or type F5) to get back to Setup
         mode.  Scores, timeouts, and period clock time are all saved.
       </li>
       <li>
@@ -102,8 +123,8 @@
         it to change it to a different time.
       </li>
       <li>
-        Click the period indicator to cycle between "Period 1", "Break",
-        and "Period 2".
+        Click the period indicator to cycle between "Period 1",
+        "Halftime", "Period 2", and "Break".
       </li>
     </ul>
 
@@ -115,9 +136,10 @@
       <dd>
         <ol>
           <li>Type "T" to enter timeout mode.</li>
-          <li>Click the period indicator until it says "Break"</li>
+          <li>Click the period indicator until it says "Halftime" or
+          "Break"</li>
           <li>Click the period clock.</li>
-          <li>Enter the duration of halftime.</li>
+          <li>Enter the duration of the break.</li>
           <li>Type Space Bar to start counting down.</li>
           <li>It's okay to let the jam clock reach 0:00.</li>
         </ol>
@@ -126,49 +148,50 @@
       <dt>20-minute periods</dt>
       <dd>
         <ol>
-          <li>During setup or timeout, click the period clock.</li>
+          <li>During Setup or Timeout, click the period clock.</li>
           <li>Enter "20:00" for the new time.</li>
           <li>Click the period indicator until it displays the
-            appropriate period</li>
+            right period.</li>
         </ol>
       </dd>
     </dl>
 
 
-    <h1>If the browser exits</h1>
-    <p>
-      Shit happens.  So every second, the scoreboard saves its state to the
-      browser's long-term storage using the
-      HTML5 <code>localStorage</code> object.  The following information
-      is stored, and will come back the way it was when the browser exited:
-    </p>
+    <h1>Advanced Tips</h1>
 
     <ul>
-      <li>Period clock time</li>
-      <li>Team names</li>
-      <li>Team logo URLs</li>
-      <li>Team scores</li>
+      <li>
+        Hold down the "Shift" key to make counters, logos, etc. go the
+        other direction.
+      </li>
+      <li>
+        Hold down the "Ctrl" or "Alt" key while clicking a team logo in
+        Setup mode to provide a URL.
+      </li>
+      <li>
+        Hold down the "Ctrl" or "Alt" key while clicking the period
+        indicator to change it to any text.
+      </li>
+      <li>
+        Timeouts can exceed three by clicking them while holding the
+        "Shift" key.
+      </li>
     </ul>
 
-    <p>
-      It is a good idea to verify that your browser actually stores this
-      information around before you run a bout, by starting a pretend
-      jam, exiting, then re-opening.
-    </p>
 
-    <h1>Customizing the display</h1>
+    <h1>Customizing</h1>
     <p>
-      The scoreboard is written in HTML5, CSS, and JavaScript.  If you'd
-      like to try your hand at graphic design, feel encouraged to do
-      so.  Just remember to keep the <code>onclick</code>
-      and <code>id</code> attributes in elements that have them, and
-      everything should continue to work.
+      If you use this, I want to add your logo and the logos of the
+      teams you play to the <a href="logos.html">included set of
+      logos</a>.
     </p>
 
     <p>
-      If you come up with a new design, or code improvements, I'd love
-      to see it!
+      The scoreboard is written in HTML5, CSS, and JavaScript, so a web
+      designer should be able to season to taste.  Send me what you come
+      up with, I want to see it!
     </p>
+
 
     <h1>If you have problems</h1>
     <p>
