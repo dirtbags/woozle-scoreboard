@@ -4,6 +4,7 @@
 }
 body {
     background: #222 url(bg.jpg);
+    background-size: 100% auto;
     color: #eee;
     max-width: 40em;
     margin: auto auto;
