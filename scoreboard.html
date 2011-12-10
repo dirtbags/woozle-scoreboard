@@ -30,12 +30,51 @@
         background-size: 100% auto;
         color: #eee;
         font-family: Most Wazted, fantasy;
-        font-size: 5em;
         text-align: center;
       }
       #scoreboard {
+        font-size: 5em;
         width: 100%;
       }
+
+#penalties-a {
+    float: left;
+    border-collapse: collapse;
+}
+#penalties-b {
+    float: right;
+    border-collapse: collapse;
+}
+
+#penalties td {
+    border: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+#penalties .minors {
+    height: 3.2em;
+    vertical-align: bottom;
+}
+#penalties .majors {
+    height: 8.2em;
+    vertical-align: bottom;
+}
+#penalties .minors div {
+    background-color: #880;
+    color: black;
+}
+#penalties .majors div {
+    background-color: #800;
+}
+#penalties .sk8ers div {
+    transform: rotate(90deg);
+    /* Remove all the cruft below here when browsers handle CSS3 rotation */
+    -moz-transform: rotate(90deg); 
+    -webkit-transform: rotate(90deg); 
+    -o-transform: rotate(90deg); 
+    -ms-transform: rotate(90deg); 
+    width: 1em;
+}
+
     </style>
     <link rel="stylesheet" type="text/css" href="scoreboard.css">
     <script type="text/javascript" src="logos.js"></script>
@@ -84,5 +123,93 @@
         </td>
       </tr>
     </table>
+
+    <div id="penalties">
+      <table id="penalties-a">
+        <tr class="majors"></tr>
+        <tr class="minors"></tr>
+        <tr class="sk8ers"></tr>
+      </table>
+
+      <table id="penalties-b">
+        <tr class="majors"></tr>
+        <tr class="minors"></tr>
+        <tr class="sk8ers"></tr>
+      </table>
+    </div>
+
+    <script type="text/javascript">
+function penalties (table) {
+    var minors = table.getElementById
+}
+
+function clicko (event) {
+    var element = event.currentTarget;
+    var pops = element.parentNode;
+    var div = element.getElementsByTagName("div")[0];
+    var max;
+
+    if (pops.className == "minors") {
+        max = 4;
+    } else if (pops.className == "majors") {
+        max = 9;
+    } else {
+        var s = prompt("Enter skater number", div.innerHTML);
+
+        if (s) {
+            div.innerHTML = s;
+        }
+        return;
+    }
+
+    div.value = ((div.value || 0) + 1) % max;
+    div.style.height = div.value + "em";
+    div.innerHTML = div.value?div.value:"";
+}
+
+function go () {
+    // Populate ALL THREE ROWS AT ONCE because I'm crazy like that.
+    for (var j = 0; j < 2; j += 1) {
+        var team = (j==0)?"a":"b";
+
+        var table = document.getElementById("penalties-" + team);
+        var minors = table.getElementsByClassName("minors")[0];
+        var majors = table.getElementsByClassName("majors")[0];
+        var sk8ers = table.getElementsByClassName("sk8ers")[0];
+
+        for (var i = 0; i < 20; i += 1) {
+            var td;
+            var div;
+
+            td = document.createElement("td");
+            div = document.createElement("div");
+            div.value = (i % 4);
+            div.style.height = div.value + "em";
+            div.appendChild(document.createTextNode(div.value?div.value:""));
+            td.onclick = clicko;
+            td.appendChild(div);
+            minors.appendChild(td);
+
+            div = document.createElement("div");
+            div.value = (i % 9);
+            div.style.height = div.value + "em";
+            div.appendChild(document.createTextNode(div.value?div.value:""));
+            td = document.createElement("td");
+            td.onclick = clicko;
+            td.appendChild(div);
+            majors.appendChild(td);
+
+            div = document.createElement("div");
+            div.appendChild(document.createTextNode(i));
+            td = document.createElement("td");
+            td.onclick = clicko;
+            td.appendChild(div);
+            sk8ers.appendChild(td);
+        }
+    }
+}
+
+go();
+    </script>
   </body>
 </html>
