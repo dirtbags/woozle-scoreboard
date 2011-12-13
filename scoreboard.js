@@ -28,7 +28,7 @@
 /* State names */
 var SETUP = 0;                  // !P 30:00   !J 2:00
 var JAM = 1;                    //  P          J 2:00  
-var ROTATE = 2;                 //  P          J 1:00
+var LINEUP = 2;                 //  P          J 1:00
 var TIMEOUT = 3;                // !P          J 1:00
 
 var periodtext = ["Period 1", "Halftime", "Period 2", "Break"];
@@ -152,11 +152,11 @@ function transition(newstate) {
         jt.set(120000);
         jt.start();
         jtext.innerHTML = "Jam";
-    } else if (state == ROTATE) {
+    } else if (state == LINEUP) {
         pt.start();
-        jt.set(30000, "rotate");
+        jt.set(30000);
         jt.start();
-        jtext.innerHTML = "Rotation";
+        jtext.innerHTML = "Lineup";
     } else if (state == TIMEOUT) {
         pt.stop();
         if (pt.remaining() <= 0) {
@@ -203,6 +203,7 @@ function handle(event) {
             if (tn) {
                 tgt.innerHTML = tn;
             }
+            penalties_setTeamName(team, tn);
         }
         break;
     case "logo-a":
@@ -222,6 +223,10 @@ function handle(event) {
 
                 e("name-" + team).innerHTML = t[0];
                 tgt.src = "logos/" + t[1];
+
+                if (window.penalties) {
+                    penalties_setTeamName(team, t[0]);
+                }
             }
         } else {
             score(team, -adj);
@@ -282,7 +287,7 @@ function handle(event) {
         break;
     case "jam":
         if (state == JAM) {
-            newstate = ROTATE;
+            newstate = LINEUP;
         } else {
             newstate = JAM;
         }
@@ -308,7 +313,7 @@ function key(event) {
     switch (String.fromCharCode(event.which || 0)) {
     case " ":
         if (state == JAM) {
-            newstate = ROTATE;
+            newstate = LINEUP;
         } else {
             newstate = JAM;
         }
@@ -353,8 +358,9 @@ function save() {
 }
     
 function start() {
-    var p = document.getElementById("period");
-    var j = document.getElementById("jam");
+    if (window.penalties) {
+        window.penalties_init();
+    }
 
     e("name-a").innerHTML = dfl(localStorage.rdsb_name_a, "Home");
     e("name-b").innerHTML = dfl(localStorage.rdsb_name_b, "Visitor");
@@ -369,10 +375,12 @@ function start() {
     e("jamtext").innerHTML = "Setup";
     transition();
 
+    var p = document.getElementById("period");
     c = Number(localStorage.rdsb_period_clock || 1800000);
     startTimer(p);
     p.set(c);
 
+    var j = document.getElementById("jam");
     startTimer(j, true);
     j.set(120000);
 

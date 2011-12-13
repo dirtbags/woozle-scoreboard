@@ -64,3 +64,42 @@
 #jam.rotate {
     background: #060;
 }
+
+
+/*
+ * Penalties
+ */
+#penalties-a {
+    float: left;
+    border-collapse: collapse;
+}
+#penalties-b {
+    float: right;
+    border-collapse: collapse;
+}
+
+#penalties td {
+    cursor: crosshair;
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    padding: 0;
+    vertical-align: bottom;
+}
+
+#penalties .minors td {
+    height: 3em;
+}
+#penalties .majors td {
+    height: 8em;
+}
+#penalties .minors div {
+    background-color: #880;
+    color: black;
+}
+#penalties .majors div {
+    background-color: #800;
+}
+#penalties .sk8ers td {
+    vertical-align: top;
+    width: 1em;
+    line-height: 75%;
+}
