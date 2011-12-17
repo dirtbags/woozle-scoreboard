@@ -353,6 +353,8 @@ function save() {
     localStorage.rdsb_logo_b = e("logo-b").src;
     localStorage.rdsb_score_a = e("score-a").innerHTML;
     localStorage.rdsb_score_b = e("score-b").innerHTML;
+    localStorage.rdsb_score_a = e("timeouts-a").innerHTML;
+    localStorage.rdsb_score_b = e("timeouts-b").innerHTML;
     localStorage.rdsb_period = period;
     localStorage.rdsb_period_clock = e("period").remaining();
 }

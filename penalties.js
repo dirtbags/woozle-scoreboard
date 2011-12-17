@@ -144,6 +144,7 @@ function penalties_init () {
 
             div = document.createElement("div");
             div.text = "";
+            div.appendChild(document.createTextNode("•"));
             td = document.createElement("td");
             td.onclick = penalties_click;
             td.appendChild(div);
