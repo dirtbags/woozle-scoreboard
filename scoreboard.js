@@ -154,7 +154,7 @@ function transition(newstate) {
         jtext.innerHTML = "Jam";
     } else if (state == LINEUP) {
         pt.start();
-        jt.set(30000);
+        jt.set(30000, "lineup");
         jt.start();
         jtext.innerHTML = "Lineup";
     } else if (state == TIMEOUT) {
