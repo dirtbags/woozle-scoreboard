@@ -37,6 +37,28 @@
         width: 100%;
       }
 
+#penalties.notice {
+    display: none;
+}
+#notice div {
+    font-family: sans-serif;
+    font-size: 800%;
+    display: none;
+}
+#notice .active {
+    display: block;
+    -moz-animation-duration: 0.5s;
+    -moz-animation-name: grow;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-direction: alternate;
+}  
+    
+@-moz-keyframes grow {  
+  0%   {color: red;}
+  50%  {color: yellow;}
+  75%  {color: blue;}
+  100% {color: magenta;}
+}
 
     </style>
     <link rel="stylesheet" type="text/css" href="scoreboard.css">
@@ -44,6 +66,32 @@
     <script type="text/javascript" src="scoreboard.js"></script>
     <script type="text/javascript" src="penalties.js"></script>
     <script type="text/javascript">
+var notice_timer;
+
+function notice_expire(n) {
+    var p = document.getElementById("penalties");
+    var pClassName = "";
+
+    for (var i = 0; i < 10; i += 1) {
+        var e = document.getElementById("notice-" + i);
+        
+        if (! e) continue;
+        if (i == n) {
+            e.className = "active";
+            pClassName = "notice";
+        } else {
+            e.className = "";
+        }
+    }
+    if (p) p.className = pClassName;
+}
+
+function notice(n) {
+    clearTimeout(notice_timer);
+    notice_timer = setTimeout(function() {notice_expire()}, 8000);
+    notice_expire(n);
+}
+
       window.onkeypress = key;
     </script>
   </head>
@@ -100,6 +148,11 @@
         <tr class="minors"></tr>
         <tr class="sk8ers"></tr>
       </table>
+    </div>
+    <div id="notice">
+      <div id="notice-1">Power Jam</div>
+      <div id="notice-2">Grand Slam</div>
+      <div id="notice-3">Ouch!</div>
     </div>
   </body>
 </html>

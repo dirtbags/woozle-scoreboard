@@ -308,9 +308,10 @@ function handle(event) {
 }
 
 function key(event) {
+    var c = String.fromCharCode(event.which || 0);
     var newstate;
 
-    switch (String.fromCharCode(event.which || 0)) {
+    switch (c) {
     case " ":
         if (state == JAM) {
             newstate = LINEUP;
@@ -333,6 +334,20 @@ function key(event) {
     case "B":
         score('b', -1);
         break;
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+    case "6":
+    case "7":
+    case "8":
+    case "9":
+        var n = Number(c);
+
+        if (window.notice) {
+            window.notice(n);
+        }
     }
 
     transition(newstate);
