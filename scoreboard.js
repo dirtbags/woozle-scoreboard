@@ -340,8 +340,8 @@ function start() {
 
     e("name-a").innerHTML = dfl(localStorage.rdsb_name_a, "Home");
     e("name-b").innerHTML = dfl(localStorage.rdsb_name_b, "Vis");
-    e("logo-a").src = dfl(localStorage.rdsb_logo_a, "#");
-    e("logo-b").src = dfl(localStorage.rdsb_logo_b, "#");
+    e("logo-a").src = dfl(localStorage.rdsb_logo_a, "logos/white.png");
+    e("logo-b").src = dfl(localStorage.rdsb_logo_b, "logos/black.png");
     e("score-a").innerHTML = dfl(localStorage.rdsb_score_a, 0);
     e("score-b").innerHTML = dfl(localStorage.rdsb_score_b, 0);
     e("timeouts-a").innerHTML = dfl(localStorage.rdsb_timeout_a, 3);
