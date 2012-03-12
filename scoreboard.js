@@ -339,7 +339,7 @@ function start() {
     var j = document.getElementById("jam");
 
     e("name-a").innerHTML = dfl(localStorage.rdsb_name_a, "Home");
-    e("name-b").innerHTML = dfl(localStorage.rdsb_name_b, "Visitor");
+    e("name-b").innerHTML = dfl(localStorage.rdsb_name_b, "Vis");
     e("logo-a").src = dfl(localStorage.rdsb_logo_a, "#");
     e("logo-b").src = dfl(localStorage.rdsb_logo_b, "#");
     e("score-a").innerHTML = dfl(localStorage.rdsb_score_a, 0);

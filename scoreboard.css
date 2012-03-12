@@ -9,11 +9,15 @@
 #scoreboard p {
     margin: 0;
 }
+#scoreboard *[id] {
+    cursor: pointer;
+}
 .team {
     font-family: Comunicacion Digital, sans-serif;
+    font-size: 90%;
 }
 .team img {
-    max-width: 100%;
+    max-width: 2em;
     max-height: 2em;
 }
 
