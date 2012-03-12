@@ -28,7 +28,7 @@
 /* State names */
 var SETUP = 0;                  // !P 30:00   !J 2:00
 var JAM = 1;                    //  P          J 2:00  
-var ROTATE = 2;                 //  P          J 1:00
+var LINEUP = 2;                 //  P          J 1:00
 var TIMEOUT = 3;                // !P          J 1:00
 
 var periodtext = ["Period 1", "Halftime", "Period 2", "Break"];
@@ -143,11 +143,11 @@ function transition(newstate) {
         jt.set(120000);
         jt.start();
         jtext.innerHTML = "Jam";
-    } else if (state == ROTATE) {
+    } else if (state == LINEUP) {
         pt.start();
-        jt.set(30000, "rotate");
+        jt.set(30000, "lineup");
         jt.start();
-        jtext.innerHTML = "Rotation";
+        jtext.innerHTML = "Lineup";
     } else if (state == TIMEOUT) {
         pt.stop();
         if (pt.remaining() <= 0) {
@@ -264,7 +264,7 @@ function handle(event) {
         break;
     case "jam":
         if (state == JAM) {
-            newstate = ROTATE;
+            newstate = LINEUP;
         } else {
             newstate = JAM;
         }
@@ -290,7 +290,7 @@ function key(e) {
     switch (String.fromCharCode(e.which || 0)) {
     case " ":
         if (state == JAM) {
-            newstate = ROTATE;
+            newstate = LINEUP;
         } else {
             newstate = JAM;
         }
