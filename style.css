@@ -34,3 +34,11 @@ caption {
     font-size: 33%;
     font-family: default;
 }
+
+#screenshot {
+    text-align: center;
+}
+
+#screenshot img {
+    border: solid black 4px;
+}
