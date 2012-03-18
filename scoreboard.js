@@ -184,7 +184,7 @@ function logo_rotate(team, dir) {
 }
 
 function handle(event) {
-    var e = event.target;
+    var e = event.target || window.event.srcElement;
     var team = e.id.substr(e.id.length - 1);
     var adj = event.shiftKey?-1:1;
     var mod = (event.ctrlKey || event.altKey);
