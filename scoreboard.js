@@ -337,28 +337,33 @@ function save() {
 function start() {
     var p = document.getElementById("period");
     var j = document.getElementById("jam");
+    var c;
 
-    e("name-a").innerHTML = dfl(localStorage.rdsb_name_a, "Home");
-    e("name-b").innerHTML = dfl(localStorage.rdsb_name_b, "Vis");
-    e("logo-a").src = dfl(localStorage.rdsb_logo_a, "logos/black.png");
-    e("logo-b").src = dfl(localStorage.rdsb_logo_b, "logos/white.png");
-    e("score-a").innerHTML = dfl(localStorage.rdsb_score_a, 0);
-    e("score-b").innerHTML = dfl(localStorage.rdsb_score_b, 0);
-    e("timeouts-a").innerHTML = dfl(localStorage.rdsb_timeout_a, 3);
-    e("timeouts-b").innerHTML = dfl(localStorage.rdsb_timeout_b, 3);
-    period = Number(localStorage.rdsb_period) || 0;
+   // IE8 doesn't have localStorage for files.  Laaaame.
+    if (localStorage) {
+        e("name-a").innerHTML = dfl(localStorage.rdsb_name_a, "Home");
+        e("name-b").innerHTML = dfl(localStorage.rdsb_name_b, "Vis");
+        e("logo-a").src = dfl(localStorage.rdsb_logo_a, "logos/black.png");
+        e("logo-b").src = dfl(localStorage.rdsb_logo_b, "logos/white.png");
+        e("score-a").innerHTML = dfl(localStorage.rdsb_score_a, 0);
+        e("score-b").innerHTML = dfl(localStorage.rdsb_score_b, 0);
+        e("timeouts-a").innerHTML = dfl(localStorage.rdsb_timeout_a, 3);
+        e("timeouts-b").innerHTML = dfl(localStorage.rdsb_timeout_b, 3);
+        period = Number(localStorage.rdsb_period) || 0;
+        c = Number(localStorage.rdsb_period_clock || 1800000);
+
+        save_itimer = setInterval(save, 1000);
+    }
+    
     e("periodtext").innerHTML = periodtext[period];
     e("jamtext").innerHTML = "Setup";
     transition();
 
-    c = Number(localStorage.rdsb_period_clock || 1800000);
     startTimer(p);
     p.set(c);
 
     startTimer(j, true);
     j.set(120000);
-
-    save_itimer = setInterval(save, 1000);
 }
 
 window.onload = start;
