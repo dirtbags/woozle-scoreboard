@@ -337,21 +337,21 @@ function save() {
 function start() {
     var p = document.getElementById("period");
     var j = document.getElementById("jam");
+    var ls = localStorage || {};
     var c;
 
-   // IE8 doesn't have localStorage for files.  Laaaame.
-    if (localStorage) {
-        e("name-a").innerHTML = dfl(localStorage.rdsb_name_a, "Home");
-        e("name-b").innerHTML = dfl(localStorage.rdsb_name_b, "Vis");
-        e("logo-a").src = dfl(localStorage.rdsb_logo_a, "logos/black.png");
-        e("logo-b").src = dfl(localStorage.rdsb_logo_b, "logos/white.png");
-        e("score-a").innerHTML = dfl(localStorage.rdsb_score_a, 0);
-        e("score-b").innerHTML = dfl(localStorage.rdsb_score_b, 0);
-        e("timeouts-a").innerHTML = dfl(localStorage.rdsb_timeout_a, 3);
-        e("timeouts-b").innerHTML = dfl(localStorage.rdsb_timeout_b, 3);
-        period = Number(localStorage.rdsb_period) || 0;
-        c = Number(localStorage.rdsb_period_clock || 1800000);
+    // IE8 doesn't have localStorage for file:// URLs  :<
+    e("name-a").innerHTML = dfl(ls.rdsb_name_a, "Home");
+    e("name-b").innerHTML = dfl(ls.rdsb_name_b, "Vis");
+    e("logo-a").src = dfl(ls.rdsb_logo_a, "logos/black.png");
+    e("logo-b").src = dfl(ls.rdsb_logo_b, "logos/white.png");
+    e("score-a").innerHTML = dfl(ls.rdsb_score_a, 0);
+    e("score-b").innerHTML = dfl(ls.rdsb_score_b, 0);
+    e("timeouts-a").innerHTML = dfl(ls.rdsb_timeout_a, 3);
+    e("timeouts-b").innerHTML = dfl(ls.rdsb_timeout_b, 3);
+    period = Number(ls.rdsb_period) || 0;
 
+    if (localStorage) {
         save_itimer = setInterval(save, 1000);
     }
     
@@ -359,6 +359,7 @@ function start() {
     e("jamtext").innerHTML = "Setup";
     transition();
 
+    c = Number(ls.rdsb_period_clock || 1800000);
     startTimer(p);
     p.set(c);
 
