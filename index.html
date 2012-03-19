@@ -27,17 +27,36 @@
     <h1>LADD Roller Derby Scoreboard</h1>
 
     <p>
-      This is the scoreboard used by
-      the <a href="http://laderbydames.com/">Los Alamos Derby Dames</a>,
-      in bouts and scrimmages.
+      This is a free WFTDA-rules scoreboard, created with ease-of-use
+      in mind.
+      It is known to work on:
+    </p>
+    
+    <ul>
+      <li>Windows (XP or later)</li>
+      <li>MacOS</li>
+      <li>Linux</li>
+      <li>Android Phones and Tablets</li>
+      <li>iPad</li>
+      <li>iPhone</li>
     </p>
 
     <script type="text/javascript" src="logos.js"></script>
     <script type="text/javascript" src="scoreboard.js"></script>
-    <table id="scoreboard">
+        
+    <div id="screenshot">
+      <img src="screenshot.png">
+      <p>
+        The scoreboard requires JavaScript.  If your browser is capable
+        of JavaScript, enable it for this page to try the scoreboard
+        in your browser!
+      </p>
+    </div>
+
+    <table id="scoreboard" style="display: none;">
       <caption>
-        Working demonstration, no keyboard shortcuts.  Click on
-        team logos, then the jam time!  
+        <b>Your browser is already running the scoreboard right now!</b>
+        Click on the team logos below, then the bottom timer to start a jam.
         <a href="scoreboard.html">Full-screen version here</a>.
       </caption>
       <tr>
@@ -77,14 +96,25 @@
       </tr>
     </table>
 
+    <script type="text/javascript">
+        var sb = document.getElementById("scoreboard");
+        sb.style.display = "table";
+
+        sb = document.getElementById("screenshot");
+        sb.style.display = "none";
+    </script>
 
     <h1>Features</h1>
+
     <ul>
       <li>
         Free to use, share, and change (GPLv3)
       </li>
       <li>
         Easy mouse-driven (with hotkeys) setup and operation
+      </li>
+      <li>
+        No complicated installation procedure: just open a web page
       </li>
       <li>
         Looks <em>good</em>, with colors tuned for high-visibility
@@ -94,37 +124,29 @@
         Appearance can be customized in HTML and CSS
       </li>
       <li>
-        Runs in any modern web browser—even smartphones and
-        tablets
+        Runs on practically anything, including older computers,
+        smartphones, and tablets
       </li>
       <li>
         Ships with <a href="logos.html">an ever-expanding set of
         team logos</a>
       </li>
-      <li>Uses WFTDA timing</li>
     </ul>
-
-    <h1>Try it!</h1>
-
-    <p>
-      The scoreboard is implemented in pure HTML5 and JavaScript.  The
-      box above is a <em>running scoreboard</em>.  If the box works, you
-      can run this scoreboard without installing anything else.  Try
-      clicking on team logos, then the Jam Timer, to get things started.
-    </p>
 
     <h1>Documentation</h1>
     <p>
-      <a href="usage.html">Full documentation</a> comes bundled with the
+      Watch a <a href="http://youtu.be/MXOzmmnHqXU">5-minute video
+        tutorial</a> or read the
+      <a href="usage.html">Full documentation</a> which comes bundled with the
       download.
     </p>
 
 
     <h1>Download</h1>
     <p>
-      <a href="http://woozle.org/~neale/gitweb.cgi/scoreboard/snapshot/stable.zip">Download
+      <a href="http://woozle.org/~neale/g.cgi/scoreboard/snapshot/scoreboard-stable.zip">Download
         the latest version</a> to your hard drive to run a scoreboard
-      without Internet access (<strong>recommended</strong>).  This
+        without Internet access (<strong>recommended</strong>).  This
         includes the documentation.
     </p>
 
@@ -137,18 +159,30 @@
 
     <p>
       You can
-      also <a href="http://woozle.org/~neale/gitweb.cgi/scoreboard">browse
+      also <a href="http://woozle.org/~neale/g.cgi/scoreboard">browse
         the source tree</a> or clone it with git:
       <pre>git clone http://woozle.org/~neale/projects/scoreboard</pre>
     </p>
 
-    <h1>Other Derby Stuff</h1>
+    <h1>Other Derby Stuff By Me</h1>
 
-    <p>
-      I've also written a <a href="http://woozle.org/track/">Derby Track</a>
-      position editor, which lets you place people and save the positions
-      as a link.  This is free too!
-    </p>
+    <ul>
+      <li>
+        A free <a href="http://woozle.org/track/">online track</a>,
+        to help you work out strategies.
+      </li>
+      <li>
+        <a href="http://woozle.org/~neale/papers/derby-av.html">
+        Running Audio/Visual for a Derby Bout</a> contains specific
+        hardware recommendation and hints for what to look for when
+        bargain hunting.
+      </li>
+      <li>
+        I also keep a <a href="others.html">list of other free
+        scoreboard programs</a>.  If the LADD scoreboard isn't
+        right for you, try one of these!
+      </li>
+    </ul>
 
     <h1>Contact Me</h1>
 
@@ -162,6 +196,6 @@
     <address>
       Neale Pickett &lt;<a href="mailto:neale&#64;woozle&#46;org">neale&#64;woozle&#46;org</a>&gt;
     </address>
-      
+
   </body>
 </html>
