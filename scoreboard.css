@@ -103,6 +103,7 @@
     background-color: #800;
 }
 #penalties .sk8ers td {
+    font-family: sans-serif;
     vertical-align: top;
     width: 1em;
     line-height: 75%;

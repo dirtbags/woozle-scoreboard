@@ -108,7 +108,7 @@ function penalties_click (event) {
         }
     } else if (pops.className == "majors") {
         val = ((div.value || 0) + inc + 9) % 9;
-    } else {
+    } else if (state == SETUP) {
         val = prompt("Enter skater number", div.text);
     }
 
