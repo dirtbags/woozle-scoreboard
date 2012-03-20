@@ -83,7 +83,7 @@
 }
 
 #penalties td {
-    cursor: crosshair;
+    cursor: pointer;
     border: 1px solid rgba(255, 255, 255, 0.075);
     padding: 0;
     vertical-align: bottom;
@@ -107,3 +107,31 @@
     width: 1em;
     line-height: 75%;
 }
+
+
+/*
+ * Notices
+ */
+#penalties.notice {
+    display: none;
+}
+#notice div {
+    font-family: Crack Babies, Comunicacion Digital, sans-serif;
+    font-size: 1000%;
+    display: none;
+}
+#notice .active {
+    display: block;
+    -moz-animation-duration: 0.5s;
+    -moz-animation-name: grow;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-direction: alternate;
+}  
+    
+@-moz-keyframes grow {  
+  0%   {color: red;}
+  50%  {color: yellow;}
+  75%  {color: blue;}
+  100% {color: magenta;}
+}
+
