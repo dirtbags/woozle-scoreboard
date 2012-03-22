@@ -134,7 +134,7 @@ function startTimer(element, tenths, callback) {
 function clicky(event) {
     var tgt = event.target || window.event.srcElement;
 
-    tgt.set((tgt.remaining() + 60000) % (60000*7));
+    tgt.set((tgt.remaining() + 60000) % (60000*8));
     tgt.start();
 }
 
