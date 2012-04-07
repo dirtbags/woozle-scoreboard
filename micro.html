@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+    Roller Derby Scoreboard    Copyright © 2011 Neale Pickett
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful, but
+    WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see
+    <http://www.gnu.org/licenses/>.
+-->
+<html>
+  <head>
+    <title>LADD Scoreboard</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="scoreboard.css">
+    <style type="text/css">
+      @font-face {
+        font-family: Most Wazted;
+        src: url(Mostwasted.ttf);
+      }
+      body {
+        background: black;
+        background-size: 100% auto;
+        color: #eee;
+        font-family: Most Wazted, fantasy;
+        text-align: center;
+      }
+      #scoreboard {
+        font-size: 155px;
+        width: 100%;
+      }
+      html, p {
+        padding: 0;
+        margin: 0;
+      }
+
+    </style>
+    <script type="text/javascript" src="logos.js"></script>
+    <script type="text/javascript" src="scoreboard.js"></script>
+    <script type="text/javascript">
+window.onkeypress = key;
+window.tenths = false;
+    </script>
+  </head>
+  <body>
+    <div id="scoreboard">
+        <p>
+            <span id="period" onclick="handle(event);">--:--</span>
+        </p>
+        <p>
+            <span id="jam" onclick="handle(event);">-:--.-</span>
+        </p>
+    </div>
+  </body>
+</html>

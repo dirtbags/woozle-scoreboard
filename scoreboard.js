@@ -138,9 +138,9 @@ function startTimer(element, tenths, callback) {
 
 // Transition state machine based on state
 function transition(newstate) {
-    var jt = document.getElementById("jam");
-    var pt = document.getElementById("period");
-    var jtext = document.getElementById("jamtext");
+    var jt = e("jam");
+    var pt = e("period");
+    var jtext = e("jamtext");
 
     if ((newstate == undefined) || (newstate == state)) {
         return;
@@ -209,7 +209,11 @@ function notice(n) {
 }
 
 function e(id) {
-    return document.getElementById(id);
+    ret = document.getElementById(id);
+    if (! ret) {
+        return Array();
+    }
+    return ret;
 }
 
 function score(team, points) {
@@ -401,19 +405,27 @@ function dfl(v, d) {
     }
 }
 
+function store(k, v) {
+    if ((v == undefined) || ! localStorage) {
+        return;
+    } else {
+        localStorage["rdsb_" + k] = v;
+    }
+}
+
 function save() {
     var ls = localStorage || {};
 
-    ls.rdsb_name_a = e("name-a").innerHTML;
-    ls.rdsb_name_b = e("name-b").innerHTML;
-    ls.rdsb_logo_a = e("logo-a").src;
-    ls.rdsb_logo_b = e("logo-b").src;
-    ls.rdsb_score_a = e("score-a").innerHTML;
-    ls.rdsb_score_b = e("score-b").innerHTML;
-    ls.rdsb_timeout_a = e("timeouts-a").innerHTML;
-    ls.rdsb_timeout_b = e("timeouts-b").innerHTML;
-    ls.rdsb_period = period;
-    ls.rdsb_period_clock = e("period").remaining();
+    store("period_clock", e("period").remaining());
+    store("name_a", e("name-a").innerHTML);
+    store("name_b", e("name-b").innerHTML);
+    store("logo_a", e("logo-a").src);
+    store("logo_b", e("logo-b").src);
+    store("score_a", e("score-a").innerHTML);
+    store("score_b", e("score-b").innerHTML);
+    store("timeout_a", e("timeouts-a").innerHTML);
+    store("timeout_b", e("timeouts-b").innerHTML);
+    store("period", period);
 }
     
 function start() {
@@ -450,7 +462,7 @@ function start() {
     p.set(c);
 
     var j = document.getElementById("jam");
-    startTimer(j, true);
+    startTimer(j, window.tenths);
     j.set(120000);
 
     save_timer = setInterval(save, 1000);
@@ -458,3 +470,4 @@ function start() {
 }
 
 window.onload = start;
+window.tenths = true;
