@@ -2,19 +2,26 @@
 <html>
     <head>
         <title>LADD Penalty Timer</title>
+        <meta name="viewport" content="width=device-width">
         <style type="text/css">
 body {
-    background: black;
-    color: white;
+    background: url(bg.jpg) #222;
+    background-size: 100% auto;
+    color: #eee;
     text-align: center;
 }
-p {
-    width: 40%;
-    display: inline-block;
+table {
+    margin: auto auto;
+}
+td {
+    font-size: 200%;
     border: solid #444 2px;
     border-radius: 15px;
     margin: 1em;
     padding: 1em;
+}
+.jammer td {
+    border-color: #aa0;
 }
 .expired {
     background: #080;
@@ -133,9 +140,29 @@ function startTimer(element, tenths, callback) {
 
 function clicky(event) {
     var tgt = event.target || window.event.srcElement;
+    var rem = tgt.remaining();
+    var orem = (tgt.other?tgt.other.remaining():null);
 
-    tgt.set((tgt.remaining() + 60000) % (60000*8));
-    tgt.start();
+    if (tgt.other && (orem > 0)) {
+        // If jammer B gets a penalty when jammer A is in the box,
+        // deduct a minute from A.  If the result is negative, A
+        // gets out and B serves the absolute value: this works
+        // out to be the amount of time under a minute A served.
+
+        orem -= 60000;
+        if (orem < 0) {
+            tgt.set(-orem);
+            tgt.start();
+            tgt.other.set(0);
+            tgt.other.stop();
+        } else {
+            tgt.other.set(orem);
+            tgt.other.start();
+        }
+    } else {
+        tgt.set((rem + 60000) % (60000*8));
+        tgt.start();
+    }
 }
 
 var timers = [];
@@ -166,14 +193,29 @@ function pause(event) {
 function start() {
     var t = document.getElementById("timers");
 
-    for (var i = 0; i < 8; i += 1) {
-        var e = document.createElement("p");
+    for (var j = 0; j < 4; j += 1) {
+        var r = document.createElement("tr");
 
-        startTimer(e, true);
-        e.set(0);
-        e.onclick = clicky;
-        t.appendChild(e);
-        timers.push(e);
+        for (var i = 0; i < 2; i += 1) {
+            var d = document.createElement("td");
+
+            startTimer(d, true);
+            d.set(0);
+            d.onclick = clicky;
+            r.appendChild(d);
+            timers.push(d);
+        }
+        if (j == 0) {
+            // Jammers are speshul
+
+            var a = r.children[0];
+            var b = r.children[1];
+
+            a.other = b;
+            b.other = a;
+            r.className = "jammer";
+        }
+        t.appendChild(r);
     }
     update_itimer = setInterval(update, 33);
 }
@@ -182,7 +224,15 @@ window.onload = start;
         </script>
     </head>
     <body>
-        <div id="timers"></div>
+        <table id="timers">
+        </table>
         <input type="button" value="Pause" onclick="pause(event)">
+        <ul>
+          <li>Tap a timer once per penalty</li>
+          <li>Top timers are for jammers and behave differently</li>
+          <li>Reload page to reset all timers to 0:00</li>
+          <li>WFTDA rules are unclear on how the penalty timer handles no-jammer jams.
+              You'll need to work it out with the refs.</li>
+        </ul>
     </body>
 </html>
