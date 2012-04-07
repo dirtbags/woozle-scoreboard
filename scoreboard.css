@@ -25,7 +25,7 @@
 }
 
 #timeouts-a, #timeouts-b, #score-a, #score-b, #jam, #period {
-    color: yellow;
+    color: white;
     font-family: sans-serif;
     font-weight: bold;
     font-size: 133%;
