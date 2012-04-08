@@ -32,6 +32,7 @@ var LINEUP = 2;                 //  P          J 1:00
 var TIMEOUT = 3;                // !P          J 1:00
 
 var periodtext = ["Period 1", "Halftime", "Period 2", "Break"];
+var jamtext = ["Jam", "Lineup", "Timeout", "Setup"];
 var period = 0;
 
 var state = SETUP;
@@ -156,12 +157,12 @@ function transition(newstate) {
         pt.start();
         jt.set(120000);
         jt.start();
-        jtext.innerHTML = "Jam";
+        jtext.innerHTML = jamtext[0];
     } else if (state == LINEUP) {
         pt.start();
         jt.set(30000, "lineup");
         jt.start();
-        jtext.innerHTML = "Lineup";
+        jtext.innerHTML = jamtext[1];
     } else if (state == TIMEOUT) {
         pt.stop();
         if (pt.remaining() <= 0) {
@@ -169,7 +170,7 @@ function transition(newstate) {
         }
         jt.set(0, "timeout");
         jt.start();
-        jtext.innerHTML = "Timeout";
+        jtext.innerHTML = jamtext[2];
     }
 
     // Reset lead jammer indicators
@@ -454,7 +455,7 @@ function start() {
     }
 
     e("periodtext").innerHTML = periodtext[period];
-    e("jamtext").innerHTML = "Setup";
+    e("jamtext").innerHTML = jamtext[3];
     transition();
 
     c = Number(ls.rdsb_period_clock || 1800000);
