@@ -56,8 +56,18 @@
             padding: 0;
             margin: 0;
         }
+        #notice {
+            font-size: 150px;
+            position: absolute;
+            top: 10px;
+            left: 20%;
+            width: 60%;
+            background: white;
+            color: black;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
     </style>
-    <script type="text/javascript" src="logos.js"></script>
     <script type="text/javascript" src="scoreboard.js"></script>
     <script type="text/javascript">
 window.onkeypress = key;
@@ -80,6 +90,12 @@ tenths = true;
         <p>
             <span id="jam" onclick="handle(event);">-:--.-</span>
         </p>
+        <div id="notice">
+            <div id="notice-1">Power Jam</div>
+            <div id="notice-2">Grand Slam</div>
+            <div id="notice-3">Ouch!</div>
+            <div id="notice-4">OMG</div>
+        </div>
     </div>
   </body>
 </html>

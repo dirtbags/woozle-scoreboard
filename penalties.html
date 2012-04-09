@@ -36,36 +36,12 @@
         font-size: 5em;
         width: 100%;
       }
-#notice div {
-    font-family: Crack Babies, Comunicacion Digital, sans-serif;
-    font-size: 7em;
-    position: absolute;
-    top: 10px;
-    left: 20%;
-    width: 60%;
-    display: none;
-    background: black;
-}
-#notice .active {
-    display: block;
-    -moz-animation-duration: 0.5s;
-    -moz-animation-name: grow;
-    -moz-animation-iteration-count: infinite;
-    -moz-animation-direction: alternate;
-}  
-    
-@-moz-keyframes grow {  
-  0%   {color: red;}
-  50%  {color: yellow;}
-  75%  {color: blue;}
-  100% {color: magenta;}
-}
-
 
     </style>
     <link rel="stylesheet" type="text/css" href="scoreboard.css">
     <script type="text/javascript" src="logos.js"></script>
     <script type="text/javascript" src="scoreboard.js"></script>
+    <script type="text/javascript" src="penalties.js"></script>
     <script type="text/javascript">
 window.onkeypress = key;
     </script>
@@ -112,6 +88,22 @@ window.onkeypress = key;
         </td>
       </tr>
     </table>
+
+    <div id="penalties">
+      <table id="penalties-a">
+        <tr class="majors"></tr>
+        <tr class="minors"></tr>
+        <tr class="sk8ers"></tr>
+      </table>
+
+      <!-- Right here would be an excellent place for a sponsor logo -->
+
+      <table id="penalties-b">
+        <tr class="majors"></tr>
+        <tr class="minors"></tr>
+        <tr class="sk8ers"></tr>
+      </table>
+    </div>
 
     <div id="notice">
       <div id="notice-1">Power Jam</div>

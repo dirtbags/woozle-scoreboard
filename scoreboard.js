@@ -186,7 +186,7 @@ function transition(newstate) {
 var notice_timer;
 
 function notice_expire(n) {
-    var p = document.getElementById("penalties");
+    var p = document.getElementById("notice-vanish");
     var pClassName = "";
 
     for (var i = 0; i < 10; i += 1) {
@@ -230,6 +230,15 @@ function score(team, points) {
  */
 
 var logo = {a:-1, b:-1};
+
+function leadJammer(team) {
+    tgt = e("jammer-" + team);
+    var on = ! tgt.className;
+
+    e("jammer-a").className = "";
+    e("jammer-b").className = "";
+    if (on) tgt.className = "lead";
+}
 
 function handle(event) {
     var tgt = event.target || window.event.srcElement;
@@ -280,11 +289,7 @@ function handle(event) {
         break;
     case "jammer-a":
     case "jammer-b":
-        var on = ! tgt.className;
-
-        e("jammer-a").className = "";
-        e("jammer-b").className = "";
-        if (on) tgt.className = "lead";
+        leadJammer(team);
         break;
     case "timeouts-a":
     case "timeouts-b":
@@ -369,16 +374,26 @@ function key(event) {
         newstate = TIMEOUT;
         break;
     case "a":
+    case "[":
         score('a', 1);
         break;
     case "b":
+    case "]":
         score('b', 1);
         break;
     case "A":
+    case "{":
         score('a', -1);
         break;
     case "B":
+    case "}":
         score('b', -1);
+        break;
+    case ",":
+        leadJammer('a');
+        break;
+    case ".":
+        leadJammer('b');
         break;
     case "1":
     case "2":
