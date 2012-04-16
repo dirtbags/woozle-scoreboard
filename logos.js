@@ -13,6 +13,7 @@ teams = [
     ["DD",      "doubledown.png", "HCDD Double Down"],
     ["DCD",     "dcd.png",        "Duke City Derby"],
     ["RMRG",    "rmrg.png",       "Rocky Mountain Roller Girls"],
+    ["MT",      "minorthreat.png", "Minor Threat"],
 ];
 teams.sort();
 
