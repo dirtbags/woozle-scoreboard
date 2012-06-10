@@ -14,9 +14,9 @@
    height="729"
    viewBox="-187.819908 -187.819908 9320.639816 6636.303416"
    id="svg10326"
-   inkscape:version="0.48.1 r9760"
+   inkscape:version="0.48.3.1 r9886"
    sodipodi:docname="hellokitty.svg"
-   inkscape:export-filename="/home/neale/tmp/scoreboard/logos/black.png"
+   inkscape:export-filename="/home/neale/src/scoreboard/logos/black.png"
    inkscape:export-xdpi="18.299999"
    inkscape:export-ydpi="18.299999">
   <metadata
@@ -40,22 +40,22 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="697"
-     inkscape:window-height="1005"
+     inkscape:window-width="729"
+     inkscape:window-height="580"
      id="namedview16"
      showgrid="false"
      inkscape:object-paths="true"
      inkscape:zoom="0.84499314"
-     inkscape:cx="509.38"
+     inkscape:cx="300.50256"
      inkscape:cy="346.15303"
      inkscape:window-x="0"
-     inkscape:window-y="15"
+     inkscape:window-y="16"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg10326" />
   <defs
      id="defs10328" />
   <path
-     style="fill:#ffffff;stroke:#000000;stroke-width:22;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
+     style="fill:#707070;stroke:#000000;stroke-width:22;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
      d="m 124.26136,401.18669 c -17.1599,297.63555 336.09741,293.4935 384.61851,292.31006 48.5211,-1.18344 415.97971,0.59172 386.98539,-299.41071 C 852.66964,147.33848 667.08313,156.66702 518.3474,156.21428 363.67452,155.74347 146.15503,188.75893 124.26136,401.18669 z"
      id="path3836"
      inkscape:connector-curvature="0"
