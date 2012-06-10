@@ -1,0 +1,2 @@
+* When period ends and jam timer is toggled, period clock should not count up
+* Auto-scale (3-digit score wrapped in Taos)
