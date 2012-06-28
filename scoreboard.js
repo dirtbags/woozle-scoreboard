@@ -52,6 +52,7 @@ function update() {
 function startTimer(element, tenths, callback) {
     var startTime;
     var running = false;
+    var set_duration = 0;
     var duration = 0;
     var className;
 
@@ -71,7 +72,7 @@ function startTimer(element, tenths, callback) {
         }
 
         // Has the timer run out?
-        if ((duration > 0) && (remain <= 0)) {
+        if ((set_duration > 0) && (remain <= 0)) {
             duration = 0;
             sec = 0;
             running = false;
@@ -111,6 +112,7 @@ function startTimer(element, tenths, callback) {
     // Put element into class [cn], if set.
     element.set = function(t, cn) {
         startTime = (new Date()).getTime();
+        set_duration = t;
         duration = t;
         className = cn;
         refresh();
