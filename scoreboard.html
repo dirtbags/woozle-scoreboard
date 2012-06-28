@@ -21,21 +21,22 @@
     <title>LADD Scoreboard</title>
     <meta charset="utf-8">
     <style type="text/css">
-      @font-face {
-        font-family: Most Wazted;
-        src: url(Mostwasted.ttf);
-      }
-      body {
-        background: url(bg.jpg) #222;
-        background-size: 100% auto;
-        color: #eee;
-        font-family: Most Wazted, fantasy;
-        text-align: center;
-      }
-      #scoreboard {
-        font-size: 5em;
-        width: 100%;
-      }
+body {
+    background: url(bg.jpg) #222;
+    background-size: 100% auto;
+    color: #eee;
+    font-family: sans;
+    font-weight: bold;
+    text-align: center;
+}
+#scoreboard {
+    font-size: 5em;
+    width: 100%;
+}
+#periodtext {
+    font-size: 75%;
+}
+
 #notice div {
     font-family: Crack Babies, Comunicacion Digital, sans-serif;
     font-size: 7em;
@@ -91,6 +92,7 @@ window.onkeypress = key;
             <span id="jammer-a" onclick="handle(event);">★</span>
             <span id="jamtext">-</span>
             <span id="jammer-b" onclick="handle(event);">★</span>
+            <span id="jamno" onclick="handle(event);">0</span>
           </p>
           <p>
             <span id="jam" onclick="handle(event);">-:--.-</span>

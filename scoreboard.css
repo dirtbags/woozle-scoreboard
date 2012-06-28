@@ -4,6 +4,9 @@
 }
 #scoreboard {
     cursor: default;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
 #scoreboard td {
     vertical-align: top;
@@ -17,6 +20,7 @@
 }
 .team {
     font-family: Comunicacion Digital, sans-serif;
+    font-weight: normal;
     font-size: 90%;
 }
 .team img {
@@ -46,7 +50,7 @@
 }
 
 #jammer-a.lead, #jammer-b.lead {
-    color: yellow;
+    color: white;
 }
 
 #jam, #period {
@@ -54,6 +58,11 @@
     font-size: 150%;
     border-radius: 15px;
     padding: 0 0.1em;
+}
+
+#jamno {
+    float: right;
+    font-size: 0.6em;
 }
 
 /* States timers can be in */
