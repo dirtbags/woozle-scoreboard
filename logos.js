@@ -19,6 +19,9 @@ teams = [
     ["MT",      "minorthreat.png", "Minor Threat"],
     ["CCR",     "choicecity.png", "Choice City Rebels"],
     ["DIA",     "dia.png",        "Derby Intelligence Agency"],
+    ["TRD",     "tucson.png",     "Tucson Roller Derby"],
+    ["TST",     "saddletramps.jpg","Tucson Saddle Tramps"],
+    ["TC",      "tallcity.png",   "Tall City Roller Betties"],
 ];
 teams.sort();
 
