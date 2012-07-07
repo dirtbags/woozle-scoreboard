@@ -24,6 +24,8 @@
  * change in this file.
  */
 
+longnames = false;
+tenths = true;
 
 /* State names */
 var SETUP = 0;                  // !P 30:00   !J 2:00
@@ -277,12 +279,18 @@ function handle(event) {
                     tgt.src = u;
                 }
             } else {
-                var t;
+                var t, name;
 
                 logo[team] = (teams.length + logo[team] + adj) % teams.length;
                 t = teams[logo[team]];
 
-                e("name-" + team).innerHTML = t[0];
+                if (longnames) {
+                    name = t[2];
+                } else {
+                    name = t[0];
+                }
+
+                e("name-" + team).innerHTML = name;
                 tgt.src = "logos/" + t[1];
 
                 if (window.penalties) {
@@ -531,4 +539,3 @@ window.onload = start;
 window.onkeypress = key;
 window.onresize = resize;
 
-window.tenths = true;
