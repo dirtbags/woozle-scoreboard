@@ -129,10 +129,15 @@ img, p {
     bottom: 0;
 }
 
-#periodtext, #jtxt {
+.text {
     width: 6em;
-    margin: auto;
     font-size: 50%;
+    margin: 0.1em auto;
+}
+
+.timer {
+    width: 4em;
+    margin: 0.1em auto;
 }
 
 #jcol {
@@ -178,16 +183,16 @@ tenths = false;
             </div>
 
             <div id="pcol">
-                <p class="button" id="periodtext" onclick="handle(event);"></p>
-                <p class="button"><span id="period" onclick="handle(event);">--:--</span></p>
+                <p class="text button" id="periodtext" onclick="handle(event);"></p>
+                <p class="timer button"><span id="period" onclick="handle(event);">--:--</span></p>
             </div>
 
             <div id="jcol">
-                <p class="button" id="jtxt">
+                <p class="text button" id="jtxt">
                     <span id="jamtext" onclick="handle(event);"></span>
                     <span id="jamno" onclick="handle(event);">0</span>
                 </p>
-                <p class="button"><span id="jam" onclick="handle(event);">-:--.-</span></p>
+                <p class="timer button"><span id="jam" onclick="handle(event);">-:--.-</span></p>
             </div>
 
         </div>
