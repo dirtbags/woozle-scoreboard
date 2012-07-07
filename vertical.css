@@ -1,0 +1,126 @@
+@font-face {
+    font-family: Comunicacion Digital;
+    src: url(Comunicacion.ttf);
+}
+@font-face {
+    font-family: Most Wazted;
+    src: url(Mostwasted.ttf);
+}
+
+#scoreboard {
+    cursor: default;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+#scoreboard p {
+    margin: 0;
+}
+#scoreboard *[id] {
+    cursor: pointer;
+}
+#name-a, #name-b {
+    font-family: Comunicacion Digital, sans-serif;
+}
+#logo-a, #logo-b {
+    max-width: 2em;
+    max-height: 2em;
+}
+
+#timeouts-a, #timeouts-b, #score-a, #score-b, #jam, #period {
+    color: yellow;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+#timeouts-a, #timeouts-b {
+    font-size: 50%;
+    color: fuchsia;
+}
+#timeouts-a, #jammer-a {
+}
+#timeouts-b, #jammer-b {
+}
+
+#jammer-a, #jammer-b {
+    color: #444;
+}
+
+#jammer-a.lead, #jammer-b.lead {
+    color: yellow;
+}
+
+#jam, #period {
+    background: #000;
+    border-radius: 15px;
+    padding: 0 0.1em;
+}
+
+#jamtext, #periodtext {
+    font-family: Most Wazted, sans-serif;
+    font-size: 75%;
+}
+
+/* States timers can be in */
+#jam.paused, #period.paused {
+    color: #888;
+}
+#jam.lowtime, #period.lowtime {
+    background: #f24;
+}
+#jam.timeout {
+    background: #044;
+}
+#jam.lineup {
+    background: #060;
+}
+
+
+/*
+ * Penalties
+ */
+#penalties-a {
+    float: left;
+    border-collapse: collapse;
+}
+#penalties-b {
+    float: right;
+    border-collapse: collapse;
+}
+
+#penalties td {
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    padding: 0;
+    vertical-align: bottom;
+}
+
+#penalties .minors td {
+    height: 3em;
+}
+#penalties .majors td {
+    height: 8em;
+}
+#penalties .minors div {
+    background-color: #880;
+    color: black;
+}
+#penalties .majors div {
+    background-color: #800;
+}
+#penalties .sk8ers td {
+    font-family: sans-serif;
+    vertical-align: top;
+    width: 1em;
+    line-height: 75%;
+}
+
+
+/*
+ * Notices
+ */
+#notice div {
+    display: none;
+}
+#notice .active {
+    display: block;
+}

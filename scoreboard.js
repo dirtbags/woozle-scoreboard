@@ -34,6 +34,7 @@ var TIMEOUT = 3;                // !P          J 1:00
 var periodtext = ["Period 1", "Halftime", "Period 2", "Break"];
 var jamtext = ["Jam", "Lineup", "Timeout", "Setup"];
 var period = 0;
+var jamno = 0;
 
 var state = SETUP;
 
@@ -144,6 +145,7 @@ function transition(newstate) {
     var jt = e("jam");
     var pt = e("period");
     var jtext = e("jamtext");
+    var jno = e("jamno");
 
     if ((newstate == undefined) || (newstate == state)) {
         return;
@@ -160,6 +162,8 @@ function transition(newstate) {
         jt.set(120000);
         jt.start();
         jtext.innerHTML = jamtext[0];
+        jamno += 1;
+        jno.innerHTML = jamno;
     } else if (state == LINEUP) {
         pt.start();
         jt.set(30000, "lineup");
@@ -344,6 +348,10 @@ function handle(event) {
         } else {
             newstate = JAM;
         }
+        break;
+    case "jamno":
+        jamno -= adj;
+        tgt.innerHTML = jamno;
         break;
     case "score-a":
     case "score-b":
