@@ -20,60 +20,9 @@
   <head>
     <title>LADD Scoreboard</title>
     <meta charset="utf-8">
-    <style type="text/css">
-body {
-    background: url(bg.jpg) #222;
-    background-size: 100% auto;
-    font-size: 160px;
-    color: #eee;
-    margin: 0;
-}
-#scoreboard {
-    width: 100%;
-}
-    </style>
     <link rel="stylesheet" type="text/css" href="scoreboard.css">
     <script type="text/javascript" src="logos.js"></script>
     <script type="text/javascript" src="scoreboard.js"></script>
-    <script type="text/javascript">
-
-function resize() {
-    var b = document.getElementsByTagName("body")[0];
-    var w, h;
-    
-    // Internet Explorer makes everything a pain in the ass
-    if (window.innerWidth) {
-        w = window.innerWidth;
-        h = window.innerHeight;
-    } else if (document.documentElement && document.documentElement.clientWidth) {
-        w = document.documentElement.clientWidth;
-        h = document.documentElement.clientHeight;
-    } else if (document.body) {
-        w = document.body.clientWidth;
-        h = document.body.clientHeight;
-    } else {
-        // Punt
-        w = 800;
-        h = 600;
-    }
-   
-    w /= 7;
-    h /= 5;
-
-    var fs = Math.min(w, h);
-
-    b.style.fontSize = fs + 'px';
-}
-
-function localstart() {
-    start();
-    resize();
-}
-
-window.onresize = resize;
-window.onload = localstart;
-window.onkeypress = key;
-        </script>
     </head>
     <body>
         <!-- 
@@ -104,7 +53,7 @@ window.onkeypress = key;
                 <span id="jammer-b" onclick="handle(event);">★</span>
                 <span id="score-b" onclick="handle(event);">-</span>
             </p>
-        </table>
+        </div>
 
         <div id="notice">
             <div id="notice-1">Power Jam</div>

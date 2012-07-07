@@ -21,90 +21,22 @@
     <title>LADD Roller Derby Scoreboard</title>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <link rel="stylesheet" type="text/css" href="scoreboard.css">
   </head>
   <body>
     <h1>LADD Roller Derby Scoreboard</h1>
 
     <p>
       This is a free WFTDA-rules scoreboard, created with ease-of-use
-      in mind.
-      It is known to work on:
+      in mind.  It is known to work on PC, Mac, Android, iOS, or Linux, using any
+      common web browser.
     </p>
-    
-    <ul>
-      <li>Windows (XP or later)</li>
-      <li>MacOS</li>
-      <li>Linux</li>
-      <li>Android Phones and Tablets</li>
-      <li>iPad</li>
-      <li>iPhone</li>
-    </ul>
 
-    <script type="text/javascript" src="logos.js"></script>
-    <script type="text/javascript" src="scoreboard.js"></script>
-        
-    <div id="screenshot">
-      <img src="screenshot.png">
-      <p>
-        The scoreboard requires JavaScript.  If your browser is capable
-        of JavaScript, enable it for this page to try the scoreboard
-        in your browser!
-      </p>
-    </div>
-
-    <table id="scoreboard" style="display: none;">
-      <caption>
-        <b>Your browser is already running the scoreboard right now!</b>
-        Click on the team logos below, then the bottom timer to start a jam.
-        <a href="scoreboard.html">Full-screen version here</a>.
-      </caption>
-      <tr>
-        <td width="20%" class="team">
-          <span id="name-a" onclick="handle(event);">-</span>
-          <br>
-          <img src="" alt="☻" id="logo-a" onclick="handle(event);">
-        </td>
-        <td width="60%" rowspan="2">
-          <p>
-            <span id="period" onclick="handle(event);">--:--</span>
-            <br>
-            <span id="timeouts-a" onclick="handle(event);">0</span>
-            <span id="periodtext" onclick="handle(event);">-</span>
-            <span id="timeouts-b" onclick="handle(event);">0</span>
-          </p>
-          <p>
-            <span id="jammer-a" onclick="handle(event);">★</span>
-            <span id="jamtext">-</span>
-            <span id="jammer-b" onclick="handle(event);">★</span>
-            <br>
-            <span id="jam" onclick="handle(event);">-:--.--</span>
-          </p>
-        </td>
-        <td width="20%" class="team">
-          <span id="name-b" onclick="handle(event);">-</span>
-          <br>
-          <img src="" alt="☻" id="logo-b" onclick="handle(event);">
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <span id="score-a" onclick="handle(event);">-</span>
-        </td>
-        <td>
-          <span id="score-b" onclick="handle(event);">-</span>
-        </td>
-      </tr>
-    </table>
-
-    <script type="text/javascript">
-        var sb = document.getElementById("scoreboard");
-        sb.style.display = "table";
-
-        sb = document.getElementById("screenshot");
-        sb.style.display = "none";
-    </script>
+    <p id="screenshot">
+        <img src="screenshot.png">
+        <br>
+        You can <a href="scoreboard.html">try it right now</a>--it
+        runs in a web browser (but doesn't require Internet access).
+    </p>
 
     <h1>Features</h1>
 

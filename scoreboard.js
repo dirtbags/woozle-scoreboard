@@ -495,7 +495,40 @@ function start() {
 
     save_timer = setInterval(save, 1000);
     update_itimer = setInterval(update, 33);
+
+    resize();
+}
+
+function resize() {
+    var b = document.getElementsByTagName("body")[0];
+    var w, h;
+    
+    // Internet Explorer makes everything a pain in the ass
+    if (window.innerWidth) {
+        w = window.innerWidth;
+        h = window.innerHeight;
+    } else if (document.documentElement && document.documentElement.clientWidth) {
+        w = document.documentElement.clientWidth;
+        h = document.documentElement.clientHeight;
+    } else if (document.body) {
+        w = document.body.clientWidth;
+        h = document.body.clientHeight;
+    } else {
+        // Punt
+        w = 800;
+        h = 600;
+    }
+   
+    w /= 7;
+    h /= 5;
+
+    var fs = Math.min(w, h);
+
+    b.style.fontSize = fs + 'px';
 }
 
 window.onload = start;
+window.onkeypress = key;
+window.onresize = resize;
+
 window.tenths = true;

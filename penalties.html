@@ -20,25 +20,82 @@
   <head>
     <title>LADD Scoreboard</title>
     <meta charset="utf-8">
-    <style type="text/css">
-      @font-face {
-        font-family: Most Wazted;
-        src: url(Mostwasted.ttf);
-      }
-      body {
-        background: url(bg.jpg) #222;
-        background-size: 100% auto;
-        color: #eee;
-        font-family: Most Wazted, fantasy;
-        text-align: center;
-      }
-      #scoreboard {
-        font-size: 5em;
-        width: 100%;
-      }
-
-    </style>
     <link rel="stylesheet" type="text/css" href="scoreboard.css">
+    <style type="text/css">
+#scoreboard {
+    font-size: 75%;
+}
+
+#score-a, #score-b {
+    top: 2.1em;
+}
+
+#jamtext {
+    top: 3.1em;
+    bottom: inherit;
+}
+#jamno {
+    top: 5em;
+    bottom: inherit;
+}
+#jam, #jammer-a, #jammer-b {
+    top: 3em;
+    bottom: inherit;
+}
+#jammer-a {
+    left: 1.2em;
+}
+#jammer-b {
+    right: 1.2em;
+}
+#timeouts-a, #timeouts-b {
+    top: 7em;
+}
+
+/*
+ * Penalties
+ */
+#penalties-a, #penalties-b {
+    position: absolute;
+    font-size: 13%;
+    bottom: 2px;
+    border-collapse: collapse;
+}
+
+#penalties-a {
+    left: 0;
+}
+#penalties-b {
+    right: 0;
+}
+
+#penalties td {
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.075);
+    padding: 0;
+    vertical-align: bottom;
+}
+
+#penalties .minors td {
+    height: 3em;
+}
+#penalties .majors td {
+    height: 8em;
+}
+#penalties .minors div {
+    background-color: #880;
+    color: black;
+}
+#penalties .majors div {
+    background-color: #800;
+}
+#penalties .sk8ers td {
+    font-family: sans-serif;
+    vertical-align: top;
+    width: 1em;
+    line-height: 75%;
+}
+    </style>
     <script type="text/javascript" src="logos.js"></script>
     <script type="text/javascript" src="scoreboard.js"></script>
     <script type="text/javascript" src="penalties.js"></script>
@@ -46,48 +103,32 @@
 window.onkeypress = key;
     </script>
   </head>
-  <body>
-    <table id="scoreboard">
-      <tr>
-        <td width="20%" class="team">
-          <span id="name-a" onclick="handle(event);">-</span>
-          <br>
-          <img src="" alt="☻" id="logo-a" onclick="handle(event);">
-        </td>
-        <td width="60%" rowspan="2">
-          <p>
-            <span id="period" onclick="handle(event);">--:--</span>
-          </p>
-          <p>
-            <span id="timeouts-a" onclick="handle(event);">0</span>
-            <span id="periodtext" onclick="handle(event);">-</span>
-            <span id="timeouts-b" onclick="handle(event);">0</span>
-          </p>
-          <p>
-            <span id="jammer-a" onclick="handle(event);">★</span>
-            <span id="jamtext">-</span>
-            <span id="jammer-b" onclick="handle(event);">★</span>
-          </p>
-          <p>
-            <span id="jam" onclick="handle(event);">-:--.-</span>
-          </p>
-        </td>
-        <td width="20%" class="team">
-          <span id="name-b" onclick="handle(event);">-</span>
-          <br>
-          <img src="" alt="☻" id="logo-b" onclick="handle(event);">
-        </td>
-      </tr>
+    <body>
+        <div id="scoreboard">
+            <p>
+                <span id="name-a" onclick="handle(event);">Home</span>
+                <img src="" alt="A" id="logo-a" onclick="handle(event);">
+                <span id="timeouts-a" onclick="handle(event);">0</span>
+                <span id="jammer-a" onclick="handle(event);">★</span>
+                <span id="score-a" onclick="handle(event);">-</span>
+            </p>
 
-      <tr>
-        <td>
-          <span id="score-a" onclick="handle(event);">-</span>
-        </td>
-        <td>
-          <span id="score-b" onclick="handle(event);">-</span>
-        </td>
-      </tr>
-    </table>
+            <p>
+                <span id="period" onclick="handle(event);">--:--</span>
+                <span id="periodtext" onclick="handle(event);"></span>
+                <span id="jam" onclick="handle(event);">-:--.-</span>
+                <span id="jamtext" onclick="handle(event);"></span>
+                <span id="jamno" onclick="handle(event);">0</span>
+            </p>
+
+            <p>
+                <span id="name-b" onclick="handle(event);">Vis</span>
+                <img src="" alt="B" id="logo-b" onclick="handle(event);">
+                <span id="timeouts-b" onclick="handle(event);">0</span>
+                <span id="jammer-b" onclick="handle(event);">★</span>
+                <span id="score-b" onclick="handle(event);">-</span>
+            </p>
+        </div>
 
     <div id="penalties">
       <table id="penalties-a">

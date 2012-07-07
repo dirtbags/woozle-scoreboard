@@ -24,14 +24,27 @@
     <style type="text/css">
         body {
             background: black;
+        }
+        #scoreboard {
+            font-size: 2em;
             text-align: center;
         }
         #jam, #period {
+            position: inherit;
+            margin: inherit;
+            width: inherit;
+            left: inherit;
             color: white;
         }
-        #scoreboard {
-            font-size: 155px;
-            width: 100%;
+        #jamtext {
+            font-family: inherit;
+            font-size: 50%;
+            margin: inherit;
+            width: inherit;
+
+            position: inherit;
+            bottom: 0em;
+            left: 0em;
         }
         html, p {
             padding: 0;
@@ -40,8 +53,8 @@
     </style>
     <script type="text/javascript" src="scoreboard.js"></script>
     <script type="text/javascript">
-window.onkeypress = key;
-window.tenths = false;
+jamtext = ["J", "L", "T", "S"];
+tenths = false;
     </script>
   </head>
   <body>
@@ -50,7 +63,8 @@ window.tenths = false;
             <span id="period" onclick="handle(event);">--:--</span>
         </p>
         <p>
-            <span id="jam" onclick="handle(event);">-:--.-</span>
+            <span id="jamtext">S</span>
+            <span id="jam" onclick="handle(event);">-:--</span>
         </p>
     </div>
   </body>
