@@ -2,72 +2,142 @@
     font-family: Comunicacion Digital;
     src: url(Comunicacion.ttf);
 }
+@font-face {
+    font-family: Most Wazted;
+    src: url(Mostwasted.ttf);
+}
+
 #scoreboard {
     cursor: default;
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    user-select: none;
-}
-#scoreboard td {
-    vertical-align: top;
-    text-align: center;
+    font-family: sans-serif;
+    font-weight: bold;
 }
 #scoreboard p {
     margin: 0;
 }
 #scoreboard *[id] {
     cursor: pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
-.team {
-    font-family: Comunicacion Digital, sans-serif;
-    font-weight: normal;
-    font-size: 90%;
+
+#name-a, #name-b {
+    display: none;
 }
-.team img {
-    max-width: 2em;
+
+#logo-a, #logo-b {
+    position: absolute;
+    top: 0;
+    max-width: 1.8em;
     max-height: 2em;
 }
-
-#timeouts-a, #timeouts-b, #score-a, #score-b, #jam, #period {
-    color: white;
-    font-family: sans-serif;
-    font-weight: bold;
-    font-size: 133%;
+#logo-a {
+    left: 0;
 }
+#logo-b {
+    right: 0;
+}
+
 #timeouts-a, #timeouts-b {
+    position: absolute;
     font-size: 50%;
-    color: fuchsia;
+    bottom: 1em;
+    color: #0f0;
 }
-#timeouts-a, #jammer-a {
-    float: left;
+#timeouts-a {
+    left: 0em;
 }
-#timeouts-b, #jammer-b {
-    float: right;
+#timeouts-b {
+    right: 0em;
 }
 
+/* Jammer indicators */
 #jammer-a, #jammer-b {
+    position: absolute;
+    bottom: 0em;
     color: #444;
 }
-
-#jammer-a.lead, #jammer-b.lead {
-    color: white;
+#jammer-a.lead, #jammer-b.lead, #jamtext, #periodtext {
+    color: yellow;
+}
+#jammer-a {
+    left: 0.5em;
+}
+#jammer-b {
+    right: 0.5em;
 }
 
 #jam, #period {
+    text-align: center;
     background: #000;
-    font-size: 150%;
     border-radius: 15px;
-    padding: 0 0.1em;
+}
+#period {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 3.4em;
+    margin-left: -1.7em;
+}
+
+#jam {
+    position: absolute;
+    bottom: 0em;
+    left: 50%;
+    width: 4em;
+    margin-left: -2em;
+}
+
+#jamtext, #periodtext {
+    text-align: center;
+    font-family: Most Wazted, sans-serif;
+    font-weight: normal;
+    font-size: 75%;
+
+    position: absolute;
+    left: 50%;
+    width: 4em;
+    margin-left: -2em;
+}
+
+#periodtext {
+    top: 1.4em;
+}
+
+#jamtext {
+    bottom: 1.4em;
+}
+
+
+#score-a, #score-b {
+    position: absolute;
+    font-size: 1.2em;
+    top: 50%;
+    margin-top: -0.6em;
+}
+#score-a {
+    left: 0em;
+}
+#score-b {
+    right: 0em;
 }
 
 #jamno {
-    float: right;
-    font-size: 0.6em;
+    color: #0f0;
+    position: absolute;
+    font-size: 50%;
+    bottom: 2.2em;
+    left: 50%;
+    margin-left: 3em;
 }
 
-/* States timers can be in */
+
+/*
+ * States timers can be in 
+ */
 #jam.paused, #period.paused {
-    color: #888;
+    color: #aaf;
 }
 #jam.lowtime, #period.lowtime {
     background: #f24;
@@ -81,51 +151,35 @@
 
 
 /*
- * Penalties
- */
-#penalties-a {
-    float: left;
-    border-collapse: collapse;
-}
-#penalties-b {
-    float: right;
-    border-collapse: collapse;
-}
-
-#penalties td {
-    cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.075);
-    padding: 0;
-    vertical-align: bottom;
-}
-
-#penalties .minors td {
-    height: 3em;
-}
-#penalties .majors td {
-    height: 8em;
-}
-#penalties .minors div {
-    background-color: #880;
-    color: black;
-}
-#penalties .majors div {
-    background-color: #800;
-}
-#penalties .sk8ers td {
-    font-family: sans-serif;
-    vertical-align: top;
-    width: 1em;
-    line-height: 75%;
-}
-
-
-/*
  * Notices
  */
 #notice div {
     display: none;
+
+    font-family: Comunicacion Digital, sans-serif;
+    font-weight: normal;
+    text-align: center;
+    line-height: 1.1em;
+    opacity: 0.9;
+    
+    position: absolute;
+    bottom: 1.8em;
+    left: 50%;
+    width: 3em;
+    margin-left: -1.5em;
 }
 #notice .active {
-    display: block;
+    display: inherit;
+    -moz-animation-duration: 0.5s;
+    -moz-animation-name: grow;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-direction: alternate;
+}  
+    
+@-moz-keyframes grow {  
+  0%   {color: red;}
+  50%  {color: yellow;}
+  75%  {color: blue;}
+  100% {color: magenta;}
 }
+

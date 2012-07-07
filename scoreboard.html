@@ -25,101 +25,76 @@ body {
     background: url(bg.jpg) #222;
     background-size: 100% auto;
     color: #eee;
-    font-family: sans;
-    font-weight: bold;
-    text-align: center;
+    margin: 0;
 }
 #scoreboard {
-    font-size: 5em;
     width: 100%;
 }
-#periodtext {
-    font-size: 75%;
-}
-
-#notice div {
-    font-family: Crack Babies, Comunicacion Digital, sans-serif;
-    font-size: 7em;
-    position: absolute;
-    top: 10px;
-    left: 20%;
-    width: 60%;
-    display: none;
-    background: black;
-}
-#notice .active {
-    display: block;
-    -moz-animation-duration: 0.5s;
-    -moz-animation-name: grow;
-    -moz-animation-iteration-count: infinite;
-    -moz-animation-direction: alternate;
-}  
-    
-@-moz-keyframes grow {  
-  0%   {color: red;}
-  50%  {color: yellow;}
-  75%  {color: blue;}
-  100% {color: magenta;}
-}
-
-
     </style>
     <link rel="stylesheet" type="text/css" href="scoreboard.css">
     <script type="text/javascript" src="logos.js"></script>
     <script type="text/javascript" src="scoreboard.js"></script>
     <script type="text/javascript">
+
+function resize() {
+    var b = document.getElementsByTagName("body")[0];
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+   
+    w /= 7;
+    h /= 5;
+
+    var fs = Math.min(w, h);
+
+    b.style.fontSize = fs + 'px';
+}
+
+function localstart() {
+    start();
+    resize();
+}
+
+window.onresize = resize;
+window.onload = localstart;
 window.onkeypress = key;
-    </script>
-  </head>
-  <body>
-    <table id="scoreboard">
-      <tr>
-        <td width="20%" class="team">
-          <span id="name-a" onclick="handle(event);">-</span>
-          <br>
-          <img src="" alt="☻" id="logo-a" onclick="handle(event);">
-        </td>
-        <td width="60%" rowspan="2">
-          <p>
-            <span id="period" onclick="handle(event);">--:--</span>
-          </p>
-          <p>
-            <span id="timeouts-a" onclick="handle(event);">0</span>
-            <span id="periodtext" onclick="handle(event);">-</span>
-            <span id="timeouts-b" onclick="handle(event);">0</span>
-          </p>
-          <p>
-            <span id="jammer-a" onclick="handle(event);">★</span>
-            <span id="jamtext">-</span>
-            <span id="jammer-b" onclick="handle(event);">★</span>
-            <span id="jamno" onclick="handle(event);">0</span>
-          </p>
-          <p>
-            <span id="jam" onclick="handle(event);">-:--.-</span>
-          </p>
-        </td>
-        <td width="20%" class="team">
-          <span id="name-b" onclick="handle(event);">-</span>
-          <br>
-          <img src="" alt="☻" id="logo-b" onclick="handle(event);">
-        </td>
-      </tr>
+        </script>
+    </head>
+    <body>
+        <!-- 
+            HTML5 says not to use tables for layout.  Since this is
+            a highly-styled page, it looks awful without CSS.  Sorry.
+        -->
+        <div id="scoreboard">
+            <p>
+                <span id="name-a" onclick="handle(event);">Home</span>
+                <img src="" alt="A" id="logo-a" onclick="handle(event);">
+                <span id="timeouts-a" onclick="handle(event);">0</span>
+                <span id="jammer-a" onclick="handle(event);">★</span>
+                <span id="score-a" onclick="handle(event);">-</span>
+            </p>
 
-      <tr>
-        <td>
-          <span id="score-a" onclick="handle(event);">-</span>
-        </td>
-        <td>
-          <span id="score-b" onclick="handle(event);">-</span>
-        </td>
-      </tr>
-    </table>
+            <p>
+                <span id="period" onclick="handle(event);">--:--</span>
+                <span id="periodtext" onclick="handle(event);"></span>
+                <span id="jam" onclick="handle(event);">-:--.-</span>
+                <span id="jamtext" onclick="handle(event);"></span>
+                <span id="jamno" onclick="handle(event);">0</span>
+            </p>
 
-    <div id="notice">
-      <div id="notice-1">Power Jam</div>
-      <div id="notice-2">Grand Slam</div>
-      <div id="notice-3">Ouch!</div>
-      <div id="notice-4">OMG</div>
-    </div>
-  </body>
+            <p>
+                <span id="name-b" onclick="handle(event);">Vis</span>
+                <img src="" alt="B" id="logo-b" onclick="handle(event);">
+                <span id="timeouts-b" onclick="handle(event);">0</span>
+                <span id="jammer-b" onclick="handle(event);">★</span>
+                <span id="score-b" onclick="handle(event);">-</span>
+            </p>
+        </table>
+
+        <div id="notice">
+            <div id="notice-1">Power Jam</div>
+            <div id="notice-2">Grand Slam</div>
+            <div id="notice-3">Ouch</div>
+            <div id="notice-4">OMG</div>
+        </div>
+    </body>
 </html>
