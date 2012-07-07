@@ -1,10 +1,28 @@
 @font-face {
-    font-family: Comunicacion Digital;
-    src: url(Comunicacion.ttf);
+    font-family: 'ComunicacionDigitalMedium';
+    src: url('comunicacion-webfont.eot');
+    src: url('comunicacion-webfont.eot?#iefix') format('embedded-opentype'),
+         url('comunicacion-webfont.woff') format('woff'),
+         url('comunicacion-webfont.ttf') format('truetype'),
+         url('comunicacion-webfont.svg#ComunicacionDigitalMedium') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
 }
+
+
+
+
 @font-face {
-    font-family: Most Wazted;
-    src: url(Mostwasted.ttf);
+    font-family: 'MostWaztedRegular';
+    src: url('mostwasted-webfont.eot');
+    src: url('mostwasted-webfont.eot?#iefix') format('embedded-opentype'),
+         url('mostwasted-webfont.woff') format('woff'),
+         url('mostwasted-webfont.ttf') format('truetype'),
+         url('mostwasted-webfont.svg#MostWaztedRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
 }
 
 #scoreboard {
@@ -91,7 +109,7 @@
 
 #jamtext, #periodtext {
     text-align: center;
-    font-family: Most Wazted, sans-serif;
+    font-family: MostWaztedRegular, sans-serif;
     font-weight: normal;
     font-size: 75%;
 
@@ -156,7 +174,7 @@
 #notice div {
     display: none;
 
-    font-family: Comunicacion Digital, sans-serif;
+    font-family: ComunicacionDigitalMedium, sans-serif;
     font-weight: normal;
     text-align: center;
     line-height: 1.1em;
