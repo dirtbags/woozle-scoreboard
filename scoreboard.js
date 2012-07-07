@@ -368,6 +368,8 @@ function handle(event) {
     transition(newstate);
 }
 
+// I'm unable to get IE8 to ever call this on a key press.
+// You guys are just going to have to use the mouse.
 function key(event) {
     var c = String.fromCharCode(event.which || 0);
     var newstate;
