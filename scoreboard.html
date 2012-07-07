@@ -24,6 +24,7 @@
 body {
     background: url(bg.jpg) #222;
     background-size: 100% auto;
+    font-size: 160px;
     color: #eee;
     margin: 0;
 }
@@ -38,8 +39,23 @@ body {
 
 function resize() {
     var b = document.getElementsByTagName("body")[0];
-    var w = window.innerWidth;
-    var h = window.innerHeight;
+    var w, h;
+    
+    // Internet Explorer makes everything a pain in the ass
+    if (window.innerWidth) {
+        w = window.innerWidth;
+        h = window.innerHeight;
+    } else if (document.documentElement && document.documentElement.clientWidth) {
+        w = document.documentElement.clientWidth;
+        h = document.documentElement.clientHeight;
+    } else if (document.body) {
+        w = document.body.clientWidth;
+        h = document.body.clientHeight;
+    } else {
+        // Punt
+        w = 800;
+        h = 600;
+    }
    
     w /= 7;
     h /= 5;
