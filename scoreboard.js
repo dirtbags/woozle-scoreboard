@@ -376,10 +376,9 @@ function handle(event) {
     transition(newstate);
 }
 
-// I'm unable to get IE8 to ever call this on a key press.
-// You guys are just going to have to use the mouse.
 function key(event) {
-    var c = String.fromCharCode(event.which || 0);
+    var e = event || window.event;
+    var c = String.fromCharCode(e.which || e.keyCode || 0);
     var newstate;
 
     switch (c) {
@@ -536,6 +535,5 @@ function resize() {
 }
 
 window.onload = start;
-window.onkeypress = key;
+document.onkeypress = key;  // IE requires document, not window
 window.onresize = resize;
-
