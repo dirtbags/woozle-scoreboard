@@ -28,6 +28,8 @@ teams.sort();
 
 // Add special teams at the beginning
 teams.splice(0, 0,
-             ["Blk", "black.png", "Black Team"],
-             ["Wht", "white.png", "White Team"]
-            );
+    ["Blk", "black.png", "Black Team"],
+    ["Wht", "white.png", "White Team"],
+    ["Grn", "green.png", "Green Team"],
+    ["Rng", "orange.png", "Orange Team"]
+);
