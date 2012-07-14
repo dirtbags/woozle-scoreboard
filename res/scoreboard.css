@@ -42,10 +42,6 @@ body {
     user-select: none;
 }
 
-#name-a, #name-b {
-    display: none;
-}
-
 #logo-a, #logo-b {
     position: absolute;
     top: 0;

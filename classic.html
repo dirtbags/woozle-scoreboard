@@ -22,94 +22,50 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="res/scoreboard.css">
     <style type="text/css">
-#scoreboard {
+#name-a, #name-b {
+    font-family: ComunicacionDigitalMedium, monospace, sans-serif;
+    position: absolute;
+    top: 0;
     font-size: 75%;
 }
 
-#score-a, #score-b {
-    top: 2.1em;
-}
-
-#jamtext {
-    top: 3.1em;
-    bottom: inherit;
-}
-#jamno {
-    top: 5em;
-    bottom: inherit;
-}
-#jam, #jammer-a, #jammer-b {
-    top: 3em;
-    bottom: inherit;
-}
-#jammer-a {
-    left: 1.2em;
-}
-#jammer-b {
-    right: 1.2em;
-}
-#timeouts-a, #timeouts-b {
-    top: 7em;
-}
-
-#notice div {
-    bottom: 0.2em;
-}
-
-/*
- * Penalties
- */
-#penalties-a, #penalties-b {
-    position: absolute;
-    font-size: 13%;
-    bottom: 2px;
-    border-collapse: collapse;
-}
-
-#penalties-a {
+#name-a {
     left: 0;
 }
-#penalties-b {
+
+#name-b {
     right: 0;
 }
 
-#penalties td {
-    cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.075);
-    padding: 0;
-    vertical-align: bottom;
+#logo-a, #logo-b {
+    top: 1em;
+    max-height: 1.5em;
 }
 
-#penalties .minors td {
-    height: 3em;
+#score-a, #score-b {
+    font-size: 90%;
+    top: inherit;
+    bottom: 0;
 }
-#penalties .majors td {
-    height: 8em;
+
+#jammer-a, #jammer-b {
+    bottom: 1.5em;
 }
-#penalties .minors div {
-    background-color: #880;
-    color: black;
-}
-#penalties .majors div {
-    background-color: #800;
-}
-#penalties .sk8ers td {
-    font-family: sans-serif;
-    vertical-align: top;
-    width: 1em;
-    line-height: 75%;
+#timeouts-a, #timeouts-b {
+    bottom: 3em;
 }
     </style>
     <script type="text/javascript" src="logos/logos.js"></script>
     <script type="text/javascript" src="res/scoreboard.js"></script>
-    <script type="text/javascript" src="res/penalties.js"></script>
-    <script type="text/javascript">
-window.onkeypress = key;
-    </script>
-  </head>
+    </head>
     <body>
+        <!-- 
+            HTML5 says not to use tables for layout.  Since this is
+            a highly-styled page, it looks awful without CSS.  Sorry.
+        -->
         <div id="scoreboard">
             <p>
+                <span id="name-a" onclick="handle(event);">Home</span>
                 <img src="" alt="A" id="logo-a" onclick="handle(event);">
                 <span id="timeouts-a" onclick="handle(event);">0</span>
                 <span id="jammer-a" onclick="handle(event);">★</span>
@@ -125,6 +81,7 @@ window.onkeypress = key;
             </p>
 
             <p>
+                <span id="name-b" onclick="handle(event);">Vis</span>
                 <img src="" alt="B" id="logo-b" onclick="handle(event);">
                 <span id="timeouts-b" onclick="handle(event);">0</span>
                 <span id="jammer-b" onclick="handle(event);">★</span>
@@ -132,27 +89,11 @@ window.onkeypress = key;
             </p>
         </div>
 
-    <div id="penalties">
-      <table id="penalties-a">
-        <tr class="majors"></tr>
-        <tr class="minors"></tr>
-        <tr class="sk8ers"></tr>
-      </table>
-
-      <!-- Right here would be an excellent place for a sponsor logo -->
-
-      <table id="penalties-b">
-        <tr class="majors"></tr>
-        <tr class="minors"></tr>
-        <tr class="sk8ers"></tr>
-      </table>
-    </div>
-
-    <div id="notice">
-      <div id="notice-1">Power Jam</div>
-      <div id="notice-2">Grand Slam</div>
-      <div id="notice-3">Ouch</div>
-      <div id="notice-4">OMG</div>
-    </div>
-  </body>
+        <div id="notice">
+            <div id="notice-1">Power Jam</div>
+            <div id="notice-2">Grand Slam</div>
+            <div id="notice-3">Ouch</div>
+            <div id="notice-4">OMG</div>
+        </div>
+    </body>
 </html>

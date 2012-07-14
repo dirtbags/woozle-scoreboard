@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Roller Derby Logos</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="../res/style.css">
     <style type="text/css">
       #gallery {
       }
@@ -16,7 +16,7 @@
       }
       #gallery img
       {
-          background: url(checkerboard.png) #282;
+          background: url(../res/checkerboard.png) #282;
           display:inline;
           float: none;
           margin:3px;
@@ -43,10 +43,10 @@ function gallery() {
         var a = document.createElement("a");
         var i = document.createElement("img");
 
-        i.setAttribute("src", "logos/" + team[1]);
+        i.setAttribute("src", team[1]);
         i.setAttribute("alt", team[0] + " logo");
 
-        a.setAttribute("href", "logos/" + team[1]);
+        a.setAttribute("href", team[1]);
         a.appendChild(i);
         a.appendChild(document.createElement("br"));
         a.appendChild(document.createTextNode(team[2] + " (" + team[0] + ")"));
@@ -65,7 +65,7 @@ window.onload = gallery;
 
     <p>
       Here are the logos currently shipping with the
-      free <a href="index.html">LADD Scoreboard</a>.  If you'd like
+      free <a href="../index.html">LADD Scoreboard</a>.  If you'd like
       yours added, email your team name, preferred short name, and logo
       to <a href="mailto:neale&#64;woozle.org">neale&#64;woozle.org</a>.
     </p>
