@@ -16,6 +16,13 @@ teams = [
     ["DD",      "doomsdames.png", "Albuquerque Doomsdames"],
     ["TEX",     "texpistols.png", "El Paso Tex Pistols"],
     ["PWH",     "pistol.png",     "El Paso Pistol Whip-Hers"],
+    ["MT",      "minorthreat.png", "Minor Threat"],
+    ["CCR",     "choicecity.png", "Choice City Rebels"],
+    ["DIA",     "dia.png",        "Derby Intelligence Agency"],
+    ["TRD",     "tucson.png",     "Tucson Roller Derby"],
+    ["TST",     "saddletramps.jpg","Tucson Saddle Tramps"],
+    ["TC",      "tallcity.png",   "Tall City Roller Betties"],
+    ["SS",      "ssdd.png",       "South Side Derby Dames"],
 ];
 teams.sort();
 
