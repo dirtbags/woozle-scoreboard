@@ -1,6 +1,3 @@
-/* IE can't handle key events anyway, so screw it,
-   we're just keeping one copy around. */
-
 @font-face {
     font-family: 'ComunicacionDigitalMedium';
     src: url('comunicacion-webfont.ttf') format('truetype');
@@ -42,17 +39,22 @@ body {
     user-select: none;
 }
 
-#logo-a, #logo-b {
+#logo-a-container, #logo-b-container {
     position: absolute;
     top: 0;
-    max-width: 1.8em;
-    max-height: 2em;
+    height: 5em;
+    width: 2em;
+    text-align: center;
 }
-#logo-a {
+#logo-a-container {
     left: 0;
 }
-#logo-b {
+#logo-b-container {
     right: 0;
+}
+#logo-a, #logo-b {
+    max-width: 1.8em;
+    max-height: 2em;
 }
 
 #timeouts-a, #timeouts-b {
