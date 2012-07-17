@@ -39,19 +39,21 @@ body {
     user-select: none;
 }
 
-#logo-a-container, #logo-b-container {
+.left, .right {
+    width: 2em;
+    height: 100%;
+    text-align: center;
     position: absolute;
     top: 0;
-    height: 5em;
-    width: 2em;
-    text-align: center;
 }
-#logo-a-container {
+
+.left {
     left: 0;
 }
-#logo-b-container {
+.right {
     right: 0;
 }
+
 #logo-a, #logo-b {
     max-width: 1.8em;
     max-height: 2em;

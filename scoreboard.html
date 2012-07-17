@@ -30,14 +30,14 @@
             a highly-styled page, it looks awful without CSS.  Sorry.
         -->
         <div id="scoreboard">
-            <p>
-                <span id="logo-a-container"><img src="" alt="A" id="logo-a" onclick="handle(event);"></span>
-                <span id="timeouts-a" onclick="handle(event);">0</span>
-                <span id="jammer-a" onclick="handle(event);">★</span>
-                <span id="score-a" onclick="handle(event);">-</span>
+            <p class="left">
+                <img  class="logo"     id="logo-a" src="" alt="A" onclick="handle(event);">
+                <span class="timeouts" id="timeouts-a" onclick="handle(event);">0</span>
+                <span class="jammer"   id="jammer-a" onclick="handle(event);">★</span>
+                <span class="score"    id="score-a" onclick="handle(event);">-</span>
             </p>
 
-            <p>
+            <p class="center">
                 <span id="period" onclick="handle(event);">--:--</span>
                 <span id="periodtext" onclick="handle(event);"></span>
                 <span id="jam" onclick="handle(event);">-:--.-</span>
@@ -45,11 +45,11 @@
                 <span id="jamno" onclick="handle(event);">0</span>
             </p>
 
-            <p>
-                <span id="logo-b-container"><img src="" alt="B" id="logo-b" onclick="handle(event);"></span>
-                <span id="timeouts-b" onclick="handle(event);">0</span>
-                <span id="jammer-b" onclick="handle(event);">★</span>
-                <span id="score-b" onclick="handle(event);">-</span>
+            <p class="right">
+                <img  class="logo"     id="logo-b" src="" alt="B" onclick="handle(event);">
+                <span class="timeouts" id="timeouts-b" onclick="handle(event);">0</span>
+                <span class="jammer"   id="jammer-b" onclick="handle(event);">★</span>
+                <span class="score"    id="score-b" onclick="handle(event);">-</span>
             </p>
         </div>
 
