@@ -70,6 +70,7 @@ body {
 
 /* Jammer indicators */
 #jammer-a, #jammer-b {
+    font-family: monospace;
     position: absolute;
     bottom: 0em;
     color: #444;
@@ -144,8 +145,7 @@ body {
     position: absolute;
     font-size: 50%;
     bottom: 2.2em;
-    left: 50%;
-    margin-left: 3em;
+    right: 30%;
 }
 
 

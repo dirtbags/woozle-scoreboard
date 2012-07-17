@@ -432,16 +432,20 @@ function key(event) {
     transition(newstate);
 }
 
-function dfl(v, d) {
-    if (v == undefined) {
+function get(k, d) {
+    if (! window.localStorage) {
         return d;
     } else {
+        var v = window.localStorage["rdsb_" + k];
+        if (v == undefined) {
+            return d;
+        }
         return v;
     }
 }
 
 function store(k, v) {
-    if ((v == undefined) || ! localStorage) {
+    if ((v == undefined) || ! window.localStorage) {
         return;
     } else {
         localStorage["rdsb_" + k] = v;
@@ -449,8 +453,6 @@ function store(k, v) {
 }
 
 function save() {
-    var ls = localStorage || {};
-
     store("period_clock", e("period").remaining());
     store("name_a", e("name-a").innerHTML);
     store("name_b", e("name-b").innerHTML);
@@ -460,27 +462,48 @@ function save() {
     store("score_b", e("score-b").innerHTML);
     store("timeout_a", e("timeouts-a").innerHTML);
     store("timeout_b", e("timeouts-b").innerHTML);
+    store("jamno", jamno);
     store("period", period);
 }
     
+function iecheck() {
+    // If it's IE, it's got to be at least 7
+    var ua = navigator.userAgent;
+    var ie = ua.indexOf("MSIE ");
+
+    if (ie == -1) {
+        // Not IE
+        return;
+    } else {
+        var n = parseFloat(ua.substring(ie + 5, ua.indexOf(";", ie)));
+        if (n < 7) {
+            alert("Your browser is too old to run the Woozle scoreboard.\nYou can use Firefox, Chrome, Opera, or Internet Explorer 7 and up.");
+        }
+    }
+}
+
 function start() {
+    resize();
+    iecheck();
+
     var p = document.getElementById("period");
     var j = document.getElementById("jam");
-    var ls = localStorage || {};
     var c;
 
-    // IE8 doesn't have localStorage for file:// URLs  :<
-    e("name-a").innerHTML = dfl(ls.rdsb_name_a, "Home");
-    e("name-b").innerHTML = dfl(ls.rdsb_name_b, "Vis");
-    e("logo-a").src = dfl(ls.rdsb_logo_a, "logos/black.png");
-    e("logo-b").src = dfl(ls.rdsb_logo_b, "logos/white.png");
-    e("score-a").innerHTML = dfl(ls.rdsb_score_a, 0);
-    e("score-b").innerHTML = dfl(ls.rdsb_score_b, 0);
-    e("timeouts-a").innerHTML = dfl(ls.rdsb_timeout_a, 3);
-    e("timeouts-b").innerHTML = dfl(ls.rdsb_timeout_b, 3);
-    period = Number(ls.rdsb_period) || 0;
 
-    if (localStorage) {
+    // IE8 doesn't have localStorage for file:// URLs  :<
+    e("name-a").innerHTML = get("name_a", "Home");
+    e("name-b").innerHTML = get("name_b", "Vis");
+    e("logo-a").src = get("logo_a", "logos/black.png");
+    e("logo-b").src = get("logo_b", "logos/white.png");
+    e("score-a").innerHTML = get("score_a", 0);
+    e("score-b").innerHTML = get("score_b", 0);
+    e("timeouts-a").innerHTML = get("timeout_a", 3);
+    e("timeouts-b").innerHTML = get("timeout_b", 3);
+    period = Number(get("period", 0));
+    jamno = Number(get("jamno", 0));
+
+    if (window.localStorage) {
         save_itimer = setInterval(save, 1000);
     }
     
@@ -492,7 +515,7 @@ function start() {
     e("jamtext").innerHTML = jamtext[3];
     transition();
 
-    c = Number(ls.rdsb_period_clock || 1800000);
+    c = Number(get("period_clock", 1800000));
     startTimer(p);
     p.set(c);
 
@@ -503,7 +526,6 @@ function start() {
     save_timer = setInterval(save, 1000);
     update_itimer = setInterval(update, 33);
 
-    resize();
 }
 
 function resize() {
