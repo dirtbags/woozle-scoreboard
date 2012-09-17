@@ -50,12 +50,12 @@ body {
     right: 0;
 }
 
-#logo-a, #logo-b {
+.logo {
     max-width: 1.8em;
     max-height: 2em;
 }
 
-#timeouts-a, #timeouts-b {
+.timeouts {
     position: absolute;
     font-size: 50%;
     bottom: 1em;
@@ -69,7 +69,7 @@ body {
 }
 
 /* Jammer indicators */
-#jammer-a, #jammer-b {
+.jammer {
     font-family: monospace;
     position: absolute;
     bottom: 0em;
@@ -127,7 +127,7 @@ body {
 }
 
 
-#score-a, #score-b {
+.score {
     position: absolute;
     font-size: 1.2em;
     top: 50%;

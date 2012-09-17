@@ -22,38 +22,23 @@
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="res/scoreboard.css">
     <style type="text/css">
-#scoreboard {
-    font-size: 75%;
+#jam {
+    bottom: auto;
+    top: 2em;
 }
-
-#score-a, #score-b {
-    top: 2.1em;
-}
-
 #jamtext {
-    top: 2.8em;
-    bottom: inherit;
+    bottom: auto;
+    top: 1.5em;
 }
 #jamno {
-    top: 5em;
-    bottom: inherit;
-}
-#jam, #jammer-a, #jammer-b {
+    bottom: auto;
     top: 3em;
-    bottom: inherit;
 }
-#jammer-a {
-    left: 1.2em;
+.timeouts {
+    margin: 0em 6em;
 }
-#jammer-b {
-    right: 1.2em;
-}
-#timeouts-a, #timeouts-b {
-    top: 7em;
-}
-
-#notice div {
-    bottom: 0.2em;
+.jammer {
+    margin: 0em 3em;
 }
 
 /*
@@ -103,6 +88,9 @@
     <script type="text/javascript" src="logos/logos.js"></script>
     <script type="text/javascript" src="res/scoreboard.js"></script>
     <script type="text/javascript" src="res/penalties.js"></script>
+    <script type="text/javascript">
+tenths = true;
+    </script>
   </head>
     <body>
         <div id="scoreboard">
@@ -115,7 +103,6 @@
 
             <p class="center">
                 <span id="period" onclick="handle(event);">--:--</span>
-                <span id="periodtext" onclick="handle(event);"></span>
                 <span id="jam" onclick="handle(event);">-:--.-</span>
                 <span id="jamtext" onclick="handle(event);"></span>
                 <span id="jamno" onclick="handle(event);">0</span>
