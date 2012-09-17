@@ -4,11 +4,9 @@
 function penalties (team) {
     var table = document.getElementById("penalties-" + team);
 
-    var minors = table.getElementsByClassName("minors")[0];
     var majors = table.getElementsByClassName("majors")[0];
     var sk8ers = table.getElementsByClassName("sk8ers")[0];
 
-    var mindiv = minors.getElementsByTagName("div");
     var majdiv = majors.getElementsByTagName("div");
     var sk8div = sk8ers.getElementsByTagName("div");
 
@@ -16,7 +14,6 @@ function penalties (team) {
 
     for (var i = 0; i < 20; i += 1) {
         ret.push([sk8div[i].text,
-                  mindiv[i].value || 0,
                   majdiv[i].value || 0]);
     }
 
@@ -58,17 +55,14 @@ function penalties_setdiv (div, value) {
 function penalties_load (team, values) {
     var table = document.getElementById("penalties-" + team);
 
-    var minors = table.getElementsByClassName("minors")[0];
     var majors = table.getElementsByClassName("majors")[0];
     var sk8ers = table.getElementsByClassName("sk8ers")[0];
 
-    var mindiv = minors.getElementsByTagName("div");
     var majdiv = majors.getElementsByTagName("div");
     var sk8div = sk8ers.getElementsByTagName("div");
 
     for (var i = 0; i < values.length; i += 1) {
         penalties_setdiv(sk8div[i], values[i][0]);
-        penalties_setdiv(mindiv[i], values[i][1]);
         penalties_setdiv(majdiv[i], values[i][2]);
     }
 }
@@ -99,14 +93,7 @@ function penalties_click (event) {
     var inc = event.shiftKey?-1:1;
     var val;
 
-    if (pops.className == "minors") {
-        val = ((div.value || 0) + inc + 4) % 4;
-        if ((inc == 1) && (val == 0)) {
-            var majdiv = div.majdiv;
-            
-            penalties_setdiv(majdiv, ((majdiv.value || 0) + 1) % 9);
-        }
-    } else if (pops.className == "majors") {
+    if (pops.className == "majors") {
         val = ((div.value || 0) + inc + 9) % 9;
     } else if (state == SETUP) {
         val = prompt("Enter skater number", div.text);
@@ -136,12 +123,11 @@ function penalties_duck () {
 function penalties_init () {
     var ls = localStorage || {};
 
-    // Populate ALL THREE ROWS AT ONCE because I'm crazy like that.
+    // Populate ALL ROWS AT ONCE because I'm crazy like that.
     for (var j = 0; j < 2; j += 1) {
         var team = (j==0)?"a":"b";
 
         var table = document.getElementById("penalties-" + team);
-        var minors = table.getElementsByClassName("minors")[0];
         var majors = table.getElementsByClassName("majors")[0];
         var sk8ers = table.getElementsByClassName("sk8ers")[0];
 
@@ -154,14 +140,6 @@ function penalties_init () {
             td.onclick = penalties_click;
             td.appendChild(majdiv);
             majors.appendChild(td);
-
-
-            td = document.createElement("td");
-            div = document.createElement("div");
-            div.majdiv = majdiv;
-            td.onclick = penalties_click;
-            td.appendChild(div);
-            minors.appendChild(td);
 
 
             div = document.createElement("div");

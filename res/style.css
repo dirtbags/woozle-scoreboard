@@ -1,10 +1,6 @@
 @font-face {
-    font-family: 'MostWaztedRegular';
-    src: url('mostwasted-webfont.eot');
-    src: url('mostwasted-webfont.eot?#iefix') format('embedded-opentype'),
-         url('mostwasted-webfont.woff') format('woff'),
-         url('mostwasted-webfont.ttf') format('truetype'),
-         url('mostwasted-webfont.svg#MostWaztedRegular') format('svg');
+    font-family: 'PermanentMarker';
+    src: url('PermanentMarker.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
@@ -18,7 +14,7 @@ body {
 }
 h1 {
     color: #fd8;
-    font-family: MostWaztedRegular, fantasy, sans-serif;
+    font-family: PermanentMarker, fantasy, sans-serif;
     font-size-adjust: 1.0;
 }
 h2 {

@@ -348,7 +348,13 @@ function handle(event) {
             period = (period + ptl + adj) % ptl;
             pt = periodtext[period];
         }
-        if (pt) tgt.innerHTML = pt;
+        if (pt) {
+            tgt.innerHTML = pt;
+            if (state == TIMEOUT) {
+                jamno = 0;
+                e("jamno").innerHTML = jamno;
+            }
+        }
         break;
     case "jam":
         if (state == JAM) {
@@ -453,6 +459,9 @@ function store(k, v) {
 }
 
 function save() {
+    if (window.penalties_save) {
+        penalties_save();
+    }
     store("period_clock", e("period").remaining());
     store("name_a", e("name-a").innerHTML);
     store("name_b", e("name-b").innerHTML);

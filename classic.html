@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="res/scoreboard.css">
     <style type="text/css">
 #name-a, #name-b {
-    font-family: ComunicacionDigitalMedium, monospace, sans-serif;
+    font-family: PermanentMarker, monospace, sans-serif;
     position: absolute;
     top: 0;
     font-size: 75%;
@@ -37,15 +37,16 @@
     right: 0;
 }
 
-#logo-a, #logo-b {
-    top: 1em;
+.logo {
+    margin-top: 1em;
     max-height: 1.5em;
 }
 
 #score-a, #score-b {
+    position: absolute;
     font-size: 90%;
-    top: inherit;
-    bottom: 0;
+    top: auto;
+    bottom: 0em;
 }
 
 #jammer-a, #jammer-b {
@@ -64,12 +65,12 @@
             a highly-styled page, it looks awful without CSS.  Sorry.
         -->
         <div id="scoreboard">
-            <p>
-                <span id="name-a" onclick="handle(event);">Home</span>
-                <img src="" alt="A" id="logo-a" onclick="handle(event);">
-                <span id="timeouts-a" onclick="handle(event);">0</span>
-                <span id="jammer-a" onclick="handle(event);">★</span>
-                <span id="score-a" onclick="handle(event);">-</span>
+            <p class="left">
+                <span class="name" id="name-a" onclick="handle(event);">Home</span>
+                <img  class="logo" src="" alt="A" id="logo-a" onclick="handle(event);">
+                <span class="timeouts" id="timeouts-a" onclick="handle(event);">0</span>
+                <span class="jammer" id="jammer-a" onclick="handle(event);">★</span>
+                <span class="score" id="score-a" onclick="handle(event);">-</span>
             </p>
 
             <p>
@@ -80,12 +81,12 @@
                 <span id="jamno" onclick="handle(event);">0</span>
             </p>
 
-            <p>
-                <span id="name-b" onclick="handle(event);">Vis</span>
-                <img src="" alt="B" id="logo-b" onclick="handle(event);">
-                <span id="timeouts-b" onclick="handle(event);">0</span>
-                <span id="jammer-b" onclick="handle(event);">★</span>
-                <span id="score-b" onclick="handle(event);">-</span>
+            <p class="right">
+                <span class="name" id="name-b" onclick="handle(event);">Vis</span>
+                <img  class="logo" src="" alt="B" id="logo-b" onclick="handle(event);">
+                <span class="timeouts" id="timeouts-b" onclick="handle(event);">0</span>
+                <span class="jammer" id="jammer-b" onclick="handle(event);">★</span>
+                <span class="score" id="score-b" onclick="handle(event);">-</span>
             </p>
         </div>
 
