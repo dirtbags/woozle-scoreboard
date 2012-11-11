@@ -200,6 +200,7 @@ var notices = [
 	'<embed src="res/HolyShot.swf" type="text/html">',
 	'<embed src="res/FasterFaster.swf" type="text/html">',
 	'<embed src="res/BadGirl.swf" type="text/html">',
+	'<embed src="res/banana.gif" type="image/gif">',
 ];
 
 var notice_timer;
