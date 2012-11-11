@@ -69,7 +69,7 @@ body {
 }
 
 /* Jammer indicators */
-.jammer {
+#jammer-a, #jammer-b {
     font-family: monospace;
     position: absolute;
     bottom: 0em;
@@ -150,7 +150,7 @@ body {
 
 
 /*
- * States timers can be in 
+ * States timers can be in
  */
 #jam.paused, #period.paused {
     color: #aaf;
@@ -169,37 +169,17 @@ body {
 /*
  * Notices
  */
-#notice div {
-    display: none;
-
-    background: silver;
-    border: solid white 10px;
-    border-radius: 90px;
-
-    font-size: 150%;
-    font-family: Magenta, sans-serif;
-    font-weight: normal;
-    text-align: center;
-    opacity: 0.9;
-    
+#notice {
     position: absolute;
     bottom: 1.3em;
     left: 50%;
-    width: 3em;
-    margin-left: -1.5em;
+    width: 4em;
+	height: 3em;
+    margin-left: -2em;
 }
-#notice .active {
-    display: inherit;
-    -moz-animation-duration: 0.5s;
-    -moz-animation-name: grow;
-    -moz-animation-iteration-count: infinite;
-    -moz-animation-direction: alternate;
-}  
-    
-@-moz-keyframes grow {  
-  0%   {color: red;}
-  50%  {color: yellow;}
-  75%  {color: blue;}
-  100% {color: magenta;}
+
+#notice embed {
+	width: 100%;
+	height: 100%;
 }
 

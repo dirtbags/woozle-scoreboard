@@ -29,7 +29,7 @@ tenths = true;
 
 /* State names */
 var SETUP = 0;                  // !P 30:00   !J 2:00
-var JAM = 1;                    //  P          J 2:00  
+var JAM = 1;                    //  P          J 2:00
 var LINEUP = 2;                 //  P          J 1:00
 var TIMEOUT = 3;                // !P          J 1:00
 
@@ -183,7 +183,7 @@ function transition(newstate) {
 
     // Reset lead jammer indicators
     e("jammer-a").className = "";
-    e("jammer-b").className = ""; 
+    e("jammer-b").className = "";
 }
 
 
@@ -191,30 +191,35 @@ function transition(newstate) {
 /***********************************
  * Notices
  */
+
+var notices = [
+	false,
+	'<embed src="res/Zounds.swf" type="text/html">',
+	'<embed src="res/Ouch.swf" type="text/html">',
+	'<embed src="res/Pow.swf" type="text/html">',
+	'<embed src="res/HolyShot.swf" type="text/html">',
+	'<embed src="res/FasterFaster.swf" type="text/html">',
+	'<embed src="res/BadGirl.swf" type="text/html">',
+];
+
 var notice_timer;
 
-function notice_expire(n) {
-    var p = document.getElementById("notice-vanish");
-    var pClassName = "";
+function notice_expire() {
+	var c = document.getElementById("notice");
 
-    for (var i = 0; i < 10; i += 1) {
-        var e = document.getElementById("notice-" + i);
-        
-        if (! e) continue;
-        if (i == n) {
-            e.className = "active";
-            pClassName = "notice";
-        } else {
-            e.className = "";
-        }
-    }
-    if (p) p.className = pClassName;
+	c.innerHTML = "";
 }
 
 function notice(n) {
-    clearTimeout(notice_timer);
-    notice_timer = setTimeout(function() {notice_expire()}, 8000);
-    notice_expire(n);
+    var c = document.getElementById("notice");
+
+    if (notices[n]) {
+        c.innerHTML = notices[n];
+        clearTimeout(notice_timer);
+        notice_timer = setTimeout(function() {notice_expire()}, 8000);
+    } else {
+        notice_expire();
+    }
 }
 
 function e(id) {
