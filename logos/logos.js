@@ -24,6 +24,7 @@ teams = [
     ["TC",      "tallcity.png",   "Tall City Roller Betties"],
     ["SS",      "ssdd.png",       "South Side Derby Dames"],
     ["WTRD",    "wtrd.png",       "West Texas Roller Dollz"],
+    ["FDD",		"fdd.png",		"Faultline Derby Devilz"],
 ];
 teams.sort();
 
