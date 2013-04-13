@@ -1,59 +1,59 @@
 <!DOCTYPE html>
 <!--
-    Roller Derby Scoreboard    Copyright © 2011 Neale Pickett
+		Roller Derby Scoreboard		Copyright © 2011 Neale Pickett
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+		This program is free software: you can redistribute it and/or modify
+		it under the terms of the GNU General Public License as published by
+		the Free Software Foundation, either version 3 of the License, or
+		(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful, but
-    WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    General Public License for more details.
+		This program is distributed in the hope that it will be useful, but
+		WITHOUT ANY WARRANTY; without even the implied warranty of
+		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU
+		General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see
-    <http://www.gnu.org/licenses/>.
+		You should have received a copy of the GNU General Public License
+		along with this program.	If not, see
+		<http://www.gnu.org/licenses/>.
 -->
 <html>
-  <head>
-    <title>LADD Scoreboard</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" href="res/scoreboard.css">
-    <script type="text/javascript" src="logos/logos.js"></script>
-    <script type="text/javascript" src="res/scoreboard.js"></script>
-    </head>
-    <body>
-        <!-- 
-            HTML5 says not to use tables for layout.  Since this is
-            a highly-styled page, it looks awful without CSS.  Sorry.
-        -->
-        <div id="scoreboard">
-            <p class="left">
-                <img  class="logo"     id="logo-a" src="" alt="A" onclick="handle(event);">
-                <span class="timeouts" id="timeouts-a" onclick="handle(event);">0</span>
-                <span class="jammer"   id="jammer-a" onclick="handle(event);">★</span>
-                <span class="score"    id="score-a" onclick="handle(event);">-</span>
-            </p>
+	<head>
+		<title>LADD Scoreboard</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="res/scoreboard.css">
+		<script type="text/javascript" src="logos/logos.js"></script>
+		<script type="text/javascript" src="res/scoreboard.js"></script>
+		<script type="text/javascript" src="res/adverts.js"></script>
+	</head>
+	<body>
+		<!-- 
+			HTML5 says not to use tables for layout.	Since this is
+			a highly-styled page, it looks awful without CSS.	Sorry.
+		-->
+		<div id="scoreboard">
+			<p class="left">
+				<img	class="logo"		 id="logo-a" src="" alt="A" onclick="handle(event);">
+				<span class="timeouts" id="timeouts-a" onclick="handle(event);">0</span>
+				<span class="jammer"	 id="jammer-a" onclick="handle(event);">★</span>
+				<span class="score"		id="score-a" onclick="handle(event);">-</span>
+			</p>
 
-            <p class="center">
-                <span id="period" onclick="handle(event);">--:--</span>
-                <span id="periodtext" onclick="handle(event);"></span>
-                <span id="jam" onclick="handle(event);">-:--.-</span>
-                <span id="jamtext" onclick="handle(event);"></span>
-                <span id="jamno" onclick="handle(event);">0</span>
-            </p>
+			<p class="center">
+				<span id="period" onclick="handle(event);">--:--</span>
+				<img id="no-advert" src="error.jpg" onerror="adverterror()">
+				<span id="jam" onclick="handle(event);">-:--.-</span>
+				<span id="jamtext" onclick="handle(event);"></span>
+			</p>
 
-            <p class="right">
-                <img  class="logo"     id="logo-b" src="" alt="B" onclick="handle(event);">
-                <span class="timeouts" id="timeouts-b" onclick="handle(event);">0</span>
-                <span class="jammer"   id="jammer-b" onclick="handle(event);">★</span>
-                <span class="score"    id="score-b" onclick="handle(event);">-</span>
-            </p>
-        </div>
+			<p class="right">
+				<img	class="logo"		 id="logo-b" src="" alt="B" onclick="handle(event);">
+				<span class="timeouts" id="timeouts-b" onclick="handle(event);">0</span>
+				<span class="jammer"	 id="jammer-b" onclick="handle(event);">★</span>
+				<span class="score"		id="score-b" onclick="handle(event);">-</span>
+			</p>
+		</div>
 
-        <div id="notice">
-        </div>
-    </body>
+		<div id="notice">
+		</div>
+	</body>
 </html>

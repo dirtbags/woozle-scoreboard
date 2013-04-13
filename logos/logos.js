@@ -29,6 +29,8 @@ teams = [
     ["TKRD", "tulare-kings.png", "Tulare Kings Roller Derby"],
     ["CHRY", "cherries.png", "Los Alamos Cherry Bombs"],
     ["PLG", "plague.png", "Zombie Plague"],
+    ["BDB", "bd-betties.png", "Black Diamond Betties"],
+    ["SKS", "sirens.png", "Sea to Sky Sirens"],
 ];
 teams.sort();
 
@@ -37,5 +39,6 @@ teams.splice(0, 0,
     ["Blk", "black.png", "Black Team"],
     ["Wht", "white.png", "White Team"],
     ["Grn", "green.png", "Green Team"],
-    ["Rng", "orange.png", "Orange Team"]
+    ["Rng", "orange.png", "Orange Team"],
+    ["Blu", "blue.png", "Blue Team"]
 );

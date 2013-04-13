@@ -50,6 +50,10 @@ body {
     right: 0;
 }
 
+.center {
+	text-align: center;
+}
+
 .logo {
     max-width: 1.8em;
     max-height: 2em;
@@ -126,6 +130,11 @@ body {
     bottom: 1.4em;
 }
 
+#advert {
+	margin-top: 1.4em;
+	max-height: 2em;
+	max-width: 5em;
+}
 
 .score {
     position: absolute;
