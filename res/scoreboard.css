@@ -179,6 +179,7 @@ body {
  * Notices
  */
 #notice {
+    display: none;
     position: absolute;
     bottom: 1.3em;
     left: 50%;
