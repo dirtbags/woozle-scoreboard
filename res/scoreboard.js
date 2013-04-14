@@ -209,11 +209,13 @@ function notice_expire() {
 	var c = document.getElementById("notice");
 
 	c.innerHTML = "";
+	c.style.display = "none";
 }
 
 function notice(n) {
     var c = document.getElementById("notice");
 
+    c.style.display = "block";
     if (notices[n]) {
         c.innerHTML = notices[n];
         clearTimeout(notice_timer);
