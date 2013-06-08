@@ -31,6 +31,7 @@ teams = [
     ["PLG", "plague.png", "Zombie Plague"],
     ["BDB", "bd-betties.png", "Black Diamond Betties"],
     ["SKS", "sirens.png", "Sea to Sky Sirens"],
+    ["BBDD", "bbdd.png", "Battle Born Derby Bemons"],
 ];
 teams.sort();
 
