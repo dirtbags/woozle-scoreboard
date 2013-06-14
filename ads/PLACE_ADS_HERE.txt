@@ -1,0 +1,9 @@
+Advertisements
+==============
+
+The LADD scoreboard features rudimentary support for advertisements.
+JPEG files in the "ads" directory will be displayed with a slow rotation
+in a loop.
+
+Files need to be named "ad01.jpg", "ad02.jpg", "ad03.jpg", etc. They'll
+show up in numerical order.

@@ -32,6 +32,9 @@ teams = [
     ["BDB", "bd-betties.png", "Black Diamond Betties"],
     ["SKS", "sirens.png", "Sea to Sky Sirens"],
     ["BBDD", "bbdd.png", "Battle Born Derby Demons"],
+    ["OKVD", "okvd.png", "Oklahoma Victory Dolls"],
+    ["MM", "munecas.png", "Muñecas Muertas"],
+    ["MARI", "marionettes.png", "Albuquerque Marionettes"],
 ];
 teams.sort();
 

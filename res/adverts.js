@@ -22,7 +22,7 @@ function rotate_advert() {
 		sn = advert_num
 	}
 	
-	e.src = "ad" + sn + ".jpg"
+	e.src = "ads/ad" + sn + ".jpg"
 	
 	advert_num = advert_num + 1
 }
