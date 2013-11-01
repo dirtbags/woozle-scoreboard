@@ -447,22 +447,38 @@ function key(event) {
 }
 
 function get(k, d) {
-    if (! window.localStorage) {
-        return d;
+    var storage;
+
+    if (chrome) {
+        storage = chrome.storage.local
     } else {
-        var v = window.localStorage["rdsb_" + k];
-        if (v == undefined) {
-            return d;
-        }
-        return v;
+        storage = window.localStorage;
     }
+    
+    if (! storage) {
+        return d;
+    }
+
+    var v = storage["rdsb_" + k];
+    if (v == undefined) {
+        return d;
+    }
+    return v;
 }
 
 function store(k, v) {
-    if ((v == undefined) || ! window.localStorage) {
+    var storage;
+
+    if (chrome) {
+        storage = chrome.storage.local
+    } else {
+        storage = window.localStorage;
+    }
+
+    if ((v == undefined) || ! storage) {
         return;
     } else {
-        localStorage["rdsb_" + k] = v;
+        storage["rdsb_" + k] = v;
     }
 }
 
@@ -499,6 +515,8 @@ function iecheck() {
     }
 }
 
+
+
 function start() {
     resize();
     iecheck();
@@ -520,9 +538,7 @@ function start() {
     period = Number(get("period", 0));
     jamno = Number(get("jamno", 0));
 
-    if (window.localStorage) {
-        save_itimer = setInterval(save, 1000);
-    }
+    save_itimer = setInterval(save, 1000);
     
     if (window.penalties) {
         penalties_init();
