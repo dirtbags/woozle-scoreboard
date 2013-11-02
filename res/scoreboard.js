@@ -42,7 +42,7 @@ var state = SETUP;
 
 var timer_updates = [];
 function update() {
-    for (i in timer_updates) {
+    for (var i in timer_updates) {
         var u = timer_updates[i];
 
         u();
@@ -149,7 +149,7 @@ function transition(newstate) {
     var jtext = e("jamtext");
     var jno = e("jamno");
 
-    if ((newstate == undefined) || (newstate == state)) {
+    if ((newstate === undefined) || (newstate == state)) {
         return;
     }
 
@@ -264,29 +264,10 @@ function handle(event) {
     var newstate;
 
     switch (tgt.id) {
-    case "name-a":
-    case "name-b":
-        if (state == SETUP) {
-            var tn = prompt("Enter team " + team + " name", tgt.innerHTML);
-
-            if (tn) {
-                tgt.innerHTML = tn;
-            }
-            if (window.penalties) {
-                penalties_setTeamName(team, tn);
-            }
-        }
-        break;
     case "logo-a":
     case "logo-b":
         if (state == SETUP) {
-            if (mod) {
-                var u = prompt("Enter URL to team " + team + " logo");
-
-                if (u) {
-                    tgt.src = u;
-                }
-            } else {
+            if (true) {
                 var t, name;
 
                 logo[team] = (teams.length + logo[team] + adj) % teams.length;
@@ -324,24 +305,8 @@ function handle(event) {
         break;
     case "period":
         if ((state == SETUP) || (state == TIMEOUT)) {
-            var r = prompt("Enter new time for period clock", tgt.innerHTML);
-            if (! r) return;
-
-            var t = r.split(":");
-            var sec = 0;
-
-            if (t.length > 3) {
-                tgt.innerHTML = "What?";
-                return;
-            }
-
-            for (var i in t) {
-                var v = t[i];
-                sec = (sec * 60) + Number(v);
-            }
-
-            tgt.set(sec*1000);
-        } else {
+        	// Nothin'
+         } else {
             newstate = TIMEOUT;
         }
         break;
@@ -392,10 +357,36 @@ function handle(event) {
 
 function key(event) {
     var e = event || window.event;
-    var c = String.fromCharCode(e.which || e.keyCode || 0);
+    var c;
     var newstate;
 
+	switch (e.keyCode) {
+	case 38:
+		c = "up";
+		break;
+	case 40:
+		c = "down";
+		break;
+	default:
+		c = String.fromCharCode(e.which || e.keyCode || 0);
+		break;
+	}
+
     switch (c) {
+	case "up":
+		if ((state == TIMEOUT) || (state == SETUP)) {
+			var pt = document.getElementById("period");
+			var rem = pt.remaining();
+			pt.set(rem + 1000);
+		}
+		break;
+	case "down":
+		if ((state == TIMEOUT) || (state == SETUP)) {
+			var pt = document.getElementById("period");
+			var rem = pt.remaining();
+			pt.set(rem - 1000);
+		}
+		break;
     case " ":
         if (state == JAM) {
             newstate = LINEUP;
@@ -446,57 +437,23 @@ function key(event) {
     transition(newstate);
 }
 
-function get(k, d) {
-    var storage;
-
-    if (chrome) {
-        storage = chrome.storage.local
-    } else {
-        storage = window.localStorage;
-    }
-    
-    if (! storage) {
-        return d;
-    }
-
-    var v = storage["rdsb_" + k];
-    if (v == undefined) {
-        return d;
-    }
-    return v;
-}
-
-function store(k, v) {
-    var storage;
-
-    if (chrome) {
-        storage = chrome.storage.local
-    } else {
-        storage = window.localStorage;
-    }
-
-    if ((v == undefined) || ! storage) {
-        return;
-    } else {
-        storage["rdsb_" + k] = v;
-    }
-}
 
 function save() {
-    if (window.penalties_save) {
-        penalties_save();
-    }
-    store("period_clock", e("period").remaining());
-    store("name_a", e("name-a").innerHTML);
-    store("name_b", e("name-b").innerHTML);
-    store("logo_a", e("logo-a").src);
-    store("logo_b", e("logo-b").src);
-    store("score_a", e("score-a").innerHTML);
-    store("score_b", e("score-b").innerHTML);
-    store("timeout_a", e("timeouts-a").innerHTML);
-    store("timeout_b", e("timeouts-b").innerHTML);
-    store("jamno", jamno);
-    store("period", period);
+	chrome.storage.sync.set(
+		{
+			"period_clock": e("period").remaining(),
+			"name_a": e("name-a").innerHTML,
+			"name_b": e("name-b").innerHTML,
+			"logo_a": e("logo-a").src,
+			"logo_b": e("logo-b").src,
+			"score_a": e("score-a").innerHTML,
+			"score_b": e("score-b").innerHTML,
+			"timeout_a": e("timeouts-a").innerHTML,
+			"timeout_b": e("timeouts-b").innerHTML,
+			"jamno": jamno,
+			"period": period,
+		}
+	);
 }
     
 function iecheck() {
@@ -515,7 +472,13 @@ function iecheck() {
     }
 }
 
-
+function ei(name) {
+	el = e(name);
+	if (el.addEventListener) {
+		el.addEventListener("click", handle, false);
+	}
+	return el;
+}
 
 function start() {
     resize();
@@ -525,34 +488,34 @@ function start() {
     var j = document.getElementById("jam");
     var c;
 
+	// XXX: I think, instead of null, you can pass in a dictionary of defaults
+	function load(state) {
+		ei("name-a").innerHTML = state.name_a || "Home";
+		ei("name-b").innerHTML = state.name_b || "Vis";
+		ei("logo-a").src = state.logo_a || "logos/black.png";
+		ei("logo-b").src = state.logo_b || "logos/white.png";
+		ei("score-a").innerHTML = state.score_a || 0;
+		ei("score-b").innerHTML = state.score_b || 0;
+		ei("timeouts-a").innerHTML = state.timeout_a || 3;
+		ei("timeouts-b").innerHTML = state.timeout_b || 3;
+		period = state.period || 0;
+		jamno = state.jamno || 0;
+		
+		var c = state.period_clock || 1800000;
+		startTimer(p);
+		p.set(c);
+	}
+	chrome.storage.sync.get(null, load);
 
-    // IE8 doesn't have localStorage for file:// URLs  :<
-    e("name-a").innerHTML = get("name_a", "Home");
-    e("name-b").innerHTML = get("name_b", "Vis");
-    e("logo-a").src = get("logo_a", "logos/black.png");
-    e("logo-b").src = get("logo_b", "logos/white.png");
-    e("score-a").innerHTML = get("score_a", 0);
-    e("score-b").innerHTML = get("score_b", 0);
-    e("timeouts-a").innerHTML = get("timeout_a", 3);
-    e("timeouts-b").innerHTML = get("timeout_b", 3);
-    period = Number(get("period", 0));
-    jamno = Number(get("jamno", 0));
-
-    save_itimer = setInterval(save, 1000);
+    ei("jammer-a");
+    ei("jammer-b");
+    ei("period");
+    ei("jam");
     
-    if (window.penalties) {
-        penalties_init();
-    }
-
-    e("periodtext").innerHTML = periodtext[period];
-    e("jamtext").innerHTML = jamtext[3];
+    ei("periodtext").innerHTML = periodtext[period];
+    ei("jamtext").innerHTML = jamtext[3];
     transition();
 
-    c = Number(get("period_clock", 1800000));
-    startTimer(p);
-    p.set(c);
-
-    var j = document.getElementById("jam");
     startTimer(j, window.tenths);
     j.set(120000);
 
@@ -590,5 +553,5 @@ function resize() {
 }
 
 window.onload = start;
-document.onkeypress = key;  // IE requires document, not window
+document.onkeydown = key;  // IE requires document, not window
 window.onresize = resize;
