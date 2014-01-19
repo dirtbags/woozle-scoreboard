@@ -1,19 +1,19 @@
 /*
- * LADD Roller Derby Scoreboard
- * Copyright © 2011  Neale Pickett <neale@woozle.org>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at
- * your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	LADD Roller Derby Scoreboard
+	Copyright © 2014 Neale Pickett <neale@woozle.org>
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU
+	General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.	If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* You can only have one scoreboard per page.  This limitation is mostly
@@ -24,21 +24,21 @@
  * change in this file.
  */
 
-/* Tunables */
-jam_time = 120000;
-lineup_time = 30000;
-period_time = 1800000;
-var presets = {
-	"WFTDA": [1800, 120, 30],
-	"USARS": [1800, 90, 30],
-	"MADE": [900, 90, 30]
-}
+/* Times for various rulesets */
+var presets = [
+	["WFTDA", 1800, 120, 30],
+	["USARS", 1800, 90, 30],
+	["MADE", 900, 90, 30]
+];
+var period_time = presets[0][1] * 1000;
+var jam_time = presets[0][2] * 1000;
+var lineup_time = presets[0][3] * 1000;
 
 /* State names */
-var SETUP = 0;				  // !P 30:00   !J 2:00
-var JAM = 1;					//  P		  J 2:00
-var LINEUP = 2;				 //  P		  J 1:00
-var TIMEOUT = 3;				// !P		  J 1:00
+var SETUP = 0;
+var JAM = 1;
+var LINEUP = 2;
+var TIMEOUT = 3;
 
 var periodtext = [
 	chrome.i18n.getMessage("timeToGame"),
@@ -195,6 +195,8 @@ function transition(newstate) {
 	// Reset lead jammer indicators
 	e("jammer-a").className = "";
 	e("jammer-b").className = "";
+	
+	save();
 }
 
 
@@ -317,15 +319,10 @@ function handle(event) {
 		break;
 	case "periodtext":
 		var pt;
+		var ptl = periodtext.length;
 
-		if (mod) {
-			pt = prompt("Enter new period indicator text", tgt.innerHTML);
-		} else {
-			var ptl = periodtext.length;
-
-			period = (period + ptl + adj) % ptl;
-			pt = periodtext[period];
-		}
+		period = (period + ptl + adj) % ptl;
+		pt = periodtext[period];
 		if (pt) {
 			tgt.innerHTML = pt;
 			if (state == TIMEOUT) {
@@ -348,16 +345,10 @@ function handle(event) {
 	case "score-a":
 	case "score-b":
 		if (state == SETUP) {
-			var s = prompt("Enter score for team " + team, tgt.innerHTML);
-			if (s) {
-				tgt.innerHTML = s;
-			}
+			e(tgt.id).innerHTML = 0;
 		} else {
 			score(team, adj);
 		}
-		break;
-	case "prefs":
-		chrome.app.window.create("../options.html");
 		break;
 	case "close":
 		window.close();
@@ -479,22 +470,54 @@ function key(event) {
 function save() {
 	chrome.storage.local.set(
 		{
-			"period_clock": e("period").remaining(),
-
-			"score_a": e("score-a").innerHTML,
-			"score_b": e("score-b").innerHTML,
-			"name_a": e("name-a").innerHTML,
-			"name_b": e("name-b").innerHTML,
-			"logo_a": e("logo-a").src,
-			"logo_b": e("logo-b").src,
-
 			"period_time": period_time,
 			"jam_time": jam_time,
 			"lineup_time": lineup_time,
+
+			"logo_a": e("logo-a").src,
+			"logo_b": e("logo-b").src,
+			"score_a": e("score-a").innerHTML,
+			"score_b": e("score-b").innerHTML,
+			"timeouts_a": e("timeouts-a").innerHTML,
+			"timeouts_b": e("timeouts-b").innerHTML,
+			"period_clock": e("period").remaining(),
 		}
 	);
 }
+
+function load() {
+	function load_cb(state) {
+		period_time = state.period_time;
+		jam_time = state.jam_time;
+		lineup_time = state.lineup_time;
+
+		e("logo-a").src = state.logo_a;
+		e("logo-b").src = state.logo_b;
+		e("score-a").innerHTML = state.score_a;
+		e("score-b").innerHTML = state.score_b;
+		e("timeouts-a").innerHTML = state.timeouts_a;
+		e("timeouts-b").innerHTML = state.timeouts_b;
+		
+		var p = e("period");
+		startTimer(p);
+		p.set(state.period_clock);
+	}
 	
+	chrome.storage.local.get({
+			"period_clock": period_time,
+			"score_a": 0,
+			"score_b": 0,
+			"logo_a": "logos/black.png",
+			"logo_b": "logos/white.png",
+			"timeouts_a": 3,
+			"timeouts_b": 3,
+			"period_time": period_time,
+			"jam_time": jam_time,
+			"lineup_time": lineup_time
+		}, load_cb);		
+}
+
+
 function ei(name) {
 	el = e(name);
 	if (el.addEventListener) {
@@ -505,32 +528,16 @@ function ei(name) {
 
 function start() {
 	resize();
+	load();
 
-	var p = document.getElementById("period");
-	var j = document.getElementById("jam");
-	var c;
-
-	// XXX: I think, instead of null, you can pass in a dictionary of defaults
-	function load(state) {
-		ei("name-a").innerHTML = state.name_a || "Home";
-		ei("name-b").innerHTML = state.name_b || "Vis";
-		ei("logo-a").src = state.logo_a || "logos/black.png";
-		ei("logo-b").src = state.logo_b || "logos/white.png";
-		ei("score-a").innerHTML = state.score_a || 0;
-		ei("score-b").innerHTML = state.score_b || 0;
-		ei("timeouts-a").innerHTML = state.timeout_a || 3;
-		ei("timeouts-b").innerHTML = state.timeout_b || 3;
-		period = state.period || 0;
-		jamno = state.jamno || 0;
-		
-		var c = state.period_clock || 1800000;
-		startTimer(p);
-		p.set(c);
-	}
-	chrome.storage.local.get(null, load);
-
+	ei("logo-a");
+	ei("logo-b");
+	ei("score-a");
+	ei("score-b")
 	ei("jammer-a");
 	ei("jammer-b");
+	ei("timeouts-a");
+	ei("timeouts-b");
 	ei("period");
 	ei("jam");
 	ei("prefs");
@@ -540,10 +547,10 @@ function start() {
 	ei("jamtext").innerHTML = jamtext[3];
 	transition();
 
+	var j = e("jam");
 	startTimer(j);
 	j.set(jam_time);
 
-	save_timer = setInterval(save, 10000); // Every 10 seconds
 	update_itimer = setInterval(update, 200); // 5 times a second
 
 }

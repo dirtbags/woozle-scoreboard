@@ -1,2 +1,5 @@
+* During setup, make period time and scores input fields
+* Display clickable timing presets during setup
+* A popup logo browser would be nice
 * use chrome.mediaGalleries to load logos
 * use chrome.power to keep the display on
