@@ -24,8 +24,15 @@
  * change in this file.
  */
 
-longnames = false;
-tenths = true;
+/* Tunables */
+jam_time = 120000;
+lineup_time = 30000;
+period_time = 1800000;
+var presets = {
+	"WFTDA": [1800, 120, 30],
+	"USARS": [1800, 90, 30],
+	"MADE": [900, 90, 30]
+}
 
 /* State names */
 var SETUP = 0;				  // !P 30:00   !J 2:00
@@ -33,8 +40,18 @@ var JAM = 1;					//  P		  J 2:00
 var LINEUP = 2;				 //  P		  J 1:00
 var TIMEOUT = 3;				// !P		  J 1:00
 
-var periodtext = ["Period 1", "Halftime", "Period 2", "Break"];
-var jamtext = ["Jam", "Lineup", "Timeout", "Setup"];
+var periodtext = [
+	chrome.i18n.getMessage("timeToGame"),
+	chrome.i18n.getMessage("period1"),
+	chrome.i18n.getMessage("halftime"),
+	chrome.i18n.getMessage("period2")
+];
+var jamtext = [
+	chrome.i18n.getMessage("jam"),
+	chrome.i18n.getMessage("lineup"),
+	chrome.i18n.getMessage("timeout"),
+	chrome.i18n.getMessage("setup")
+];
 var period = 0;
 var jamno = 0;
 
@@ -50,9 +67,8 @@ function update() {
 }
 
 // Create a timer on [element].
-// If [tenths] is true, show tenths of a second.
 // If [callback] is defined, call it when time runs out.
-function startTimer(element, tenths, callback) {
+function startTimer(element, callback) {
 	var startTime;
 	var running = false;
 	var set_duration = 0;
@@ -61,13 +77,13 @@ function startTimer(element, tenths, callback) {
 
 	// Re-calculate and update displayed time
 	function refresh () {
-		var remain = element.remaining();
-		var min = Math.floor(Math.abs(remain / 60000));
-		var sec = (Math.floor(Math.abs(remain / 100)) / 10) % 60;
+		var remain = Math.abs(Math.ceil(element.remaining() / 1000));
+		var min = Math.floor(remain / 60);
+		var sec = remain % 60;
 
 		// Set classes
 		element.className = className;
-		if ((! className) && (remain <= 20000)) {
+		if ((! className) && (remain <= 20)) {
 			element.className += " lowtime";
 		}
 		if (! running) {
@@ -84,12 +100,7 @@ function startTimer(element, tenths, callback) {
 			}
 		}
 
-		// .toFixed() rounds, we want to truncate
-		if (! tenths) {
-			sec = Math.floor(sec);
-		} else {
-			sec = sec.toFixed(1);
-		}
+		sec = Math.ceil(sec);
 		// Zero-pad
 		if (sec < 10) {
 			sec = "0" + sec;
@@ -161,20 +172,20 @@ function transition(newstate) {
 
 	if (state == JAM) {
 		pt.start();
-		jt.set(120000);
+		jt.set(jam_time);
 		jt.start();
 		jtext.innerHTML = jamtext[0];
 		jamno += 1;
 		jno.innerHTML = jamno;
 	} else if (state == LINEUP) {
 		pt.start();
-		jt.set(30000, "lineup");
+		jt.set(lineup_time, "lineup");
 		jt.start();
 		jtext.innerHTML = jamtext[1];
 	} else if (state == TIMEOUT) {
 		pt.stop();
 		if (pt.remaining() <= 0) {
-			pt.set(1800000);
+			pt.set(period_time);
 		}
 		jt.set(0, "timeout");
 		jt.start();
@@ -267,24 +278,18 @@ function handle(event) {
 	case "logo-a":
 	case "logo-b":
 		if (state == SETUP) {
-			if (true) {
-				var t, name;
+			var t, name;
 
-				logo[team] = (teams.length + logo[team] + adj) % teams.length;
-				t = teams[logo[team]];
+			logo[team] = (teams.length + logo[team] + adj) % teams.length;
+			t = teams[logo[team]];
 
-				if (longnames) {
-					name = t[2];
-				} else {
-					name = t[0];
-				}
+			name = t[0];
 
-				e("name-" + team).innerHTML = name;
-				tgt.src = "logos/" + t[1];
+			e("name-" + team).innerHTML = name;
+			tgt.src = "logos/" + t[1];
 
-				if (window.penalties) {
-					penalties_setTeamName(team, t[0]);
-				}
+			if (window.penalties) {
+				penalties_setTeamName(team, t[0]);
 			}
 		} else {
 			score(team, -adj);
@@ -350,6 +355,12 @@ function handle(event) {
 		} else {
 			score(team, adj);
 		}
+		break;
+	case "prefs":
+		chrome.app.window.create("../options.html");
+		break;
+	case "close":
+		window.close();
 		break;
 	}
 	transition(newstate);
@@ -469,36 +480,21 @@ function save() {
 	chrome.storage.local.set(
 		{
 			"period_clock": e("period").remaining(),
+
+			"score_a": e("score-a").innerHTML,
+			"score_b": e("score-b").innerHTML,
 			"name_a": e("name-a").innerHTML,
 			"name_b": e("name-b").innerHTML,
 			"logo_a": e("logo-a").src,
 			"logo_b": e("logo-b").src,
-			"score_a": e("score-a").innerHTML,
-			"score_b": e("score-b").innerHTML,
-			"timeout_a": e("timeouts-a").innerHTML,
-			"timeout_b": e("timeouts-b").innerHTML,
-			"jamno": jamno,
-			"period": period,
+
+			"period_time": period_time,
+			"jam_time": jam_time,
+			"lineup_time": lineup_time,
 		}
 	);
 }
 	
-function iecheck() {
-	// If it's IE, it's got to be at least 7
-	var ua = navigator.userAgent;
-	var ie = ua.indexOf("MSIE ");
-
-	if (ie == -1) {
-		// Not IE
-		return;
-	} else {
-		var n = parseFloat(ua.substring(ie + 5, ua.indexOf(";", ie)));
-		if (n < 7) {
-			alert("Your browser is too old to run the Woozle scoreboard.\nYou can use Firefox, Chrome, Opera, or Internet Explorer 7 and up.");
-		}
-	}
-}
-
 function ei(name) {
 	el = e(name);
 	if (el.addEventListener) {
@@ -509,7 +505,6 @@ function ei(name) {
 
 function start() {
 	resize();
-	iecheck();
 
 	var p = document.getElementById("period");
 	var j = document.getElementById("jam");
@@ -538,45 +533,28 @@ function start() {
 	ei("jammer-b");
 	ei("period");
 	ei("jam");
+	ei("prefs");
+	ei("close");
 	
 	ei("periodtext").innerHTML = periodtext[period];
 	ei("jamtext").innerHTML = jamtext[3];
 	transition();
 
-	startTimer(j, window.tenths);
-	j.set(120000);
+	startTimer(j);
+	j.set(jam_time);
 
 	save_timer = setInterval(save, 10000); // Every 10 seconds
-	update_itimer = setInterval(update, 33);
+	update_itimer = setInterval(update, 200); // 5 times a second
 
 }
 
 function resize() {
-	var b = document.getElementsByTagName("body")[0];
 	var w, h;
 	
-	// Internet Explorer makes everything a pain in the ass
-	if (window.innerWidth) {
-		w = window.innerWidth;
-		h = window.innerHeight;
-	} else if (document.documentElement && document.documentElement.clientWidth) {
-		w = document.documentElement.clientWidth;
-		h = document.documentElement.clientHeight;
-	} else if (document.body) {
-		w = document.body.clientWidth;
-		h = document.body.clientHeight;
-	} else {
-		// Punt
-		w = 800;
-		h = 600;
-	}
-   
-	w /= 7;
-	h /= 5;
+	w = window.innerWidth / 7;
+	h = window.innerHeight / 5;
 
-	var fs = Math.min(w, h);
-
-	b.style.fontSize = fs + 'px';
+	document.body.style.fontSize = Math.min(w, h) + 'px';
 }
 
 window.onload = start;

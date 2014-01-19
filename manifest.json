@@ -1,17 +1,21 @@
 // This file is used by the chrome app distribution
 {
-	"name": "LADD Scoreboard",
-	"description": "Roller Derby Scoreboard",
-	"version": "5.2",
-	"manifest_version": 2,
-    "permissions": [ "storage" ],
-	"offline_enabled": true,
-	"icons": {
-		"128": "res/icon.png"
-  	},
+	"version": "6.0",
 	"app": {
 		"background": {
 			"scripts": ["res/background.js"]
 		}
-	}
+	},
+	"icons": {
+		"128": "res/icon.png"
+  	},
+	"permissions": [
+		"storage"
+	],
+	"offline_enabled": true,
+	
+	"name": "__MSG_appName__",
+	"description": "__MSG_appDesc__",
+	"default_locale": "en",
+	"manifest_version": 2
 }
