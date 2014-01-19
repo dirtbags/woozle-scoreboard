@@ -37,6 +37,8 @@ teams = [
 	["MARI", "marionettes.png", "Albuquerque Marionettes"],
 	["QSDD", "qsdd.png", "Quad Skate Derby Dames"],
 	["BWBS", "bwbs.png", "Backwoods Bombshells"]
+	["CRH", "redhots.png", "Chicago Red Hots"],
+	["HCRG", "campers.png", "Happy Camper Rollergirls"]
 ];
 teams.sort();
 
