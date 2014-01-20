@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "__MSG_appName__",
-	"shortname": "__MSG_appShortName",
+	"short_name": "__MSG_appShortName",
 	"description": "__MSG_appDesc__",
 	"author": "Neale Pickett <neale@woozle.org>",
 	"version": "6.0",
