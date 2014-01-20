@@ -130,6 +130,7 @@ input[readonly] {
     left: 50%;
     width: 5em;
     margin-left: -2.5em;
+    z-index: -1;
 }
 
 #periodtext {

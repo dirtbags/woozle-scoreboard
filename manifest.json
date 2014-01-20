@@ -14,7 +14,8 @@
 		"128": "res/icon.png"
   	},
 	"permissions": [
-		"storage"
+		"storage",
+		"fullscreen"
 	],
 	"default_locale": "en",
 	"offline_enabled": true
