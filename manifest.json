@@ -4,7 +4,7 @@
 	"short_name": "__MSG_appShortName__",
 	"description": "__MSG_appDesc__",
 	"author": "Neale Pickett <neale@woozle.org>",
-	"version": "6.0",
+	"version": "6.0.1",
 	"app": {
 		"background": {
 			"scripts": ["res/background.js"]
