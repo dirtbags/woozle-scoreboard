@@ -1,7 +1,11 @@
 {
 	"appName": {
-		"message": "LADD Scoreboard",
+		"message": "LADD Roller Derby Scoreboard",
 		"description": "Application name"
+	},
+	"appShortName": {
+		"message": "LADD Scoreboard",
+		"description": "Short application name"
 	},
 	"appDesc": {
 		"message": "Roller Derby Scoreboard",
