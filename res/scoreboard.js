@@ -84,22 +84,25 @@ function startTimer(element) {
 	var duration = 0;
 	var className;
 
+	// Heartbeat
+	function pulse() {
+		if (! running) {
+			element.className = className + " paused";
+			return;
+		}
+		
+		refresh();
+	}
+	
 	// Re-calculate and update displayed time
-	function refresh (force) {
+	function refresh() {
 		var remain = Math.ceil(element.remaining() / 1000);
 		var min = Math.floor(Math.abs(remain) / 60);
 		var sec = Math.abs(remain) % 60;
 		
-		if (! running) {
-			element.className = className + " paused";
-			if (! force) {
-				return;
-			}
-		}
-
 		// Set classes
 		if ((! className) && (remain <= 20)) {
-			element.className = className + " lowtime";
+			element.className = "lowtime";
 		} else {
 			element.className = className;
 		}
@@ -132,7 +135,7 @@ function startTimer(element) {
 			return;
 		}
 		
-		element.set(sec * 1000, className);
+		element.set(sec * 1000, className, true);
 	}
 
 	// Return remaining time in milliseconds
@@ -147,13 +150,16 @@ function startTimer(element) {
 
 	// Set timer to [d] milliseconds.
 	// Put element into class [cn], if set.
-	element.set = function(t, cn) {
+	// If [stealth] is set, don't refresh
+	element.set = function(t, cn, stealth) {
 		startTime = (new Date()).getTime();
 		set_duration = t;
 		duration = t;
 		className = cn;
 		
-		refresh(true);
+		if (! stealth) {
+			refresh();
+		}
 	}
 
 	// Start timer
@@ -171,13 +177,12 @@ function startTimer(element) {
 			duration = element.remaining();
 			running = false;
 		}
-		refresh();
 	}
 
 	element.readOnly = true;
 	element.addEventListener("input", inputHandler);
 
-	timer_updates.push(refresh);
+	timer_updates.push(pulse);
 }
 
 // Transition state machine based on state
