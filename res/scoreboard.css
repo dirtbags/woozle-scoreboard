@@ -20,6 +20,16 @@ body {
     margin: 0;
 }
 
+input {
+	font: inherit;
+}
+
+input[readonly] {
+	color: inherit;
+	background: inherit;
+	border: inherit;
+}
+
 #scoreboard {
     cursor: default;
     font-family: sans-serif;
@@ -106,11 +116,11 @@ body {
     position: absolute;
     bottom: 0em;
     left: 50%;
-    width: 3em;
-    margin-left: -1.5em;
+    width: 3.5em;
+    margin-left: -1.75em;
 }
 
-#jamtext, #periodtext {
+#jamtext, #periodtext, #preset {
     text-align: center;
     font-family: PermanentMarker, sans-serif;
     font-weight: normal;
@@ -124,6 +134,11 @@ body {
 
 #periodtext {
     top: 1.4em;
+}
+
+#preset {
+	top: 40%;
+	color: cyan;
 }
 
 #jamtext {
@@ -193,17 +208,16 @@ body {
  * Notices
  */
 #notice {
-    display: none;
-    position: absolute;
-    bottom: 1.3em;
-    left: 50%;
-    width: 4em;
+	display: none;
+	position: absolute;
+	bottom: 1.3em;
+	left: 50%;
+	width: 4em;
 	height: 3em;
-    margin-left: -2em;
+	margin-left: -2em;
+	text-align: center;
 }
 
-#notice embed {
-	width: 100%;
+#notice img {
 	height: 100%;
 }
-

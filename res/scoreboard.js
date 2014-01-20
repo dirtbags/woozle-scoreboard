@@ -26,13 +26,15 @@
 
 /* Times for various rulesets */
 var presets = [
-	["WFTDA", 1800, 120, 30],
-	["USARS", 1800, 90, 30],
-	["MADE", 900, 90, 30]
+	["WFTDA", 30 * 60 * 1000, 120 * 1000, 30 * 1000, 3],
+	["USARS", 30 * 60 * 1000, 90 * 1000, 30 * 1000, 3],
+	["RDCL", 15 * 60 * 1000, 60 * 1000, 30 * 1000, 3],
+	["MADE", 15 * 60 * 1000, 90 * 1000, 30 * 1000, 1]
 ];
-var period_time = presets[0][1] * 1000;
-var jam_time = presets[0][2] * 1000;
-var lineup_time = presets[0][3] * 1000;
+var period_time;
+var jam_time;
+var lineup_time;
+var timeouts;
 
 /* State names */
 var SETUP = 0;
@@ -41,10 +43,10 @@ var LINEUP = 2;
 var TIMEOUT = 3;
 
 var periodtext = [
-	chrome.i18n.getMessage("timeToGame"),
 	chrome.i18n.getMessage("period1"),
 	chrome.i18n.getMessage("halftime"),
-	chrome.i18n.getMessage("period2")
+	chrome.i18n.getMessage("period2"),
+	chrome.i18n.getMessage("timeToGame")
 ];
 var jamtext = [
 	chrome.i18n.getMessage("jam"),
@@ -66,9 +68,16 @@ function update() {
 	}
 }
 
+function e(id) {
+	ret = document.getElementById(id);
+	if (! ret) {
+		return Array();
+	}
+	return ret;
+}
+
 // Create a timer on [element].
-// If [callback] is defined, call it when time runs out.
-function startTimer(element, callback) {
+function startTimer(element) {
 	var startTime;
 	var running = false;
 	var set_duration = 0;
@@ -76,28 +85,30 @@ function startTimer(element, callback) {
 	var className;
 
 	// Re-calculate and update displayed time
-	function refresh () {
-		var remain = Math.abs(Math.ceil(element.remaining() / 1000));
-		var min = Math.floor(remain / 60);
-		var sec = remain % 60;
+	function refresh (force) {
+		var remain = Math.ceil(element.remaining() / 1000);
+		var min = Math.floor(Math.abs(remain) / 60);
+		var sec = Math.abs(remain) % 60;
+		
+		if (! running) {
+			element.className = className + " paused";
+			if (! force) {
+				return;
+			}
+		}
 
 		// Set classes
-		element.className = className;
 		if ((! className) && (remain <= 20)) {
-			element.className += " lowtime";
-		}
-		if (! running) {
-			element.className += " paused";
+			element.className = className + " lowtime";
+		} else {
+			element.className = className;
 		}
 
 		// Has the timer run out?
 		if ((set_duration > 0) && (remain <= 0)) {
 			duration = 0;
 			sec = 0;
-			running = false;
-			if (callback) {
-				callback();
-			}
+			element.stop();
 		}
 
 		sec = Math.ceil(sec);
@@ -107,9 +118,21 @@ function startTimer(element, callback) {
 		}
 
 		var t = min + ":" + sec;
-		if (t != element.innerHTML) {
-			element.innerHTML = t;
+		if (t != element.value) {
+			element.value = t;
 		}
+	}
+	
+	function inputHandler() {
+		var t = element.value.split(":");
+		var sec = (Number(t[0]) * 60) + Number(t[1]);
+		
+		if (isNaN(sec) || (sec <= 0) || (sec > (59 * 60))) {
+			// Ignore goofy values
+			return;
+		}
+		
+		element.set(sec * 1000, className);
 	}
 
 	// Return remaining time in milliseconds
@@ -129,7 +152,8 @@ function startTimer(element, callback) {
 		set_duration = t;
 		duration = t;
 		className = cn;
-		refresh();
+		
+		refresh(true);
 	}
 
 	// Start timer
@@ -150,6 +174,9 @@ function startTimer(element, callback) {
 		refresh();
 	}
 
+	element.readOnly = true;
+	element.addEventListener("input", inputHandler);
+
 	timer_updates.push(refresh);
 }
 
@@ -164,10 +191,6 @@ function transition(newstate) {
 		return;
 	}
 
-	if ((state == SETUP) && window.penalties) {
-		penalties_duck();
-	}
-
 	state = newstate;
 
 	if (state == JAM) {
@@ -177,11 +200,13 @@ function transition(newstate) {
 		jtext.innerHTML = jamtext[0];
 		jamno += 1;
 		jno.innerHTML = jamno;
+		pt.readOnly = true;
 	} else if (state == LINEUP) {
 		pt.start();
 		jt.set(lineup_time, "lineup");
 		jt.start();
 		jtext.innerHTML = jamtext[1];
+		pt.readOnly = true;
 	} else if (state == TIMEOUT) {
 		pt.stop();
 		if (pt.remaining() <= 0) {
@@ -190,11 +215,13 @@ function transition(newstate) {
 		jt.set(0, "timeout");
 		jt.start();
 		jtext.innerHTML = jamtext[2];
+		pt.readOnly = false;
 	}
 
 	// Reset lead jammer indicators
 	e("jammer-a").className = "";
 	e("jammer-b").className = "";
+	e("preset").style.display = "none";
 	
 	save();
 }
@@ -205,32 +232,27 @@ function transition(newstate) {
  * Notices
  */
 
-var notices = [
-	false,
-	'<embed src="res/Zounds.swf" type="text/html">',
-	'<embed src="res/Ouch.swf" type="text/html">',
-	'<embed src="res/Pow.swf" type="text/html">',
-	'<embed src="res/HolyShot.swf" type="text/html">',
-	'<embed src="res/FasterFaster.swf" type="text/html">',
-	'<embed src="res/BadGirl.swf" type="text/html">',
-	'<embed src="res/banana.gif" type="image/gif">',
-];
+var notices = {
+	"banana": '<img src="res/banana.gif">'
+};
 
 var notice_timer;
 
 function notice_expire() {
-	var c = document.getElementById("notice");
+	var c = e("notice");
 
 	c.innerHTML = "";
 	c.style.display = "none";
 }
 
 function notice(n) {
-	var c = document.getElementById("notice");
+	var c = e("notice");
 
-	c.style.display = "block";
 	if (notices[n]) {
-		c.innerHTML = notices[n];
+		if (c.innerHTML != notices[n]) {
+			c.innerHTML = notices[n];
+			c.style.display = "block";
+		}
 		clearTimeout(notice_timer);
 		notice_timer = setTimeout(function() {notice_expire()}, 8000);
 	} else {
@@ -238,16 +260,9 @@ function notice(n) {
 	}
 }
 
-function e(id) {
-	ret = document.getElementById(id);
-	if (! ret) {
-		return Array();
-	}
-	return ret;
-}
 
 function score(team, points) {
-	var te = document.getElementById("score-" + team);
+	var te = e("score-" + team);
 	var ts = Number(te.innerHTML);
 
 	ts += points;
@@ -287,12 +302,7 @@ function handle(event) {
 
 			name = t[0];
 
-			e("name-" + team).innerHTML = name;
 			tgt.src = "logos/" + t[1];
-
-			if (window.penalties) {
-				penalties_setTeamName(team, t[0]);
-			}
 		} else {
 			score(team, -adj);
 		}
@@ -307,7 +317,9 @@ function handle(event) {
 		var v = Number(tgt.innerHTML);
 
 		v -= adj;
-		if (v == -1) v = 3;
+		if (v == -1) {
+			v = timeouts;
+		}
 		tgt.innerHTML = v;
 		break;
 	case "period":
@@ -350,6 +362,9 @@ function handle(event) {
 			score(team, adj);
 		}
 		break;
+	case "preset":
+		load_preset(+1);
+		break;
 	case "close":
 		window.close();
 		break;
@@ -379,11 +394,17 @@ function key(event) {
 	case 190:
 		c = ".";
 		break;
-	case 221:
-		c = e.shiftKey ? "}" : "]";
+	case 191:
+		c = "/";
 		break;
 	case 219:
 		c = e.shiftKey ? "{" : "[";
+		break;
+	case 221:
+		c = e.shiftKey ? "}" : "]";
+		break;
+	case 222:
+		c = e.shiftKey ? "\"" : "'";
 		break;
 	default:
 		if ((k >= 48) && (k <= 90)) {
@@ -399,19 +420,17 @@ function key(event) {
 
 	bige = e;
 
-	console.log("Key " + k + " pressed: " + c + " === " + e.which);
-
 	switch (c) {
 	case "up":
 		if ((state == TIMEOUT) || (state == SETUP)) {
-			var pt = document.getElementById("period");
+			var pt = e("period");
 			var rem = pt.remaining();
 			pt.set(rem + 1000);
 		}
 		break;
 	case "down":
 		if ((state == TIMEOUT) || (state == SETUP)) {
-			var pt = document.getElementById("period");
+			var pt = e("period");
 			var rem = pt.remaining();
 			pt.set(rem - 1000);
 		}
@@ -430,15 +449,15 @@ function key(event) {
 	case "[":
 		score('a', 1);
 		break;
-	case "b":
+	case "'":
 	case "]":
 		score('b', 1);
 		break;
-	case "A":
+	case "z":
 	case "{":
 		score('a', -1);
 		break;
-	case "B":
+	case "/":
 	case "}":
 		score('b', -1);
 		break;
@@ -448,19 +467,9 @@ function key(event) {
 	case ".":
 		leadJammer('b');
 		break;
-	case "1":
-	case "2":
-	case "3":
-	case "4":
-	case "5":
-	case "6":
-	case "7":
-	case "8":
-	case "9":
-	case "0":
-		var n = Number(c);
-
-		window.notice(n);
+	case "g":
+		window.notice("banana");
+		break;
 	}
 
 	transition(newstate);
@@ -470,9 +479,7 @@ function key(event) {
 function save() {
 	chrome.storage.local.set(
 		{
-			"period_time": period_time,
-			"jam_time": jam_time,
-			"lineup_time": lineup_time,
+			"preset": e("preset").innerHTML,
 
 			"logo_a": e("logo-a").src,
 			"logo_b": e("logo-b").src,
@@ -485,35 +492,64 @@ function save() {
 	);
 }
 
+function load_preset(preset_name) {
+	var inc = false;
+	var pn = 0;
+
+	if (preset_name == +1) {
+		preset_name = e("preset").innerHTML;
+		inc = true;
+	}
+		
+	for (var i in presets) {
+		if (presets[i][0] == preset_name) {
+			pn = Number(i);
+			break;
+		}
+	}
+	if (inc) {
+		pn = (pn + 1) % presets.length;
+	}
+	preset_name = presets[pn][0];
+	period_time = presets[pn][1];
+	jam_time = presets[pn][2];
+	lineup_time = presets[pn][3];
+	timeouts = presets[pn][4];
+	
+	e("preset").innerHTML = preset_name;
+	e("jam").set(jam_time);
+	e("period").set(period_time);
+	e("timeouts-a").innerHTML = timeouts;
+	e("timeouts-b").innerHTML = timeouts;
+	e("score-a").innerHTML = 0;
+	e("score-b").innerHTML = 0;
+}	
+	
 function load() {
 	function load_cb(state) {
-		period_time = state.period_time;
-		jam_time = state.jam_time;
-		lineup_time = state.lineup_time;
+		load_preset(state.preset);
+		
+		e("period").set((state.period_clock >= 0) ? state.period_clock : period_time);
 
 		e("logo-a").src = state.logo_a;
 		e("logo-b").src = state.logo_b;
 		e("score-a").innerHTML = state.score_a;
 		e("score-b").innerHTML = state.score_b;
-		e("timeouts-a").innerHTML = state.timeouts_a;
-		e("timeouts-b").innerHTML = state.timeouts_b;
 		
-		var p = e("period");
-		startTimer(p);
-		p.set(state.period_clock);
+		e("timeouts-a").innerHTML = (state.timeouts_a >= 0) ? state.timeouts_a : timeouts;
+		e("timeouts-b").innerHTML = (state.timeouts_b >= 0) ? state.timeouts_b : timeouts;
+		
 	}
 	
 	chrome.storage.local.get({
-			"period_clock": period_time,
+			"preset": presets[0][0],
+			"period_clock": -1,
 			"score_a": 0,
 			"score_b": 0,
 			"logo_a": "logos/black.png",
 			"logo_b": "logos/white.png",
-			"timeouts_a": 3,
-			"timeouts_b": 3,
-			"period_time": period_time,
-			"jam_time": jam_time,
-			"lineup_time": lineup_time
+			"timeouts_a": -1,
+			"timeouts_b": -1
 		}, load_cb);		
 }
 
@@ -542,14 +578,18 @@ function start() {
 	ei("jam");
 	ei("prefs");
 	ei("close");
+	ei("preset");
 	
 	ei("periodtext").innerHTML = periodtext[period];
 	ei("jamtext").innerHTML = jamtext[3];
 	transition();
 
+	var p = e("period");
+	startTimer(p);
+	p.readOnly = false;
+
 	var j = e("jam");
 	startTimer(j);
-	j.set(jam_time);
 
 	update_itimer = setInterval(update, 200); // 5 times a second
 
