@@ -1,5 +1,9 @@
 // This file is used by the chrome app distribution
 {
+	"manifest_version": 2,
+	"name": "__MSG_appName__",
+	"description": "__MSG_appDesc__",
+	"author": "Neale Pickett <neale@woozle.org>",
 	"version": "6.0",
 	"app": {
 		"background": {
@@ -12,10 +16,6 @@
 	"permissions": [
 		"storage"
 	],
-	"offline_enabled": true,
-	
-	"name": "__MSG_appName__",
-	"description": "__MSG_appDesc__",
 	"default_locale": "en",
-	"manifest_version": 2
+	"offline_enabled": true
 }
