@@ -8,8 +8,8 @@
 		"description": "Short application name"
 	},
 	"appDesc": {
-		"message": "Roller Derby Scoreboard",
-		"description": "Application description"
+		"message": "Roller Derby Scoreboard for WFTDA, USARS, RDCL, and MADE",
+		"description": "Application description for app store listing"
 	},
 	
 	"period1": {
