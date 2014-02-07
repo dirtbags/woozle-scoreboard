@@ -279,8 +279,6 @@ function score(team, points) {
  * Event handlers
  */
 
-var logo = {a:-1, b:-1};
-
 function leadJammer(team) {
 	tgt = e("jammer-" + team);
 	var on = ! tgt.className;
@@ -288,6 +286,36 @@ function leadJammer(team) {
 	e("jammer-a").className = "";
 	e("jammer-b").className = "";
 	if (on) tgt.className = "lead";
+}
+
+
+function merf(fo) {
+	var la = e("logo-a");
+	fo.file(function(file){la.src = URL.createObjectURL(file);})
+	window.woo = woo;
+	console.log(woo);
+	e.src = woo.toURL();
+}
+
+function changeLogo(element) {
+	// Holy cow, asynchronous events galore here
+	
+	function setURL(file) {
+		element.src = URL.createObjectURL(file);
+	}
+
+	function loaded(entry) {
+		entry.file(setURL);
+	}
+		
+	chrome.fileSystem.chooseEntry(
+		{
+			"accepts": [{
+				"mimeTypes": ["image/*"]
+			}],
+			"acceptsAllTypes": false
+		}, 
+		loaded);
 }
 
 function handle(event) {
@@ -301,14 +329,7 @@ function handle(event) {
 	case "logo-a":
 	case "logo-b":
 		if (state == SETUP) {
-			var t, name;
-
-			logo[team] = (teams.length + logo[team] + adj) % teams.length;
-			t = teams[logo[team]];
-
-			name = t[0];
-
-			tgt.src = "logos/" + t[1];
+			changeLogo(tgt);
 		} else {
 			score(team, -adj);
 		}
@@ -552,8 +573,8 @@ function load() {
 			"period_clock": -1,
 			"score_a": 0,
 			"score_b": 0,
-			"logo_a": "logos/black.png",
-			"logo_b": "logos/white.png",
+			"logo_a": "kitty.png",
+			"logo_b": "kitty.png",
 			"timeouts_a": -1,
 			"timeouts_b": -1
 		}, load_cb);		

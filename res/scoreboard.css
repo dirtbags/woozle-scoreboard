@@ -1,14 +1,14 @@
 @font-face {
-    font-family: 'Magenta';
-    src: url('Magenta.woff') format('woff');
+    font-family: 'Ubuntu';
+    src: url('Ubuntu-Medium.ttf');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: 'PermanentMarker';
-    src: url('PermanentMarker.woff') format('woff');
-    font-weight: normal;
+    font-family: 'Ubuntu';
+    src: url('Ubuntu-Bold.ttf');
+    font-weight: bold;
     font-style: normal;
 }
 
@@ -122,7 +122,7 @@ input[readonly] {
 
 #jamtext, #periodtext, #preset {
     text-align: center;
-    font-family: PermanentMarker, sans-serif;
+    font-family: Ubuntu, sans-serif;
     font-weight: normal;
     font-size: 75%;
 

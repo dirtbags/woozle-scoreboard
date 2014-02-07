@@ -15,6 +15,7 @@
   	},
 	"permissions": [
 		"storage",
+		"fileSystem",
 		"fullscreen"
 	],
 	"default_locale": "en",
