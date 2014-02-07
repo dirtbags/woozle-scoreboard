@@ -271,7 +271,7 @@ function score(team, points) {
 	var te = e("score-" + team);
 	var ts = Number(te.innerHTML);
 
-	ts += points;
+	ts = Math.max(ts + points, 0);
 	te.innerHTML = ts;
 }
 
