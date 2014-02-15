@@ -1,10 +1,12 @@
 {
 	"manifest_version": 2,
-	"name": "__MSG_appName__",
-	"short_name": "__MSG_appShortName__",
+	"name": "BETA Woozle Scoreboard",
+	"short_name": "BETA Scoreboard",
+	//"name": "__MSG_appName__",
+	//"short_name": "__MSG_appShortName__",
 	"description": "__MSG_appDesc__",
 	"author": "Neale Pickett <neale@woozle.org>",
-	"version": "7.0.1",
+	"version": "7.0.2",
 	"app": {
 		"background": {
 			"scripts": ["res/background.js"]
