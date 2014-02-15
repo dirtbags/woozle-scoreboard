@@ -1,14 +1,14 @@
 {
 	"appName": {
-		"message": "Devel Roller Derby Scoreboard",
+		"message": "Woozle Overlay Roller Derby Scoreboard",
 		"description": "Application name"
 	},
 	"appShortName": {
-		"message": "Devel Scoreboard",
+		"message": "Overlay Scoreboard",
 		"description": "Short application name"
 	},
 	"appDesc": {
-		"message": "Roller Derby Scoreboard for WFTDA, USARS, RDCL, MADE, and JRDA",
+		"message": "Overlay Roller Derby Scoreboard for WFTDA, USARS, RDCL, MADE, and JRDA",
 		"description": "Application description for app store listing"
 	},
 	
