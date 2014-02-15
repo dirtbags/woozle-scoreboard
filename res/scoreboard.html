@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+	Woozle Roller Derby Scoreboard
+	Copyright © 2014 Neale Pickett <neale@woozle.org>
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU
+	General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.	If not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
+	<head>
+		<title>Woozle Scoreboard</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="scoreboard.css">
+		<script type="text/javascript" src="kitty.js"></script>
+		<script type="text/javascript" src="scoreboard.js"></script>
+	</head>
+	<body>
+		<div id="scoreboard">
+			<div class="left">
+				<div class="logo" id="logo-a">
+					<img class="img" id="img-a" src="" alt="A">
+					<canvas class="kitty" id="kitty-a"></canvas>
+					<input type="color" class="setup color" id="color-a" value="#666666">
+					<input type="image" class="setup load" id="load-a" src="ic_picture.png">
+				</div>
+				<span class="timeouts" id="timeouts-a">3</span>
+				<span class="jammer" id="jammer-a">★</span>
+				<span class="score" id="score-a">-</span>
+			</div>
+
+			<div class="right">
+				<div class="logo" id="logo-b">
+					<img class="img" id="img-b" src="" alt="B">
+					<canvas class="kitty" id="kitty-b"></canvas>
+					<input type="color" class="setup color" id="color-b" value="#ffffff">
+					<input type="image" class="setup load" id="load-b" src="ic_picture.png">
+				</div>
+				<span class="timeouts" id="timeouts-b">3</span>
+				<span class="jammer" id="jammer-b">★</span>
+				<span class="score" id="score-b">-</span>
+			</div>
+
+			<div class="center">
+				<input id="period" value="--:--">
+				<span id="periodtext"></span>
+				<span class="setup" id="preset">-</span>
+				<input id="jam" value="-:--">
+				<span id="jamtext"></span>
+			</div>
+		</div>
+
+		<div id="notice">
+		</div>
+
+		<img id="close" src="close-icon-white.png" title="Close Scoreboard">
+
+	</body>
+</html>

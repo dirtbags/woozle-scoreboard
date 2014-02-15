@@ -1,19 +1,19 @@
 /*
- * LADD Roller Derby Scoreboard
- * Copyright © 2011  Neale Pickett <neale@woozle.org>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or (at
- * your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	Woozle Roller Derby Scoreboard
+	Copyright © 2014 Neale Pickett <neale@woozle.org>
+
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful, but
+	WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU
+	General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program.	If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* You can only have one scoreboard per page.  This limitation is mostly
@@ -24,17 +24,37 @@
  * change in this file.
  */
 
-longnames = false;
-tenths = true;
+/* Times for various rulesets */
+var presets = [
+	["WFTDA", 30 * 60 * 1000, 120 * 1000, 30 * 1000, 3],
+	["USARS", 30 * 60 * 1000, 90 * 1000, 30 * 1000, 3],
+	["RDCL", 15 * 60 * 1000, 60 * 1000, 30 * 1000, 3],
+	["MADE", 15 * 60 * 1000, 90 * 1000, 30 * 1000, 1],
+	["JRDA", 30 * 60 * 1000, 120 * 1000, 30 * 1000, 2]
+];
+var period_time;
+var jam_time;
+var lineup_time;
+var timeouts;
 
 /* State names */
-var SETUP = 0;                  // !P 30:00   !J 2:00
-var JAM = 1;                    //  P          J 2:00
-var LINEUP = 2;                 //  P          J 1:00
-var TIMEOUT = 3;                // !P          J 1:00
+var SETUP = 0;
+var JAM = 1;
+var LINEUP = 2;
+var TIMEOUT = 3;
 
-var periodtext = ["Period 1", "Halftime", "Period 2", "Break"];
-var jamtext = ["Jam", "Lineup", "Timeout", "Setup"];
+var periodtext = [
+	chrome.i18n.getMessage("period1"),
+	chrome.i18n.getMessage("halftime"),
+	chrome.i18n.getMessage("period2"),
+	chrome.i18n.getMessage("timeToGame")
+];
+var jamtext = [
+	chrome.i18n.getMessage("jam"),
+	chrome.i18n.getMessage("lineup"),
+	chrome.i18n.getMessage("timeout"),
+	chrome.i18n.getMessage("setup")
+];
 var period = 0;
 var jamno = 0;
 
@@ -42,148 +62,180 @@ var state = SETUP;
 
 var timer_updates = [];
 function update() {
-    for (i in timer_updates) {
-        var u = timer_updates[i];
+	for (var i in timer_updates) {
+		var u = timer_updates[i];
 
-        u();
-    }
+		u();
+	}
+}
+
+function e(id) {
+	ret = document.getElementById(id);
+	if (! ret) {
+		return Array();
+	}
+	return ret;
 }
 
 // Create a timer on [element].
-// If [tenths] is true, show tenths of a second.
-// If [callback] is defined, call it when time runs out.
-function startTimer(element, tenths, callback) {
-    var startTime;
-    var running = false;
-    var set_duration = 0;
-    var duration = 0;
-    var className;
+function startTimer(element) {
+	var startTime;
+	var running = false;
+	var set_duration = 0;
+	var duration = 0;
+	var className;
 
-    // Re-calculate and update displayed time
-    function refresh () {
-        var remain = element.remaining();
-        var min = Math.floor(Math.abs(remain / 60000));
-        var sec = (Math.floor(Math.abs(remain / 100)) / 10) % 60;
+	// Heartbeat
+	function pulse() {
+		if (! running) {
+			element.className = className + " paused";
+			return;
+		}
+		
+		refresh();
+	}
+	
+	// Re-calculate and update displayed time
+	function refresh() {
+		var remain = Math.ceil(element.remaining() / 1000);
+		var min = Math.floor(Math.abs(remain) / 60);
+		var sec = Math.abs(remain) % 60;
+		
+		// Set classes
+		if ((! className) && (remain <= 20)) {
+			element.className = "lowtime";
+		} else {
+			element.className = className;
+		}
 
-        // Set classes
-        element.className = className;
-        if ((! className) && (remain <= 20000)) {
-            element.className += " lowtime";
-        }
-        if (! running) {
-            element.className += " paused";
-        }
+		// Has the timer run out?
+		if ((set_duration > 0) && (remain <= 0)) {
+			duration = 0;
+			sec = 0;
+			element.stop();
+		}
 
-        // Has the timer run out?
-        if ((set_duration > 0) && (remain <= 0)) {
-            duration = 0;
-            sec = 0;
-            running = false;
-            if (callback) {
-                callback();
-            }
-        }
+		sec = Math.ceil(sec);
+		// Zero-pad
+		if (sec < 10) {
+			sec = "0" + sec;
+		}
 
-        // .toFixed() rounds, we want to truncate
-        if (! tenths) {
-            sec = Math.floor(sec);
-        } else {
-            sec = sec.toFixed(1);
-        }
-        // Zero-pad
-        if (sec < 10) {
-            sec = "0" + sec;
-        }
+		var t = min + ":" + sec;
+		if (t != element.value) {
+			element.value = t;
+		}
+	}
+	
+	function inputHandler() {
+		var t = element.value.split(":");
+		var sec = (Number(t[0]) * 60) + Number(t[1]);
+		
+		if (isNaN(sec) || (sec <= 0) || (sec > (59 * 60))) {
+			// Ignore goofy values
+			return;
+		}
+		
+		element.set(sec * 1000, className, true);
+	}
 
-        var t = min + ":" + sec;
-        if (t != element.innerHTML) {
-            element.innerHTML = t;
-        }
-    }
+	// Return remaining time in milliseconds
+	element.remaining = function() {
+		if (running) {
+			var now = (new Date()).getTime();
+			return duration - (now - startTime);
+		} else {
+			return duration;
+		}
+	}
 
-    // Return remaining time in milliseconds
-    element.remaining = function() {
-        if (running) {
-            var now = (new Date()).getTime();
-            return duration - (now - startTime);
-        } else {
-            return duration;
-        }
-    }
+	// Set timer to [d] milliseconds.
+	// Put element into class [cn], if set.
+	// If [stealth] is set, don't refresh
+	element.set = function(t, cn, stealth) {
+		startTime = (new Date()).getTime();
+		set_duration = t;
+		duration = t;
+		className = cn;
+		
+		if (! stealth) {
+			refresh();
+		}
+	}
 
-    // Set timer to [d] milliseconds.
-    // Put element into class [cn], if set.
-    element.set = function(t, cn) {
-        startTime = (new Date()).getTime();
-        set_duration = t;
-        duration = t;
-        className = cn;
-        refresh();
-    }
+	// Start timer
+	element.start = function() {
+		if (! running) {
+			startTime = (new Date()).getTime();
+			running = true;
+		}
+		refresh();
+	}
 
-    // Start timer
-    element.start = function() {
-        if (! running) {
-            startTime = (new Date()).getTime();
-            running = true;
-        }
-        refresh();
-    }
+	// Stop timer
+	element.stop = function() {
+		if (running) {
+			duration = element.remaining();
+			running = false;
+		}
+	}
 
-    // Stop timer
-    element.stop = function() {
-        if (running) {
-            duration = element.remaining();
-            running = false;
-        }
-        refresh();
-    }
+	element.readOnly = true;
+	element.addEventListener("input", inputHandler);
 
-    timer_updates.push(refresh);
+	timer_updates.push(pulse);
 }
 
 // Transition state machine based on state
 function transition(newstate) {
-    var jt = e("jam");
-    var pt = e("period");
-    var jtext = e("jamtext");
-    var jno = e("jamno");
+	var jt = e("jam");
+	var pt = e("period");
+	var jtext = e("jamtext");
+	var jno = e("jamno");
 
-    if ((newstate == undefined) || (newstate == state)) {
-        return;
-    }
+	if ((newstate === undefined) || (newstate == state)) {
+		return;
+	}
 
-    if ((state == SETUP) && window.penalties) {
-        penalties_duck();
-    }
+	state = newstate;
 
-    state = newstate;
+	if (state == JAM) {
+		pt.start();
+		jt.set(jam_time);
+		jt.start();
+		jtext.innerHTML = jamtext[0];
+		jamno += 1;
+		jno.innerHTML = jamno;
+		pt.readOnly = true;
+	} else if (state == LINEUP) {
+		pt.start();
+		jt.set(lineup_time, "lineup");
+		jt.start();
+		jtext.innerHTML = jamtext[1];
+		pt.readOnly = true;
+	} else if (state == TIMEOUT) {
+		pt.stop();
+		if (pt.remaining() <= 0) {
+			pt.set(period_time);
+		}
+		jt.set(0, "timeout");
+		jt.start();
+		jtext.innerHTML = jamtext[2];
+		pt.readOnly = false;
+	}
 
-    if (state == JAM) {
-        pt.start();
-        jt.set(120000);
-        jt.start();
-        jtext.innerHTML = jamtext[0];
-        jamno += 1;
-        jno.innerHTML = jamno;
-    } else if (state == LINEUP) {
-        pt.start();
-        jt.set(30000, "lineup");
-        jt.start();
-        jtext.innerHTML = jamtext[1];
-    } else if (state == TIMEOUT) {
-        pt.stop();
-        if (pt.remaining() <= 0) {
-            pt.set(1800000);
-        }
-        jt.set(0, "timeout");
-        jt.start();
-        jtext.innerHTML = jamtext[2];
-    }
-
-    // Reset lead jammer indicators
-    e("jammer-a").className = "";
-    e("jammer-b").className = "";
+	// Reset lead jammer indicators
+	e("jammer-a").className = "";
+	e("jammer-b").className = "";
+	
+	var setupElements = document.getElementsByClassName("setup")
+	for (var i = 0; i < setupElements.length; i += 1) {
+		var el = setupElements[i]
+		
+		el.style.display = "none"
+	}
+	
+	save();
 }
 
 
@@ -192,387 +244,415 @@ function transition(newstate) {
  * Notices
  */
 
-var notices = [
-	false,
-	'<embed src="res/Zounds.swf" type="text/html">',
-	'<embed src="res/Ouch.swf" type="text/html">',
-	'<embed src="res/Pow.swf" type="text/html">',
-	'<embed src="res/HolyShot.swf" type="text/html">',
-	'<embed src="res/FasterFaster.swf" type="text/html">',
-	'<embed src="res/BadGirl.swf" type="text/html">',
-	'<embed src="res/banana.gif" type="image/gif">',
-];
+var notices = {
+	"banana": '<img src="res/banana.gif">'
+};
 
 var notice_timer;
 
 function notice_expire() {
-	var c = document.getElementById("notice");
+	var c = e("notice");
 
 	c.innerHTML = "";
 	c.style.display = "none";
 }
 
 function notice(n) {
-    var c = document.getElementById("notice");
+	var c = e("notice");
 
-    c.style.display = "block";
-    if (notices[n]) {
-        c.innerHTML = notices[n];
-        clearTimeout(notice_timer);
-        notice_timer = setTimeout(function() {notice_expire()}, 8000);
-    } else {
-        notice_expire();
-    }
+	if (notices[n]) {
+		if (c.innerHTML != notices[n]) {
+			c.innerHTML = notices[n];
+			c.style.display = "block";
+		}
+		clearTimeout(notice_timer);
+		notice_timer = setTimeout(function() {notice_expire()}, 8000);
+	} else {
+		notice_expire();
+	}
 }
 
-function e(id) {
-    ret = document.getElementById(id);
-    if (! ret) {
-        return Array();
-    }
-    return ret;
-}
 
 function score(team, points) {
-    var te = document.getElementById("score-" + team);
-    var ts = Number(te.innerHTML);
+	var te = e("score-" + team);
+	var ts = Number(te.innerHTML);
 
-    ts += points;
-    te.innerHTML = ts;
+	ts = Math.max(ts + points, 0);
+	te.innerHTML = ts;
 }
 
 /***********************************
  * Event handlers
  */
 
-var logo = {a:-1, b:-1};
-
 function leadJammer(team) {
-    tgt = e("jammer-" + team);
-    var on = ! tgt.className;
+	tgt = e("jammer-" + team);
+	var on = ! tgt.className;
 
-    e("jammer-a").className = "";
-    e("jammer-b").className = "";
-    if (on) tgt.className = "lead";
+	e("jammer-a").className = "";
+	e("jammer-b").className = "";
+	if (on) tgt.className = "lead";
+}
+
+function changeLogo(team) {
+	// Holy cow, asynchronous events galore here
+	var element = e("img-" + team)
+	
+	function setURL(file) {
+		element.src = URL.createObjectURL(file);
+	}
+
+	function loaded(entry) {
+		entry.file(setURL);
+		e("kitty-" + team).style.display = "none"
+		element.style.display = "inline"
+	}
+		
+	chrome.fileSystem.chooseEntry(
+		{
+			"accepts": [{
+				"mimeTypes": ["image/*"]
+			}],
+			"acceptsAllTypes": false
+		}, 
+		loaded);
 }
 
 function handle(event) {
-    var tgt = event.target || window.event.srcElement;
-    var team = tgt.id.substr(tgt.id.length - 1);
-    var adj = event.shiftKey?-1:1;
-    var mod = (event.ctrlKey || event.altKey);
-    var newstate;
+	var tgt = event.target || window.event.srcElement;
+	var team = tgt.id.substr(tgt.id.length - 1);
+	var adj = event.shiftKey?-1:1;
+	var mod = (event.ctrlKey || event.altKey);
+	var newstate;
 
-    switch (tgt.id) {
-    case "name-a":
-    case "name-b":
-        if (state == SETUP) {
-            var tn = prompt("Enter team " + team + " name", tgt.innerHTML);
+	switch (tgt.id) {
+	case "load-a":
+	case "load-b":
+		changeLogo(team)
+		break
+	case "img-a":
+	case "img-b":
+	case "kitty-a":
+	case "kitty-b":
+		score(team, -adj);
+		break;
+	case "jammer-a":
+	case "jammer-b":
+		leadJammer(team);
+		break;
+	case "timeouts-a":
+	case "timeouts-b":
+		// Allow for timeouts > 3
+		var v = Number(tgt.innerHTML);
 
-            if (tn) {
-                tgt.innerHTML = tn;
-            }
-            if (window.penalties) {
-                penalties_setTeamName(team, tn);
-            }
-        }
-        break;
-    case "logo-a":
-    case "logo-b":
-        if (state == SETUP) {
-            if (mod) {
-                var u = prompt("Enter URL to team " + team + " logo");
+		v -= adj;
+		if (v == -1) {
+			v = timeouts;
+		}
+		tgt.innerHTML = v;
+		break;
+	case "period":
+		if ((state == SETUP) || (state == TIMEOUT)) {
+			// Nothin'
+		 } else {
+			newstate = TIMEOUT;
+		}
+		break;
+	case "periodtext":
+		var pt;
+		var ptl = periodtext.length;
 
-                if (u) {
-                    tgt.src = u;
-                }
-            } else {
-                var t, name;
-
-                logo[team] = (teams.length + logo[team] + adj) % teams.length;
-                t = teams[logo[team]];
-
-                if (longnames) {
-                    name = t[2];
-                } else {
-                    name = t[0];
-                }
-
-                e("name-" + team).innerHTML = name;
-                tgt.src = "logos/" + t[1];
-
-                if (window.penalties) {
-                    penalties_setTeamName(team, t[0]);
-                }
-            }
-        } else {
-            score(team, -adj);
-        }
-        break;
-    case "jammer-a":
-    case "jammer-b":
-        leadJammer(team);
-        break;
-    case "timeouts-a":
-    case "timeouts-b":
-        // Allow for timeouts > 3
-        var v = Number(tgt.innerHTML);
-
-        v -= adj;
-        if (v == -1) v = 3;
-        tgt.innerHTML = v;
-        break;
-    case "period":
-        if ((state == SETUP) || (state == TIMEOUT)) {
-            var r = prompt("Enter new time for period clock", tgt.innerHTML);
-            if (! r) return;
-
-            var t = r.split(":");
-            var sec = 0;
-
-            if (t.length > 3) {
-                tgt.innerHTML = "What?";
-                return;
-            }
-
-            for (var i in t) {
-                var v = t[i];
-                sec = (sec * 60) + Number(v);
-            }
-
-            tgt.set(sec*1000);
-        } else {
-            newstate = TIMEOUT;
-        }
-        break;
-    case "periodtext":
-        var pt;
-
-        if (mod) {
-            pt = prompt("Enter new period indicator text", tgt.innerHTML);
-        } else {
-            var ptl = periodtext.length;
-
-            period = (period + ptl + adj) % ptl;
-            pt = periodtext[period];
-        }
-        if (pt) {
-            tgt.innerHTML = pt;
-            if (state == TIMEOUT) {
-                jamno = 0;
-                e("jamno").innerHTML = jamno;
-            }
-        }
-        break;
-    case "jam":
-        if (state == JAM) {
-            newstate = LINEUP;
-        } else {
-            newstate = JAM;
-        }
-        break;
-    case "jamno":
-        jamno -= adj;
-        tgt.innerHTML = jamno;
-        break;
-    case "score-a":
-    case "score-b":
-        if (state == SETUP) {
-            var s = prompt("Enter score for team " + team, tgt.innerHTML);
-            if (s) {
-                tgt.innerHTML = s;
-            }
-        } else {
-            score(team, adj);
-        }
-        break;
-    }
-    transition(newstate);
+		period = (period + ptl + adj) % ptl;
+		pt = periodtext[period];
+		if (pt) {
+			tgt.innerHTML = pt;
+			if (state == TIMEOUT) {
+				jamno = 0;
+				e("jamno").innerHTML = jamno;
+			}
+		}
+		break;
+	case "jam":
+		if (state == JAM) {
+			newstate = LINEUP;
+		} else {
+			newstate = JAM;
+		}
+		break;
+	case "jamno":
+		jamno -= adj;
+		tgt.innerHTML = jamno;
+		break;
+	case "score-a":
+	case "score-b":
+		if (state == SETUP) {
+			e(tgt.id).innerHTML = 0;
+		} else {
+			score(team, adj);
+		}
+		break;
+	case "preset":
+		load_preset(+1);
+		break;
+	case "close":
+		window.close();
+		break;
+	}
+	transition(newstate);
 }
 
 function key(event) {
-    var e = event || window.event;
-    var c = String.fromCharCode(e.which || e.keyCode || 0);
-    var newstate;
+	var e = event || window.event;
+	var k = e.which || e.keyCode || 0;
+	var c;
+	var newstate;
 
-    switch (c) {
-    case " ":
-        if (state == JAM) {
-            newstate = LINEUP;
-        } else {
-            newstate = JAM;
-        }
-        break;
-    case "t":
-        newstate = TIMEOUT;
-        break;
-    case "a":
-    case "[":
-        score('a', 1);
-        break;
-    case "b":
-    case "]":
-        score('b', 1);
-        break;
-    case "A":
-    case "{":
-        score('a', -1);
-        break;
-    case "B":
-    case "}":
-        score('b', -1);
-        break;
-    case ",":
-        leadJammer('a');
-        break;
-    case ".":
-        leadJammer('b');
-        break;
-    case "1":
-    case "2":
-    case "3":
-    case "4":
-    case "5":
-    case "6":
-    case "7":
-    case "8":
-    case "9":
-    case "0":
-        var n = Number(c);
+	switch (k) {
+	case 32:
+		c = " ";
+		break;
+	case 38:
+		c = "up";
+		break;
+	case 40:
+		c = "down";
+		break;
+	case 188:
+		c = ",";
+		break;
+	case 190:
+		c = ".";
+		break;
+	case 191:
+		c = "/";
+		break;
+	case 219:
+		c = e.shiftKey ? "{" : "[";
+		break;
+	case 221:
+		c = e.shiftKey ? "}" : "]";
+		break;
+	case 222:
+		c = e.shiftKey ? "\"" : "'";
+		break;
+	default:
+		if ((k >= 48) && (k <= 90)) {
+			c = String.fromCharCode(k);
+			if (! e.shiftKey) {
+				c = c.toLowerCase();
+			}
+		} else {
+			c = null;
+		}
+		break;
+	}
 
-        window.notice(n);
-    }
+	bige = e;
 
-    transition(newstate);
+	switch (c) {
+	case "up":
+		if ((state == TIMEOUT) || (state == SETUP)) {
+			var pt = e("period");
+			var rem = pt.remaining();
+			pt.set(rem + 1000);
+		}
+		break;
+	case "down":
+		if ((state == TIMEOUT) || (state == SETUP)) {
+			var pt = e("period");
+			var rem = pt.remaining();
+			pt.set(rem - 1000);
+		}
+		break;
+	case " ":
+		if (state == JAM) {
+			newstate = LINEUP;
+		} else {
+			newstate = JAM;
+		}
+		break;
+	case "t":
+		newstate = TIMEOUT;
+		break;
+	case "a":
+	case "[":
+		score('a', 1);
+		break;
+	case "'":
+	case "]":
+		score('b', 1);
+		break;
+	case "z":
+	case "{":
+		score('a', -1);
+		break;
+	case "/":
+	case "}":
+		score('b', -1);
+		break;
+	case ",":
+		leadJammer('a');
+		break;
+	case ".":
+		leadJammer('b');
+		break;
+	case "g":
+		window.notice("banana");
+		break;
+	}
+
+	transition(newstate);
 }
 
-function get(k, d) {
-    if (! window.localStorage) {
-        return d;
-    } else {
-        var v = window.localStorage["rdsb_" + k];
-        if (v == undefined) {
-            return d;
-        }
-        return v;
-    }
-}
-
-function store(k, v) {
-    if ((v == undefined) || ! window.localStorage) {
-        return;
-    } else {
-        localStorage["rdsb_" + k] = v;
-    }
-}
 
 function save() {
-    if (window.penalties_save) {
-        penalties_save();
-    }
-    store("period_clock", e("period").remaining());
-    store("name_a", e("name-a").innerHTML);
-    store("name_b", e("name-b").innerHTML);
-    store("logo_a", e("logo-a").src);
-    store("logo_b", e("logo-b").src);
-    store("score_a", e("score-a").innerHTML);
-    store("score_b", e("score-b").innerHTML);
-    store("timeout_a", e("timeouts-a").innerHTML);
-    store("timeout_b", e("timeouts-b").innerHTML);
-    store("jamno", jamno);
-    store("period", period);
+	chrome.storage.local.set(
+		{
+			"preset": e("preset").innerHTML,
+			"score_a": e("score-a").innerHTML,
+			"score_b": e("score-b").innerHTML,
+			"timeouts_a": e("timeouts-a").innerHTML,
+			"timeouts_b": e("timeouts-b").innerHTML,
+			"period_clock": e("period").remaining(),
+		}
+	);
 }
-    
-function iecheck() {
-    // If it's IE, it's got to be at least 7
-    var ua = navigator.userAgent;
-    var ie = ua.indexOf("MSIE ");
 
-    if (ie == -1) {
-        // Not IE
-        return;
-    } else {
-        var n = parseFloat(ua.substring(ie + 5, ua.indexOf(";", ie)));
-        if (n < 7) {
-            alert("Your browser is too old to run the Woozle scoreboard.\nYou can use Firefox, Chrome, Opera, or Internet Explorer 7 and up.");
-        }
-    }
+function load_preset(preset_name) {
+	var inc = false;
+	var pn = 0;
+
+	if (preset_name == +1) {
+		preset_name = e("preset").innerHTML;
+		inc = true;
+	}
+		
+	for (var i in presets) {
+		if (presets[i][0] == preset_name) {
+			pn = Number(i);
+			break;
+		}
+	}
+	if (inc) {
+		pn = (pn + 1) % presets.length;
+	}
+	preset_name = presets[pn][0];
+	period_time = presets[pn][1];
+	jam_time = presets[pn][2];
+	lineup_time = presets[pn][3];
+	timeouts = presets[pn][4];
+	
+	e("preset").innerHTML = preset_name;
+	e("jam").set(jam_time);
+	e("period").set(period_time);
+	e("timeouts-a").innerHTML = timeouts;
+	e("timeouts-b").innerHTML = timeouts;
+	e("score-a").innerHTML = 0;
+	e("score-b").innerHTML = 0;
+}	
+	
+function load() {
+	function load_cb(state) {
+		load_preset(state.preset);
+		
+		e("period").set((state.period_clock >= 0) ? state.period_clock : period_time);
+
+		e("score-a").innerHTML = state.score_a;
+		e("score-b").innerHTML = state.score_b;
+		
+		e("timeouts-a").innerHTML = (state.timeouts_a >= 0) ? state.timeouts_a : timeouts;
+		e("timeouts-b").innerHTML = (state.timeouts_b >= 0) ? state.timeouts_b : timeouts;
+		
+	}
+	
+	chrome.storage.local.get({
+			"preset": presets[0][0],
+			"period_clock": -1,
+			"score_a": 0,
+			"score_b": 0,
+			"timeouts_a": -1,
+			"timeouts_b": -1
+		}, load_cb);		
+}
+
+
+function ei(name) {
+	el = e(name);
+	if (el.addEventListener) {
+		el.addEventListener("click", handle, false);
+	}
+	return el;
 }
 
 function start() {
-    resize();
-    iecheck();
+	resize();
+	load();
 
-    var p = document.getElementById("period");
-    var j = document.getElementById("jam");
-    var c;
+	ei("logo-a");
+	ei("logo-b");
+	ei("score-a");
+	ei("score-b")
+	ei("jammer-a");
+	ei("jammer-b");
+	ei("timeouts-a");
+	ei("timeouts-b");
+	ei("period");
+	ei("jam");
+	ei("prefs");
+	ei("close");
+	ei("preset");
+	
+	e("color-a").addEventListener("change", function() {rekitty("a")}, false);
+	e("color-b").addEventListener("change", function() {rekitty("b")}, false);
 
+	ei("periodtext").innerHTML = periodtext[period];
+	ei("jamtext").innerHTML = jamtext[3];
+	transition();
 
-    // IE8 doesn't have localStorage for file:// URLs  :<
-    e("name-a").innerHTML = get("name_a", "Home");
-    e("name-b").innerHTML = get("name_b", "Vis");
-    e("logo-a").src = get("logo_a", "logos/black.png");
-    e("logo-b").src = get("logo_b", "logos/white.png");
-    e("score-a").innerHTML = get("score_a", 0);
-    e("score-b").innerHTML = get("score_b", 0);
-    e("timeouts-a").innerHTML = get("timeout_a", 3);
-    e("timeouts-b").innerHTML = get("timeout_b", 3);
-    period = Number(get("period", 0));
-    jamno = Number(get("jamno", 0));
+	
 
-    if (window.localStorage) {
-        save_itimer = setInterval(save, 1000);
-    }
-    
-    if (window.penalties) {
-        penalties_init();
-    }
+	var p = e("period");
+	startTimer(p);
+	p.readOnly = false;
 
-    e("periodtext").innerHTML = periodtext[period];
-    e("jamtext").innerHTML = jamtext[3];
-    transition();
+	var j = e("jam");
+	startTimer(j);
 
-    c = Number(get("period_clock", 1800000));
-    startTimer(p);
-    p.set(c);
+	update_itimer = setInterval(update, 200); // 5 times a second
 
-    var j = document.getElementById("jam");
-    startTimer(j, window.tenths);
-    j.set(120000);
+}
 
-    save_timer = setInterval(save, 1000);
-    update_itimer = setInterval(update, 33);
-
+function rekitty(team) {
+	var i = e("img-" + team)
+	var k = e("kitty-" + team)
+	var color = e("color-" + team).value
+	
+	i.style.display = "none"
+	k.style.display = "inline"
+	kitty(k.getContext("2d"), color)
 }
 
 function resize() {
-    var b = document.getElementsByTagName("body")[0];
-    var w, h;
-    
-    // Internet Explorer makes everything a pain in the ass
-    if (window.innerWidth) {
-        w = window.innerWidth;
-        h = window.innerHeight;
-    } else if (document.documentElement && document.documentElement.clientWidth) {
-        w = document.documentElement.clientWidth;
-        h = document.documentElement.clientHeight;
-    } else if (document.body) {
-        w = document.body.clientWidth;
-        h = document.body.clientHeight;
-    } else {
-        // Punt
-        w = 800;
-        h = 600;
-    }
-   
-    w /= 7;
-    h /= 5;
+	var w = window.innerWidth / 7
+	var h = window.innerHeight / 5
+	var fs = Math.min(w, h)
 
-    var fs = Math.min(w, h);
-
-    b.style.fontSize = fs + 'px';
+	document.body.style.fontSize = Math.min(w, h) + 'px'
+	
+	// Now do kitty canvases
+	var kw = fs * 1.8
+	var kh = kw * 0.6883
+	
+	var kitties = document.getElementsByClassName("kitty")
+	for (var i = 0; i < kitties.length; i += 1) {
+		k = kitties[i]
+		k.width = kw
+		k.height = kh
+	}
+	rekitty("a")
+	rekitty("b")
 }
 
 window.onload = start;
-document.onkeypress = key;  // IE requires document, not window
+document.onkeydown = key;  // IE requires document, not window
 window.onresize = resize;

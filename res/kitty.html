@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Kitty Explorer</title>
+		<script type="text/javascript" src="kitty.js"></script>
+		<script type="text/javascript">
+function meow() {
+	c = document.getElementById("kitty")
+	ctx = c.getContext("2d")
+	kitty(ctx, "#0088ff")
+}
+
+window.addEventListener("load", meow)
+		</script>
+	</head>
+	<body>
+		<canvas id="kitty" height="300" width="300" style="border: solid black 1px;">(meow)</canvas>
+	</body>
+</html>

@@ -1,0 +1,48 @@
+{
+	"appName": {
+		"message": "Woozle Roller Derby Scoreboard",
+		"description": "Application name"
+	},
+	"appShortName": {
+		"message": "Woozle Scoreboard",
+		"description": "Short application name"
+	},
+	"appDesc": {
+		"message": "Roller Derby Scoreboard for WFTDA, USARS, RDCL, MADE, and JRDA",
+		"description": "Application description for app store listing"
+	},
+	
+	"period1": {
+		"message": "Period 1",
+		"description": "Name of first period"
+	},
+	"period2": {
+		"message": "Period 2",
+		"description": "Name of second period"
+	},
+	"halftime": {
+		"message": "Halftime",
+		"description": "The name of the break between periods"
+	},
+	"timeToGame": {
+		"message": "To Derby",
+		"description": "Text shown after countdown to start of game"
+	},
+	
+	"jam": {
+		"message": "Jam",
+		"description": "Time during the game when skaters are actively playing"
+	},
+	"lineup": {
+		"message": "Lineup",
+		"description": "Time between active play, when skaters are positioning themselves"
+	},
+	"timeout": {
+		"message": "Timeout",
+		"description": "Time when game is suspended: period clock stops counting down"
+	},
+	"setup": {
+		"message": "Setup",
+		"description": "Software state allowing logos and times to be adjusted"
+	}
+}
