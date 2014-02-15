@@ -1,23 +1,23 @@
 @font-face {
-    font-family: 'Ubuntu';
-    src: url('Ubuntu-Medium.ttf');
-    font-weight: normal;
-    font-style: normal;
+	font-family: 'Ubuntu';
+	src: url('Ubuntu-Medium.ttf');
+	font-weight: normal;
+	font-style: normal;
 }
 
 @font-face {
-    font-family: 'Ubuntu';
-    src: url('Ubuntu-Bold.ttf');
-    font-weight: bold;
-    font-style: normal;
+	font-family: 'Ubuntu';
+	src: url('Ubuntu-Bold.ttf');
+	font-weight: bold;
+	font-style: normal;
 }
 
 body {
-    background: url(bg.jpg) #222;
-    background-size: 100% auto;
-    font-size: 160px;
-    color: #eee;
-    margin: 0;
+	background: url(bg.jpg) #222;
+	background-size: 100% auto;
+	font-size: 160px;
+	color: #eee;
+	margin: 0;
 }
 
 input {
@@ -31,110 +31,118 @@ input[readonly] {
 }
 
 #scoreboard {
-    cursor: default;
-    font-family: sans-serif;
-    font-weight: bold;
+	cursor: default;
+	font-family: Ubuntu, sans-serif;
 }
 #scoreboard p {
-    margin: 0;
+	margin: 0;
 }
 #scoreboard *[id] {
-    cursor: pointer;
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    user-select: none;
+	cursor: pointer;
+	user-select: none;
 }
 
 .left, .right {
-    width: 2em;
-    height: 100%;
-    text-align: center;
-    position: absolute;
-    top: 0;
+	width: 2em;
+	height: 100%;
+	text-align: center;
+	position: absolute;
+	top: 0;
 }
 
 .left {
-    left: 0;
+	left: 0;
 }
 .right {
-    right: 0;
+	right: 0;
 }
 
 .center {
 	text-align: center;
 }
 
-.logo {
-    max-width: 1.8em;
-    max-height: 2em;
+.logo img {
+	max-width: 1.8em;
+	max-height: 2em;
+}
+
+.logo input {
+	position: absolute;
+	top: 0;
+	font-size: 10pt;
+}
+
+.logo img {
+	display: none;
 }
 
 .timeouts {
-    position: absolute;
-    font-size: 50%;
-    bottom: 1em;
-    color: #0f0;
+	position: absolute;
+	font-size: 50%;
+	bottom: 1em;
+	color: #0f0;
 }
 #timeouts-a {
-    left: 0em;
+	left: 0em;
 }
 #timeouts-b {
-    right: 0em;
+	right: 0em;
 }
 
 /* Jammer indicators */
 #jammer-a, #jammer-b {
-    font-family: monospace;
-    position: absolute;
-    bottom: 0em;
-    color: #444;
+	font-family: monospace;
+	position: absolute;
+	bottom: 0em;
+	color: #444;
 }
 #jammer-a.lead, #jammer-b.lead, #jamtext, #periodtext {
-    color: yellow;
+	color: yellow;
 }
 #jammer-a {
-    left: 0.5em;
+	left: 0.5em;
 }
 #jammer-b {
-    right: 0.5em;
+	right: 0.5em;
 }
 
 #jam, #period {
-    text-align: center;
-    background: #000;
-    border-radius: 15px;
+	text-align: center;
+	font-weight: bold;
+	background: #000;
+	border-radius: 15px;
 }
 #period {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 3.4em;
-    margin-left: -1.7em;
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 3.4em;
+	margin-left: -1.7em;
 }
 
 #jam {
-    position: absolute;
-    bottom: 0em;
-    left: 50%;
-    width: 3.5em;
-    margin-left: -1.75em;
+	position: absolute;
+	bottom: 0em;
+	left: 50%;
+	width: 3.5em;
+	margin-left: -1.75em;
 }
 
 #jamtext, #periodtext, #preset {
-    text-align: center;
-    font-family: Ubuntu, sans-serif;
-    font-weight: normal;
-    font-size: 75%;
+	text-align: center;
+	font-family: Ubuntu, sans-serif;
+	font-size: 75%;
 
-    position: absolute;
-    left: 50%;
-    width: 5em;
-    margin-left: -2.5em;
-    z-index: -1;
+	padding: 0.2em;
+	position: absolute;
+	left: 50%;
+	width: 5em;
+	margin-left: -2.7em;
+	z-index: -1;
 }
 
 #periodtext {
-    top: 1.4em;
+	top: 1.4em;
 }
 
 #preset {
@@ -143,7 +151,7 @@ input[readonly] {
 }
 
 #jamtext {
-    bottom: 1.4em;
+	bottom: 1.4em;
 }
 
 #advert {
@@ -153,24 +161,24 @@ input[readonly] {
 }
 
 .score {
-    position: absolute;
-    font-size: 1.2em;
-    top: 50%;
-    margin-top: -0.6em;
+	position: absolute;
+	font-size: 1.2em;
+	top: 50%;
+	margin-top: -0.6em;
 }
 #score-a {
-    left: 0em;
+	left: 0em;
 }
 #score-b {
-    right: 0em;
+	right: 0em;
 }
 
 #jamno {
-    color: #0f0;
-    position: absolute;
-    font-size: 50%;
-    bottom: 2.2em;
-    right: 25%;
+	color: #0f0;
+	position: absolute;
+	font-size: 50%;
+	bottom: 2.2em;
+	right: 25%;
 }
 
 
@@ -178,16 +186,16 @@ input[readonly] {
  * States timers can be in
  */
 #jam.paused, #period.paused {
-    color: #aaf;
+	color: #aaf;
 }
 #jam.lowtime, #period.lowtime {
-    background: #f24;
+	background: #f24;
 }
 #jam.timeout {
-    background: #044;
+	background: #044;
 }
 #jam.lineup {
-    background: #060;
+	background: #060;
 }
 
 #close, #prefs {

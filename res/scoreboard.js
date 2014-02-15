@@ -58,6 +58,8 @@ var jamtext = [
 var period = 0;
 var jamno = 0;
 
+var colors = ["#666", "#ffffff"];
+
 var state = SETUP;
 
 var timer_updates = [];
@@ -288,17 +290,9 @@ function leadJammer(team) {
 	if (on) tgt.className = "lead";
 }
 
-
-function merf(fo) {
-	var la = e("logo-a");
-	fo.file(function(file){la.src = URL.createObjectURL(file);})
-	window.woo = woo;
-	console.log(woo);
-	e.src = woo.toURL();
-}
-
-function changeLogo(element) {
+function changeLogo(team) {
 	// Holy cow, asynchronous events galore here
+	var element = e("img-" + team)
 	
 	function setURL(file) {
 		element.src = URL.createObjectURL(file);
@@ -306,6 +300,8 @@ function changeLogo(element) {
 
 	function loaded(entry) {
 		entry.file(setURL);
+		e("kitty-" + team).style.display = "none"
+		element.style.display = "block"
 	}
 		
 	chrome.fileSystem.chooseEntry(
@@ -324,15 +320,18 @@ function handle(event) {
 	var adj = event.shiftKey?-1:1;
 	var mod = (event.ctrlKey || event.altKey);
 	var newstate;
+	console.log(tgt.id)
 
 	switch (tgt.id) {
-	case "logo-a":
-	case "logo-b":
-		if (state == SETUP) {
-			changeLogo(tgt);
-		} else {
-			score(team, -adj);
-		}
+	case "load-a":
+	case "load-b":
+		changeLogo(team)
+		break
+	case "img-a":
+	case "img-b":
+	case "kitty-a":
+	case "kitty-b":
+		score(team, -adj);
 		break;
 	case "jammer-a":
 	case "jammer-b":
@@ -508,8 +507,6 @@ function save() {
 		{
 			"preset": e("preset").innerHTML,
 
-			"logo_a": e("logo-a").src,
-			"logo_b": e("logo-b").src,
 			"score_a": e("score-a").innerHTML,
 			"score_b": e("score-b").innerHTML,
 			"timeouts_a": e("timeouts-a").innerHTML,
@@ -558,8 +555,6 @@ function load() {
 		
 		e("period").set((state.period_clock >= 0) ? state.period_clock : period_time);
 
-		e("logo-a").src = state.logo_a;
-		e("logo-b").src = state.logo_b;
 		e("score-a").innerHTML = state.score_a;
 		e("score-b").innerHTML = state.score_b;
 		
@@ -573,8 +568,6 @@ function load() {
 			"period_clock": -1,
 			"score_a": 0,
 			"score_b": 0,
-			"logo_a": "kitty.png",
-			"logo_b": "kitty.png",
 			"timeouts_a": -1,
 			"timeouts_b": -1
 		}, load_cb);		
@@ -611,6 +604,8 @@ function start() {
 	ei("jamtext").innerHTML = jamtext[3];
 	transition();
 
+	
+
 	var p = e("period");
 	startTimer(p);
 	p.readOnly = false;
@@ -623,12 +618,23 @@ function start() {
 }
 
 function resize() {
-	var w, h;
-	
-	w = window.innerWidth / 7;
-	h = window.innerHeight / 5;
+	var w = window.innerWidth / 7
+	var h = window.innerHeight / 5
+	var fs = Math.min(w, h)
 
-	document.body.style.fontSize = Math.min(w, h) + 'px';
+	document.body.style.fontSize = Math.min(w, h) + 'px'
+	
+	// Now do kitty canvases
+	var kw = fs * 2
+	var kh = fs * 1.8
+	
+	var kitties = document.getElementsByClassName("kitty")
+	for (var i = 0; i < kitties.length; i += 1) {
+		k = kitties[i]
+		k.width = kw
+		k.height = kh
+		kitty(k.getContext("2d"), colors[i])
+	}
 }
 
 window.onload = start;

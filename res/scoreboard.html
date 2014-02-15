@@ -21,37 +21,46 @@
 		<title>Woozle Scoreboard</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" type="text/css" href="scoreboard.css">
+		<script type="text/javascript" src="kitty.js"></script>
 		<script type="text/javascript" src="scoreboard.js"></script>
 	</head>
 	<body>
 		<div id="scoreboard">
 			<p class="left">
-				<img class="logo" id="logo-a" src="" alt="A">
+				<span class="logo" id="logo-a">
+					<canvas class="kitty" id="kitty-a"></canvas>
+					<input type="button" class="setup" id="load-a" value="Load...">
+					<img class="img" id="img-a" src="" alt="A">
+				</span>
 				<span class="timeouts" id="timeouts-a">3</span>
 				<span class="jammer" id="jammer-a">★</span>
 				<span class="score" id="score-a">-</span>
 			</p>
 
-			<p class="center">
-				<input id="period" value="--:--">
-				<span id="periodtext"></span>
-				<span id="preset">-</span>
-				<input id="jam" value="-:--">
-				<span id="jamtext"></span>
-			</p>
-
 			<p class="right">
-				<img class="logo" id="logo-b" src="" alt="B">
+				<span class="logo" id="logo-b">
+					<canvas class="kitty" id="kitty-b"></canvas>
+					<input type="button" class="setup" id="load-b" value="Load...">
+					<img class="img" id="img-b" src="" alt="B">
+				</span>
 				<span class="timeouts" id="timeouts-b">3</span>
 				<span class="jammer" id="jammer-b">★</span>
 				<span class="score" id="score-b">-</span>
+			</p>
+
+			<p class="center">
+				<input id="period" value="--:--">
+				<span id="periodtext"></span>
+				<span class="setup" id="preset">-</span>
+				<input id="jam" value="-:--">
+				<span id="jamtext"></span>
 			</p>
 		</div>
 
 		<div id="notice">
 		</div>
 
-		<img id="close" src="res/close-icon-white.png" title="Close Scoreboard">
+		<img id="close" src="close-icon-white.png" title="Close Scoreboard">
 
 	</body>
 </html>
