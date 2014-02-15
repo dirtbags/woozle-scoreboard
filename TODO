@@ -1,7 +1,2 @@
-* User-Provided Logos
-	* Default to Kitty
-	* Add Color Picker
-	* chrome.fileSystem.retainEntry
-	* onload handler: check if width=0 and height=0
-
+* chrome.fileSystem.retainEntry?
 * use chrome.power to keep the display on

@@ -58,8 +58,6 @@ var jamtext = [
 var period = 0;
 var jamno = 0;
 
-var colors = ["#666", "#ffffff"];
-
 var state = SETUP;
 
 var timer_updates = [];
@@ -229,7 +227,13 @@ function transition(newstate) {
 	// Reset lead jammer indicators
 	e("jammer-a").className = "";
 	e("jammer-b").className = "";
-	e("preset").style.display = "none";
+	
+	var setupElements = document.getElementsByClassName("setup")
+	for (var i = 0; i < setupElements.length; i += 1) {
+		var el = setupElements[i]
+		
+		el.style.display = "none"
+	}
 	
 	save();
 }
@@ -301,7 +305,7 @@ function changeLogo(team) {
 	function loaded(entry) {
 		entry.file(setURL);
 		e("kitty-" + team).style.display = "none"
-		element.style.display = "block"
+		element.style.display = "inline"
 	}
 		
 	chrome.fileSystem.chooseEntry(
@@ -320,7 +324,6 @@ function handle(event) {
 	var adj = event.shiftKey?-1:1;
 	var mod = (event.ctrlKey || event.altKey);
 	var newstate;
-	console.log(tgt.id)
 
 	switch (tgt.id) {
 	case "load-a":
@@ -506,7 +509,6 @@ function save() {
 	chrome.storage.local.set(
 		{
 			"preset": e("preset").innerHTML,
-
 			"score_a": e("score-a").innerHTML,
 			"score_b": e("score-b").innerHTML,
 			"timeouts_a": e("timeouts-a").innerHTML,
@@ -600,6 +602,9 @@ function start() {
 	ei("close");
 	ei("preset");
 	
+	e("color-a").addEventListener("change", function() {rekitty("a")}, false);
+	e("color-b").addEventListener("change", function() {rekitty("b")}, false);
+
 	ei("periodtext").innerHTML = periodtext[period];
 	ei("jamtext").innerHTML = jamtext[3];
 	transition();
@@ -617,6 +622,16 @@ function start() {
 
 }
 
+function rekitty(team) {
+	var i = e("img-" + team)
+	var k = e("kitty-" + team)
+	var color = e("color-" + team).value
+	
+	i.style.display = "none"
+	k.style.display = "inline"
+	kitty(k.getContext("2d"), color)
+}
+
 function resize() {
 	var w = window.innerWidth / 7
 	var h = window.innerHeight / 5
@@ -625,16 +640,17 @@ function resize() {
 	document.body.style.fontSize = Math.min(w, h) + 'px'
 	
 	// Now do kitty canvases
-	var kw = fs * 2
-	var kh = fs * 1.8
+	var kw = fs * 1.8
+	var kh = kw * 0.6883
 	
 	var kitties = document.getElementsByClassName("kitty")
 	for (var i = 0; i < kitties.length; i += 1) {
 		k = kitties[i]
 		k.width = kw
 		k.height = kh
-		kitty(k.getContext("2d"), colors[i])
 	}
+	rekitty("a")
+	rekitty("b")
 }
 
 window.onload = start;

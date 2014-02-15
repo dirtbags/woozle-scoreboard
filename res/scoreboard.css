@@ -61,20 +61,28 @@ input[readonly] {
 	text-align: center;
 }
 
+.logo {
+	text-align: center;
+}
+
 .logo img {
 	max-width: 1.8em;
 	max-height: 2em;
+	display: none;
 }
 
 .logo input {
-	position: absolute;
-	top: 0;
+	top: 30%;
 	font-size: 10pt;
+	vertical-align: top;
+	max-height: 15pt;
+	border: none;
 }
 
-.logo img {
-	display: none;
+.setup {
+	background: rgba(0, 255,0, 0.3);
 }
+
 
 .timeouts {
 	position: absolute;
@@ -147,7 +155,6 @@ input[readonly] {
 
 #preset {
 	top: 40%;
-	color: cyan;
 }
 
 #jamtext {

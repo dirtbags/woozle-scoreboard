@@ -3,7 +3,7 @@
 // If you are reading this, there's probably a nicer converter out now.
 // But this seems to work okay so it may not be worth the effort.
 
-var kitty = function(ctx, kittyColor) {
+function kitty(ctx, kittyColor) {
 
 	var scaleBase = 0.1098503139616503
 	var scaleX = scaleBase * ctx.canvas.width / 100
