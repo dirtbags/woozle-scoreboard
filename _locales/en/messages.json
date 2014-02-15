@@ -1,10 +1,10 @@
 {
 	"appName": {
-		"message": "Woozle Roller Derby Scoreboard",
+		"message": "Local Roller Derby Scoreboard",
 		"description": "Application name"
 	},
 	"appShortName": {
-		"message": "Woozle Scoreboard",
+		"message": "Local Scoreboard",
 		"description": "Short application name"
 	},
 	"appDesc": {
