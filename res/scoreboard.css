@@ -42,7 +42,7 @@ input[readonly] {
 	user-select: none;
 }
 
-.left, .right {
+.team {
 	width: 2em;
 	height: 100%;
 	text-align: center;
@@ -50,14 +50,14 @@ input[readonly] {
 	top: 0;
 }
 
-.left {
+#team-a {
 	left: 0;
 }
-.right {
+#team-b {
 	right: 0;
 }
 
-.center {
+#clocks {
 	text-align: center;
 }
 
