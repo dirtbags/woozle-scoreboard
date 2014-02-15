@@ -1,13 +1,9 @@
 {
 	"manifest_version": 2,
 
-	"name": "BETA Woozle Scoreboard",
-	"short_name": "BETA Scoreboard",
-	"icons": {"128": "res/icon-plaid.png"},
-
-	"_name": "__MSG_appName__",
-	"_short_name": "__MSG_appShortName__",
-	"_icons": {"128": "res/icon.png"},
+	"name": "__MSG_appName__",
+	"short_name": "__MSG_appShortName__",
+	"icons": {"128": "res/icon.png"},
 
 	"description": "__MSG_appDesc__",
 	"author": "Neale Pickett <neale@woozle.org>",
