@@ -112,6 +112,19 @@ input {
 	background-color: rgba(0, 255, 0, 0.2);
 }
 
+.clocks .paused {
+	color: #aaf;
+}
+.clocks .lowtime {
+	background: #f24;
+}
+.clocks .timeout {
+	background: #044;
+}
+.clocks .lineup {
+	background: #060;
+}
+
 #period {
 	top: -0.2em;
 }
