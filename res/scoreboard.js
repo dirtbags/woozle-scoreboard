@@ -287,6 +287,10 @@ function transition(newstate) {
 	e("jammer-a").className = "jammer";
 	e("jammer-b").className = "jammer";
 	
+	// Make team names read-only
+	e("name-a").readOnly = true
+	e("name-b").readOnly = true
+	
 	var setupElements = document.getElementsByClassName("setup")
 	for (var i = 0; i < setupElements.length; i += 1) {
 		var el = setupElements[i]
@@ -389,6 +393,12 @@ function handle(event) {
 	case "load-b":
 		changeLogo(team)
 		break
+	case "name-a":
+	case "name-b":
+		if (tgt.readOnly) {
+			score(team, -adj);
+		}
+		break;
 	case "img-a":
 	case "img-b":
 	case "kitty-a":
@@ -642,6 +652,8 @@ function start() {
 	resize();
 	load();
 
+	ei("name-a")
+	ei("name-b")
 	ei("logo-a");
 	ei("logo-b");
 	ei("score-a");
