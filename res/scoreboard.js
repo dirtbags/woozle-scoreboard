@@ -245,7 +245,7 @@ function transition(newstate) {
  */
 
 var notices = {
-	"banana": '<img src="res/banana.gif">'
+	"banana": '<img src="banana.gif">'
 };
 
 var notice_timer;
@@ -628,10 +628,10 @@ function fgColor(color) {
 	for (var i = 0; i < 3; i += 1) {
 		v += parseInt(color.substr(1+i*2, 2), 16)
 	}
-	if (v / 3 >= 0x88) {
-		return "#000000"
-	} else {
+	if (v / 3 < 0x88) {
 		return "#ffffff"
+	} else {
+		return "#000000"
 	}
 }
 
