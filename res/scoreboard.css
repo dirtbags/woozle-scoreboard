@@ -34,10 +34,20 @@ input {
 	display: inline;
 }
 
-.kitty, .img {
+.team .logo {
 	position: absolute;
-	left: -10000px;
+	left: 10%;
 }
+
+.team .logo * {
+	display: none;
+}
+
+.team .color {
+	display: inline;
+	width: 0.5em;
+	margin-top: 0.60em;
+} 
 
 .team {
 	position: absolute;
@@ -56,12 +66,10 @@ input {
 
 #team-a {
 	top: 0;
-	background: #6c6;
 }
 
 #team-b {
 	top: 50%;
-	background: #c44;
 }
 
 .name {
@@ -94,10 +102,14 @@ input {
 }
 
 
-#clocks * {
+.clocks * {
 	position: absolute;
 	right: 0.1em;
 	text-align: right;
+}
+
+.setup {
+	background-color: rgba(0, 255, 0, 0.2);
 }
 
 #period {
@@ -109,6 +121,7 @@ input {
 }
 
 #jamtext {
+	display: none;
 	color: #cc0;
 	bottom: 0.1em;
 	right: 3em;
@@ -121,8 +134,10 @@ input {
 }
 
 #preset {
-	top: 1em;
-	right: 3em;
+	font-size: 40%;
+	bottom: 45%;
+	left: 5%;
+	right: auto;
 }
 
 #close {
