@@ -61,6 +61,10 @@ input[readonly] {
 	text-align: center;
 }
 
+.name {
+	display: none;
+}
+
 .logo {
 	text-align: center;
 }

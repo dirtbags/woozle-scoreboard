@@ -225,8 +225,8 @@ function transition(newstate) {
 	}
 
 	// Reset lead jammer indicators
-	e("jammer-a").className = "";
-	e("jammer-b").className = "";
+	e("jammer-a").className = "jammer";
+	e("jammer-b").className = "jammer";
 	
 	var setupElements = document.getElementsByClassName("setup")
 	for (var i = 0; i < setupElements.length; i += 1) {
@@ -287,11 +287,11 @@ function score(team, points) {
 
 function leadJammer(team) {
 	tgt = e("jammer-" + team);
-	var on = ! tgt.className;
+	var on = (tgt.className.indexOf("lead") == -1);
 
-	e("jammer-a").className = "";
-	e("jammer-b").className = "";
-	if (on) tgt.className = "lead";
+	e("jammer-a").className = "jammer";
+	e("jammer-b").className = "jammer";
+	if (on) tgt.className = "lead jammer";
 }
 
 function changeLogo(team) {
@@ -602,8 +602,8 @@ function start() {
 	ei("close");
 	ei("preset");
 	
-	e("color-a").addEventListener("change", function() {rekitty("a")}, false);
-	e("color-b").addEventListener("change", function() {rekitty("b")}, false);
+	e("color-a").addEventListener("change", function() {recolor("a")}, false);
+	e("color-b").addEventListener("change", function() {recolor("b")}, false);
 
 	ei("periodtext").innerHTML = periodtext[period];
 	ei("jamtext").innerHTML = jamtext[3];
@@ -622,19 +622,38 @@ function start() {
 
 }
 
-function rekitty(team) {
+function fgColor(color) {
+	var v = 0
+	
+	for (var i = 0; i < 3; i += 1) {
+		v += parseInt(color.substr(1+i*2, 2), 16)
+	}
+	if (v / 3 >= 0x88) {
+		return "#000000"
+	} else {
+		return "#ffffff"
+	}
+}
+
+function recolor(team) {
 	var i = e("img-" + team)
 	var k = e("kitty-" + team)
+	var t = e("team-" + team)
 	var color = e("color-" + team).value
 	
-	i.style.display = "none"
-	k.style.display = "inline"
-	kitty(k.getContext("2d"), color)
+	if (k.style) {
+		i.style.display = "none"
+		k.style.display = "inline"
+		kitty(k.getContext("2d"), color)
+	} else {
+		t.style.backgroundColor = color
+		t.style.color = fgColor(color)
+	}
 }
 
 function resize() {
-	var w = window.innerWidth / 7
-	var h = window.innerHeight / 5
+	var w = window.innerWidth / Number(document.body.getAttribute("data-x") || 7)
+	var h = window.innerHeight / Number(document.body.getAttribute("data-y") || 5)
 	var fs = Math.min(w, h)
 
 	document.body.style.fontSize = Math.min(w, h) + 'px'
@@ -649,8 +668,8 @@ function resize() {
 		k.width = kw
 		k.height = kh
 	}
-	rekitty("a")
-	rekitty("b")
+	recolor("a")
+	recolor("b")
 }
 
 window.onload = start;
