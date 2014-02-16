@@ -602,8 +602,8 @@ function start() {
 	ei("close");
 	ei("preset");
 	
-	e("color-a").addEventListener("change", function() {rekitty("a")}, false);
-	e("color-b").addEventListener("change", function() {rekitty("b")}, false);
+	e("color-a").addEventListener("change", function() {recolor("a")}, false);
+	e("color-b").addEventListener("change", function() {recolor("b")}, false);
 
 	ei("periodtext").innerHTML = periodtext[period];
 	ei("jamtext").innerHTML = jamtext[3];
@@ -622,13 +622,15 @@ function start() {
 
 }
 
-function rekitty(team) {
+function recolor(team) {
 	var i = e("img-" + team)
 	var k = e("kitty-" + team)
+	var n = e("name-" + team)
 	var color = e("color-" + team).value
 	
 	i.style.display = "none"
 	k.style.display = "inline"
+	n.style.backgroundColor = color
 	kitty(k.getContext("2d"), color)
 }
 
@@ -649,8 +651,8 @@ function resize() {
 		k.width = kw
 		k.height = kh
 	}
-	rekitty("a")
-	rekitty("b")
+	recolor("a")
+	recolor("b")
 }
 
 window.onload = start;
