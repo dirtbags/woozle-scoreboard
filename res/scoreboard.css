@@ -97,8 +97,14 @@ input {
 
 
 .timeouts {
+<<<<<<< HEAD
 	margin-top: 4.8em;
 	font-size: 20%;
+=======
+	position: absolute;
+	width: 1.8em;
+	bottom: 0.1em;
+>>>>>>> master
 }
 
 
@@ -120,6 +126,7 @@ input {
 }
 .clocks .timeout {
 	background: #044;
+
 }
 .clocks .lineup {
 	background: #060;
