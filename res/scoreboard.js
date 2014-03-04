@@ -35,7 +35,6 @@ var presets = [
 var period_time;
 var jam_time;
 var lineup_time;
-var timeouts;
 
 /* State names */
 var SETUP = 0;
@@ -186,6 +185,66 @@ function startTimer(element) {
 	timer_updates.push(pulse);
 }
 
+// Timeout arrow thingy
+function timeouts(c, total) {
+	var ctx = c.getContext("2d")
+	var gravity = c.getAttribute("data-gravity")
+	var enabled = "#ffff00"
+	var disabled = "#666666"
+	
+	c.render = function() {
+		var bw = 300 / c.max;
+		var pw = bw / 10;
+
+		ctx.clearRect(0, 0, c.width, c.height)
+		
+		ctx.save()
+		
+		ctx.fillStyle = "#ffff00"
+		for (var i = 0; i < c.max; i += 1) {
+			ctx.fillStyle = disabled
+			if (gravity == "east") {
+				if (c.max - i <= c.cur) {
+					ctx.fillStyle = enabled
+				}
+			} else {
+				if (i < c.cur) {
+					ctx.fillStyle = enabled
+				}
+			}
+			ctx.beginPath()
+			ctx.moveTo(i * bw + pw, c.height)
+			ctx.lineTo(i*bw + bw/2, c.height - 20)
+			ctx.lineTo(i*bw + bw - pw, c.height)
+			ctx.closePath()
+			ctx.fill()
+		}
+		
+		ctx.restore()
+	}
+	
+	c.set = function(cur) {
+		c.cur = cur
+		if (c.cur == -1) {
+			c.cur = c.max
+		}
+		c.render()
+	}
+	
+	c.dec = function() {
+		c.set(c.cur - 1)
+	}
+	
+	c.set_max = function(max) {
+		c.max = max
+		c.cur = max
+		c.render()
+	}
+	
+	c.set_max(total)
+}
+
+
 // Transition state machine based on state
 function transition(newstate) {
 	var jt = e("jam");
@@ -228,6 +287,10 @@ function transition(newstate) {
 	e("jammer-a").className = "jammer";
 	e("jammer-b").className = "jammer";
 	
+	// Make team names read-only
+	e("name-a").readOnly = true
+	e("name-b").readOnly = true
+	
 	var setupElements = document.getElementsByClassName("setup")
 	for (var i = 0; i < setupElements.length; i += 1) {
 		var el = setupElements[i]
@@ -245,7 +308,7 @@ function transition(newstate) {
  */
 
 var notices = {
-	"banana": '<img src="res/banana.gif">'
+	"banana": '<img src="banana.gif">'
 };
 
 var notice_timer;
@@ -330,6 +393,12 @@ function handle(event) {
 	case "load-b":
 		changeLogo(team)
 		break
+	case "name-a":
+	case "name-b":
+		if (tgt.readOnly) {
+			score(team, -adj);
+		}
+		break;
 	case "img-a":
 	case "img-b":
 	case "kitty-a":
@@ -342,14 +411,7 @@ function handle(event) {
 		break;
 	case "timeouts-a":
 	case "timeouts-b":
-		// Allow for timeouts > 3
-		var v = Number(tgt.innerHTML);
-
-		v -= adj;
-		if (v == -1) {
-			v = timeouts;
-		}
-		tgt.innerHTML = v;
+		tgt.dec()
 		break;
 	case "period":
 		if ((state == SETUP) || (state == TIMEOUT)) {
@@ -511,8 +573,8 @@ function save() {
 			"preset": e("preset").innerHTML,
 			"score_a": e("score-a").innerHTML,
 			"score_b": e("score-b").innerHTML,
-			"timeouts_a": e("timeouts-a").innerHTML,
-			"timeouts_b": e("timeouts-b").innerHTML,
+			"timeouts_a": e("timeouts-a").cur,
+			"timeouts_b": e("timeouts-b").cur,
 			"period_clock": e("period").remaining(),
 		}
 	);
@@ -521,6 +583,7 @@ function save() {
 function load_preset(preset_name) {
 	var inc = false;
 	var pn = 0;
+	var ntimeouts = 3;
 
 	if (preset_name == +1) {
 		preset_name = e("preset").innerHTML;
@@ -540,15 +603,16 @@ function load_preset(preset_name) {
 	period_time = presets[pn][1];
 	jam_time = presets[pn][2];
 	lineup_time = presets[pn][3];
-	timeouts = presets[pn][4];
+	ntimeouts = presets[pn][4];
 	
 	e("preset").innerHTML = preset_name;
 	e("jam").set(jam_time);
 	e("period").set(period_time);
-	e("timeouts-a").innerHTML = timeouts;
-	e("timeouts-b").innerHTML = timeouts;
 	e("score-a").innerHTML = 0;
 	e("score-b").innerHTML = 0;
+	
+	timeouts(e("timeouts-a"), ntimeouts)
+	timeouts(e("timeouts-b"), ntimeouts)
 }	
 	
 function load() {
@@ -560,9 +624,9 @@ function load() {
 		e("score-a").innerHTML = state.score_a;
 		e("score-b").innerHTML = state.score_b;
 		
-		e("timeouts-a").innerHTML = (state.timeouts_a >= 0) ? state.timeouts_a : timeouts;
-		e("timeouts-b").innerHTML = (state.timeouts_b >= 0) ? state.timeouts_b : timeouts;
-		
+		e("timeouts-a").grape = state.timeouts_a
+		e("timeouts-a").set(state.timeouts_a)
+		e("timeouts-b").set(state.timeouts_b)
 	}
 	
 	chrome.storage.local.get({
@@ -588,20 +652,22 @@ function start() {
 	resize();
 	load();
 
+	ei("name-a")
+	ei("name-b")
 	ei("logo-a");
 	ei("logo-b");
 	ei("score-a");
 	ei("score-b")
 	ei("jammer-a");
 	ei("jammer-b");
-	ei("timeouts-a");
-	ei("timeouts-b");
+	ei("timeouts-a")
+	ei("timeouts-b")
 	ei("period");
 	ei("jam");
 	ei("prefs");
 	ei("close");
 	ei("preset");
-	
+
 	e("color-a").addEventListener("change", function() {recolor("a")}, false);
 	e("color-b").addEventListener("change", function() {recolor("b")}, false);
 
@@ -628,10 +694,10 @@ function fgColor(color) {
 	for (var i = 0; i < 3; i += 1) {
 		v += parseInt(color.substr(1+i*2, 2), 16)
 	}
-	if (v / 3 >= 0x88) {
-		return "#000000"
-	} else {
+	if (v / 3 < 0x88) {
 		return "#ffffff"
+	} else {
+		return "#000000"
 	}
 }
 
